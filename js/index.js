@@ -44,7 +44,12 @@ let switchTheme = () => {
 	$("#theme-button").attr("data-theme", switchToLightTheme ? "light" : "dark");
 };
 
-let toggleCheckbox = (e) => {
+/**
+ * Change the status of the clicked checkbox
+ * @param {Event} e
+ * @listens click
+ * */
+let toggleCheckbox = e => {
 	let checkbox = e.currentTarget.previousElementSibling;
 	checkbox.checked = !checkbox.checked;
 
@@ -54,8 +59,13 @@ let toggleCheckbox = (e) => {
 	saveLists();
 };
 
-let addItemToList = (e) => {
-	let itemName = e.currentTarget.nextElementSibling.innerHTML;
+/**
+ * Add a new item to the list and update
+ * @param {Event} e
+ * @listens click
+ */
+let addItemToList = e => {
+	let itemName = e.currentTarget.nextElementSibling.textContent;
 
 	lists[currentListName] = lists[currentListName] || {};
 
@@ -63,6 +73,16 @@ let addItemToList = (e) => {
 	populateList();
 	saveLists();
 	$("#list-add-input").empty();
+};
+
+/**
+ * Remove an item from the list and update
+ * @param {Event} e
+ */
+let removeItem = e => {
+	e.currentTarget.parentElement.remove();
+	saveLists();
+	populateList();
 };
 
 /** Load the lists */
@@ -100,19 +120,22 @@ let populateList = () => {
 		newElement.setAttribute("class", "list-group-item d-flex align-items-center");
 		newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
 			'<span class="checkbox"></span>' +
-			`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>`;
+			`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
+			'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
 		$("#list")[0].appendChild(newElement);
 	}
 
 	$(".checkbox").off("click", toggleCheckbox);
 	$(".checkbox").click(toggleCheckbox);
+	$(".btn-item-delete").off(removeItem);
+	$(".btn-item-delete").click(removeItem);
 };
 
 /** Save the lists */
 let saveLists = () => {
 	lists[currentListName] = {};
 	Array.from($("#list").children()).forEach(e => {
-		lists[currentListName][convertToVarName(e.lastChild.innerHTML)] = e.firstChild.getAttribute("checked") === "true";
+		lists[currentListName][convertToVarName(e.children[2].textContent)] = e.firstChild.getAttribute("checked") === "true";
 	});
 	localStorage.setItem("toCheckLists", JSON.stringify(lists));
 };
@@ -132,6 +155,8 @@ $("#theme-button").click(switchTheme);
 $(".checkbox").click(toggleCheckbox);
 
 $("#list-add-button").click(addItemToList);
+
+$(".btn-item-delete").click(removeItem);
 
 // #endregion
 
