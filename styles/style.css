@@ -142,7 +142,6 @@ input[type="checkbox"] {
 }
 
 /* Style checkmark when checked */
-
 input[type="checkbox"]:checked+span:after {
 	/*Position it on top of the custom checkbox*/
 	margin-left: 0.4rem;

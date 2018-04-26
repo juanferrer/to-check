@@ -85,6 +85,14 @@ let removeItem = e => {
 	populateList();
 };
 
+/**
+ * Do different things depending on the key that has been pressed
+ * @param {*} e
+ */
+let handleKeyPress = e => {
+	if (e.key === "Enter") $("#list-add-button").click();
+};
+
 /** Load the lists */
 let loadLists = () => {
 	let listsJSONStr = localStorage.getItem("toCheckLists");
@@ -158,6 +166,7 @@ $("#list-add-button").click(addItemToList);
 
 $(".btn-item-delete").click(removeItem);
 
+$("#list-add-input").keydown(handleKeyPress);
 // #endregion
 
 main();
