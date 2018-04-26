@@ -56,9 +56,18 @@ let loadLists = () => {
 	lists = listsJSONStr ? JSON.parse(listsJSONStr) : {};
 };
 
+/**
+ * Capitalise the first letter of each word, turning it into a title
+ * @param {string} s String to be titleised
+ */
+let titleize = s => {
+	return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 /** Fill the list area with the currently selected list */
 let populateList = () => {
 	$("#list").empty();
+	$("#list-title")[0].innerHTML = titleize(currentListName);
 	for (let itemName in lists[currentListName]) {
 		let newElement = document.createElement("li");
 		newElement.setAttribute("class", "list-group-item d-flex align-items-center");

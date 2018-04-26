@@ -97,10 +97,18 @@ body {
 	margin-top: 1rem;
 }
 
+.list-title {
+	font-size: 25px;
+	color: var(--text-color);
+	font-family: var(--main-font);
+	margin-top: 10px;
+}
+
 .list-group-item {
 	color: var(--text-color);
 	background-color: var(--main-color);
 	font-family: var(--main-font);
+	border: none;
 }
 
 /* Checkboxes */
