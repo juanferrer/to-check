@@ -9,10 +9,10 @@ const listPrefaceString = "lisname";
 /** Open and close the side menu */
 let toggleSideMenu = () => {
 	if ($("#side-menu").attr("data-open")) {
-		$("#side-menu")[0].style.width = "0px";
+		$("#side-menu")[0].style.left = "-250px";
 		$("#side-menu").removeAttr("data-open");
 	} else {
-		$("#side-menu")[0].style.width = "250px";
+		$("#side-menu")[0].style.left = "0px";
 		$("#side-menu").attr("data-open", true);
 	}
 };
