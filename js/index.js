@@ -3,7 +3,7 @@
 // #region Globals
 var lists;
 var currentListName = "lisnameMovies";
-const moviePrefaceString = "movname";
+const elementPrefaceString = "elename";
 const listPrefaceString = "lisname";
 
 /** Open and close the side menu */
@@ -42,6 +42,24 @@ let switchTheme = () => {
 	}
 
 	$("#theme-button").attr("data-theme", switchToLightTheme ? "light" : "dark");
+};
+
+/**
+ * Update the list title
+ * @param {Event} e
+ * @listens blur
+ */
+let updateListTitle = e => {
+	let newListName = e.currentTarget.textContent;
+	if (convertToVarName(newListName, true) !== currentListName) {
+		lists[convertToVarName(newListName, true)] = lists[currentListName];
+		lists[currentListName] = undefined;
+		currentListName = convertToVarName(newListName, true);
+
+		saveLists();
+		populateSideMenu();
+		populateList();
+	}
 };
 
 /**
@@ -105,19 +123,20 @@ let loadLists = () => {
  * @param {string} s String to be titleised
  */
 let convertToTitle = s => {
-	let firstCharOfName = s.startsWith(listPrefaceString) || s.startsWith(moviePrefaceString) ? moviePrefaceString.length : 0;
+	let firstCharOfName = s.startsWith(listPrefaceString) || s.startsWith(elementPrefaceString) ? elementPrefaceString.length : 0;
 	return s.slice(firstCharOfName).split(/(?=[A-Z])|(?=[0-9])/g).join(" ").trim();
 };
 
 /**
  * Remove spaces and convert to a camel case string
  * @param {string} s String that needs to become a variable name
+ * @param {boolean} isList Whether the var name needs to be for an element or a list
  */
-let convertToVarName = s => {
+let convertToVarName = (s, isList = false) => {
 	let pascalCaseStr = s.split(" ").reduce((a, c) => {
 		return a + c.charAt(0).toUpperCase() + c.slice(1);
 	}, "");
-	return listPrefaceString + pascalCaseStr.trim();
+	return (isList ? listPrefaceString : elementPrefaceString) + pascalCaseStr.trim();
 };
 
 /** Load the list names on the side menu */
@@ -125,10 +144,13 @@ let populateSideMenu = () => {
 	$("#side-menu-list").empty();
 
 	for (let itemName in lists) {
-		let newElement = document.createElement("li");
-		newElement.setAttribute("class", "list-group-item d-flex align-items-center");
-		newElement.innerHTML = convertToTitle(itemName);
-		$("#side-menu-list")[0].appendChild(newElement);
+		if (lists[itemName]) {
+			let newElement = document.createElement("li");
+			newElement.setAttribute("class", "list-group-item d-flex align-items-center");
+			newElement.innerHTML = convertToTitle(itemName);
+			$("#side-menu-list")[0].appendChild(newElement);
+			currentListName = itemName;
+		}
 	}
 };
 
@@ -164,8 +186,8 @@ let saveLists = () => {
 let main = () => {
 	feather.replace();
 	loadLists();
-	populateSideMenu();
 	populateList();
+	populateSideMenu();
 };
 
 // #region Event handlers
@@ -173,6 +195,8 @@ let main = () => {
 $("#menu-button").click(toggleSideMenu);
 
 $("#theme-button").click(switchTheme);
+
+$("#list-title").blur(updateListTitle);
 
 $(".checkbox").click(toggleCheckbox);
 
