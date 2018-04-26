@@ -26,6 +26,7 @@ let switchTheme = () => {
 		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 30%, 0.3)");
 		$(":root").css("--text-color", "hsla(0, 0%, 20%, 1)");
 		$(":root").css("--icon-color", "hsla(0, 0%, 20%, 1)");
+		$(":root").css("--textbox-color", "hsla(0, 0%, 40%, 1)");
 		$("#light-theme-icon").css("display", "none");
 		$("#dark-theme-icon").css("display", "initial");
 
@@ -35,6 +36,7 @@ let switchTheme = () => {
 		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 70%, 0.3)");
 		$(":root").css("--text-color", "hsla(0, 0%, 90%, 1)");
 		$(":root").css("--icon-color", "hsla(0, 0%, 90%, 1)");
+		$(":root").css("--textbox-color", "hsla(0, 0%, 60%, 1)");
 		$("#light-theme-icon").css("display", "initial");
 		$("#dark-theme-icon").css("display", "none");
 	}

@@ -7,6 +7,7 @@
 	--semi-transparent-hover: hsla(0, 0%, 30%, 0.3);
 	--text-color: hsla(0, 0%, 20%, 1);
 	--icon-color: hsla(0, 0%, 20%, 1);
+	--textbox-color: hsla(0, 0%, 40%, 1);
 	/* Fonts */
 	--main-font: 'Roboto', sans-serif;
 }
@@ -159,6 +160,18 @@ input[type="checkbox"]:checked+span:after {
 	-o-transform: rotate(45deg);
 }
 
+.checkbox-label {
+	width: 100%;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+.checkbox-label:focus {
+	outline: none;
+	border-top-color: var(--textbox-color);
+	border-bottom-color: var(--textbox-color);
+}
+
 /* Style label when checked */
 
 input[type="checkbox"]:checked~span.checkbox-label {
@@ -176,7 +189,7 @@ input[type="checkbox"]:checked~span.checkbox-label {
 .list-add-input {
 	padding-left: 10px;
 	height: 50%;
-	border: 1px solid var(--icon-color);
+	border: 1px solid var(--textbox-color);
 	border-radius: 5px;
 	font-family: var(--main-font);
 }
