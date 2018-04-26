@@ -120,6 +120,18 @@ let convertToVarName = s => {
 	return listPrefaceString + pascalCaseStr.trim();
 };
 
+/** Load the list names on the side menu */
+let populateSideMenu = () => {
+	$("#side-menu-list").empty();
+
+	for (let itemName in lists) {
+		let newElement = document.createElement("li");
+		newElement.setAttribute("class", "list-group-item d-flex align-items-center");
+		newElement.innerHTML = convertToTitle(itemName);
+		$("#side-menu-list")[0].appendChild(newElement);
+	}
+};
+
 /** Fill the list area with the currently selected list */
 let populateList = () => {
 	$("#list").empty();
@@ -152,6 +164,7 @@ let saveLists = () => {
 let main = () => {
 	feather.replace();
 	loadLists();
+	populateSideMenu();
 	populateList();
 };
 
