@@ -100,13 +100,10 @@ body {
 .list-group-item {
 	color: var(--text-color);
 	background-color: var(--main-color);
-	font-family: "Roboto";
+	font-family: var(--main-font);
 }
 
-.list-item-checked {
-	color: gray;
-	text-decoration: line-through;
-}
+/* Checkboxes */
 
 input[type="checkbox"] {
 	display: none;
@@ -122,6 +119,8 @@ input[type="checkbox"] {
 	border-radius: 4px;
 	margin: 0 .5em;
 }
+
+/* Style checkmark when checked */
 
 input[type="checkbox"]:checked+span:after {
 	/*Add a block-level blank space*/
@@ -139,4 +138,11 @@ input[type="checkbox"]:checked+span:after {
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
 	-o-transform: rotate(45deg);
+}
+
+/* Style label when checked */
+
+input[type="checkbox"]:checked~span.checkbox-label {
+	text-decoration-line: line-through;
+	opacity: 0.65;
 }
