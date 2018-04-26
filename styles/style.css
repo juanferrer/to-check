@@ -138,6 +138,7 @@ input[type="checkbox"] {
 	background: #ededed;
 	border: 1px solid #aeaeae;
 	border-radius: 4px;
+	cursor: pointer;
 }
 
 /* Style checkmark when checked */
@@ -175,6 +176,7 @@ input[type="checkbox"]:checked+span:after {
 .btn-item-delete {
 	opacity: 0;
 	transition: none;
+	cursor: pointer;
 }
 
 .list-group-item:hover>.btn-item-delete {
