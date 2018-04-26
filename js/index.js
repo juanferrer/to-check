@@ -2,7 +2,7 @@
 
 // #region Globals
 var lists;
-var currentListName = "lisnameMovies";
+var currentListName;
 const elementPrefaceString = "elename";
 const listPrefaceString = "lisname";
 
@@ -57,9 +57,22 @@ let updateListTitle = e => {
 		currentListName = convertToVarName(newListName, true);
 
 		saveLists();
-		populateSideMenu();
 		populateList();
+		populateSideMenu();
 	}
+};
+
+/**
+ * Reload the list selected
+ * @param {Event} e
+ * @listens click
+ */
+let changeListSelection = e => {
+	currentListName = convertToVarName(e.currentTarget.textContent, true);
+
+	populateList();
+	populateSideMenu();
+	saveLists();
 };
 
 /**
@@ -116,6 +129,7 @@ let handleKeyPress = e => {
 let loadLists = () => {
 	let listsJSONStr = localStorage.getItem("toCheckLists");
 	lists = listsJSONStr ? JSON.parse(listsJSONStr) : {};
+	currentListName = localStorage.getItem("currentList");
 };
 
 /**
@@ -149,9 +163,11 @@ let populateSideMenu = () => {
 			newElement.setAttribute("class", "list-group-item d-flex align-items-center");
 			newElement.innerHTML = convertToTitle(itemName);
 			$("#side-menu-list")[0].appendChild(newElement);
-			currentListName = itemName;
 		}
 	}
+
+	$("#side-menu-list").children().off(changeListSelection);
+	$("#side-menu-list").children().click(changeListSelection);
 };
 
 /** Fill the list area with the currently selected list */
@@ -170,6 +186,8 @@ let populateList = () => {
 
 	$(".checkbox").off("click", toggleCheckbox);
 	$(".checkbox").click(toggleCheckbox);
+	$(".checkbox-label").off(saveLists);
+	$(".checkbox-label").blur(saveLists);
 	$(".btn-item-delete").off(removeItem);
 	$(".btn-item-delete").click(removeItem);
 };
@@ -181,6 +199,7 @@ let saveLists = () => {
 		lists[currentListName][convertToVarName(e.children[2].textContent)] = e.firstChild.getAttribute("checked") === "true";
 	});
 	localStorage.setItem("toCheckLists", JSON.stringify(lists));
+	localStorage.setItem("currentList", currentListName);
 };
 
 let main = () => {
@@ -195,6 +214,8 @@ let main = () => {
 $("#menu-button").click(toggleSideMenu);
 
 $("#theme-button").click(switchTheme);
+
+$("#side-menu-list").children().click(changeListSelection);
 
 $("#list-title").blur(updateListTitle);
 
