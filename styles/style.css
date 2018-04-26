@@ -1,10 +1,13 @@
 :root {
-	--main-color: white;
+	/* Colors */
+	--main-color: hsla(0, 0%, 98%, 1);
 	--accent-color: green;
 	--background-color: hsla(0, 0%, 90%, 1);
 	--semi-transparent-hover: hsla(0, 0%, 30%, 0.3);
 	--text-color: hsla(0, 0%, 20%, 1);
 	--icon-color: hsla(0, 0%, 20%, 1);
+	/* Fonts */
+	--main-font: 'Roboto', sans-serif;
 }
 
 * {
@@ -26,7 +29,7 @@ body {
 .theme-colored {
 	background-color: var(--main-color);
 	color: var(--text-color);
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--main-font);
 	font-size: 20px;
 }
 
@@ -88,4 +91,52 @@ body {
 	min-width: 350px;
 	background-color: var(--main-color);
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.list {
+	margin-top: 1rem;
+}
+
+.list-group-item {
+	color: var(--text-color);
+	background-color: var(--main-color);
+	font-family: "Roboto";
+}
+
+.list-item-checked {
+	color: gray;
+	text-decoration: line-through;
+}
+
+input[type="checkbox"] {
+	display: none;
+}
+
+.checkbox {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+	background: #ededed;
+	border: 1px solid #aeaeae;
+	border-radius: 4px;
+	margin: 0 .5em;
+}
+
+input[type="checkbox"]:checked+span:after {
+	/*Add a block-level blank space*/
+	content: "";
+	display: block;
+	/*Make a small rectangle*/
+	width: 6px;
+	height: 18px;
+	/*Add a border on the bottom and right, creating an 'L' */
+	border: solid #000000;
+	border-width: 0 4px 4px 0;
+	/*Position it on top of the custom checkbox*/
+	margin-left: 0.4rem;
+	/*Rotate the L to make it look like a checkmark*/
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
 }

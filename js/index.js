@@ -1,21 +1,8 @@
 /* globals $, feather */
 
-feather.replace();
-
-// #region Event handlers
-
-
-$("#menu-button").click(() => {
-	toggleSideMenu();
-});
-
-
-$("#theme-button").click(() => {
-	switchTheme();
-});
-
-
-// #endregion
+// #region Globals
+var lists;
+var currentListName = "movies";
 
 /** Open and close the side menu */
 let toggleSideMenu = () => {
@@ -32,7 +19,7 @@ let toggleSideMenu = () => {
 let switchTheme = () => {
 	let switchToLightTheme = $("#theme-button").attr("data-theme") === "dark";
 	if (switchToLightTheme) {
-		$(":root").css("--main-color", "white");
+		$(":root").css("--main-color", "hsla(0, 0%, 98%, 1)");
 		$(":root").css("--background-color", "hsla(0, 0%, 90%, 1)");
 		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 30%, 0.3)");
 		$(":root").css("--text-color", "hsla(0, 0%, 20%, 1)");
@@ -52,3 +39,68 @@ let switchTheme = () => {
 
 	$("#theme-button").attr("data-theme", switchToLightTheme ? "light" : "dark");
 };
+
+let toggleCheckbox = (e) => {
+	let checkbox = e.currentTarget.previousElementSibling;
+	checkbox.checked = !checkbox.checked;
+
+	if (checkbox.checked) checkbox.setAttribute("checked", true);
+	else checkbox.removeAttribute("checked");
+
+	saveLists();
+};
+
+/** Load the lists */
+let loadLists = () => {
+	let listsJSONStr = localStorage.getItem("toCheckLists");
+	lists = listsJSONStr ? JSON.parse(listsJSONStr) : {};
+};
+
+/** Fill the list area with the currently selected list */
+let populateList = () => {
+	$("#list").empty();
+	for (let itemName in lists[currentListName]) {
+		let newElement = document.createElement("li");
+		newElement.setAttribute("class", "list-group-item d-flex align-items-center");
+		newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
+			'<span class="checkbox"></span>' +
+			`<span class="checkbox-label" contenteditable = "true" > ${itemName}</span>`;
+		$("#list")[0].appendChild(newElement);
+	}
+
+	$(".checkbox").off("click", toggleCheckbox);
+	$(".checkbox").click(toggleCheckbox);
+};
+
+/** Save the lists */
+let saveLists = () => {
+	lists[currentListName] = {};
+	Array.from($("#list").children()).forEach(e => {
+		lists[currentListName][e.lastChild.innerHTML] = e.firstChild.getAttribute("checked") === "true";
+	});
+	localStorage.setItem("toCheckLists", JSON.stringify(lists));
+};
+
+let main = () => {
+	feather.replace();
+	loadLists();
+	populateList();
+};
+
+// #region Event handlers
+
+$("#menu-button").click(() => {
+	toggleSideMenu();
+});
+
+
+$("#theme-button").click(() => {
+	switchTheme();
+});
+
+$(".checkbox").click(toggleCheckbox);
+
+
+// #endregion
+
+main();
