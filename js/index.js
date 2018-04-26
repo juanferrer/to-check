@@ -34,6 +34,7 @@ let switchTheme = () => {
 	if (switchToLightTheme) {
 		$(":root").css("--main-color", "white");
 		$(":root").css("--background-color", "hsla(0, 0%, 90%, 1)");
+		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 30%, 0.3)");
 		$(":root").css("--text-color", "hsla(0, 0%, 20%, 1)");
 		$(":root").css("--icon-color", "hsla(0, 0%, 20%, 1)");
 		$("#light-theme-icon").css("display", "none");
@@ -42,6 +43,7 @@ let switchTheme = () => {
 	} else {
 		$(":root").css("--main-color", "hsla(0, 0%, 20%, 1)");
 		$(":root").css("--background-color", "hsla(0, 0%, 15%, 1)");
+		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 70%, 0.3)");
 		$(":root").css("--text-color", "hsla(0, 0%, 90%, 1)");
 		$(":root").css("--icon-color", "hsla(0, 0%, 90%, 1)");
 		$("#light-theme-icon").css("display", "initial");
