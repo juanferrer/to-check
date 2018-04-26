@@ -2,7 +2,9 @@
 
 // #region Globals
 var lists;
-var currentListName = "movies";
+var currentListName = "lisnameMovies";
+const moviePrefaceString = "movname";
+const listPrefaceString = "lisname";
 
 /** Open and close the side menu */
 let toggleSideMenu = () => {
@@ -60,20 +62,32 @@ let loadLists = () => {
  * Capitalise the first letter of each word, turning it into a title
  * @param {string} s String to be titleised
  */
-let titleize = s => {
-	return s.charAt(0).toUpperCase() + s.slice(1);
+let convertToTitle = s => {
+	let firstCharOfName = s.startsWith(listPrefaceString) || s.startsWith(moviePrefaceString) ? moviePrefaceString.length : 0;
+	return s.slice(firstCharOfName).split(/(?=[A-Z])|(?=[0-9])/g).join(" ");
+};
+
+/**
+ * Remove spaces and convert to a camel case string
+ * @param {string} s String that needs to become a variable name
+ */
+let convertToVarName = s => {
+	let pascalCaseStr = s.split(" ").reduce((a, c) => {
+		return a + c.charAt(0).toUpperCase() + c.slice(1);
+	}, "");
+	return listPrefaceString + pascalCaseStr;
 };
 
 /** Fill the list area with the currently selected list */
 let populateList = () => {
 	$("#list").empty();
-	$("#list-title")[0].innerHTML = titleize(currentListName);
+	$("#list-title")[0].innerHTML = convertToTitle(currentListName);
 	for (let itemName in lists[currentListName]) {
 		let newElement = document.createElement("li");
 		newElement.setAttribute("class", "list-group-item d-flex align-items-center");
 		newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
 			'<span class="checkbox"></span>' +
-			`<span class="checkbox-label" contenteditable = "true" > ${itemName}</span>`;
+			`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>`;
 		$("#list")[0].appendChild(newElement);
 	}
 
@@ -85,7 +99,7 @@ let populateList = () => {
 let saveLists = () => {
 	lists[currentListName] = {};
 	Array.from($("#list").children()).forEach(e => {
-		lists[currentListName][e.lastChild.innerHTML] = e.firstChild.getAttribute("checked") === "true";
+		lists[currentListName][convertToVarName(e.lastChild.innerHTML)] = e.firstChild.getAttribute("checked") === "true";
 	});
 	localStorage.setItem("toCheckLists", JSON.stringify(lists));
 };
