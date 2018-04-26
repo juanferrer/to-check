@@ -52,6 +52,17 @@ let toggleCheckbox = (e) => {
 	saveLists();
 };
 
+let addItemToList = (e) => {
+	let itemName = e.currentTarget.nextElementSibling.innerHTML;
+
+	lists[currentListName] = lists[currentListName] || {};
+
+	lists[currentListName][convertToVarName(itemName)] = false;
+	populateList();
+	saveLists();
+	$("#list-add-input").empty();
+};
+
 /** Load the lists */
 let loadLists = () => {
 	let listsJSONStr = localStorage.getItem("toCheckLists");
@@ -64,7 +75,7 @@ let loadLists = () => {
  */
 let convertToTitle = s => {
 	let firstCharOfName = s.startsWith(listPrefaceString) || s.startsWith(moviePrefaceString) ? moviePrefaceString.length : 0;
-	return s.slice(firstCharOfName).split(/(?=[A-Z])|(?=[0-9])/g).join(" ");
+	return s.slice(firstCharOfName).split(/(?=[A-Z])|(?=[0-9])/g).join(" ").trim();
 };
 
 /**
@@ -75,7 +86,7 @@ let convertToVarName = s => {
 	let pascalCaseStr = s.split(" ").reduce((a, c) => {
 		return a + c.charAt(0).toUpperCase() + c.slice(1);
 	}, "");
-	return listPrefaceString + pascalCaseStr;
+	return listPrefaceString + pascalCaseStr.trim();
 };
 
 /** Fill the list area with the currently selected list */
@@ -112,17 +123,13 @@ let main = () => {
 
 // #region Event handlers
 
-$("#menu-button").click(() => {
-	toggleSideMenu();
-});
+$("#menu-button").click(toggleSideMenu);
 
-
-$("#theme-button").click(() => {
-	switchTheme();
-});
+$("#theme-button").click(switchTheme);
 
 $(".checkbox").click(toggleCheckbox);
 
+$("#list-add-button").click(addItemToList);
 
 // #endregion
 

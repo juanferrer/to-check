@@ -45,10 +45,10 @@
 	<!-- Work area -->
 	<div class="container-fluid d-flex flex-direction-row align-items-center work-area" id="work-area">
 		<!-- Side menu -->
-		<div class="container d-flex justify-content-center align-items-center side-menu" id="side-menu">
+		<div class="container d-flex justify-content-center align-items-center side-menu theme-colored" id="side-menu">
 		</div>
 		<!-- List area -->
-		<div class="container d-flex flex-column list-area" id="list-area">
+		<div class="container d-flex flex-column list-area theme-colored" id="list-area">
 			<div class="container-fluid d-flex justify-content-center list-title" id="list-title" contenteditable="true">TITLE</div>
 			<ul class="container-fluid list-group-flush list" id="list">
 				<li class="list-group-item d-flex align-items-center">
@@ -57,6 +57,12 @@
 					<span class="checkbox-label" contenteditable="true">TEST CHECKBOX</span>
 				</li>
 			</ul>
+			<div class="container-fluid d-flex flex-row align-items-center list-add">
+				<button type="button" class="btn btn-transparent list-add-button" id="list-add-button">
+					<i data-feather="plus" class="theme-colored-icon"></i>
+				</button>
+				<span class="container-fluid d-flex list-add-input" id="list-add-input" contenteditable="true"></span>
+			</div>
 		</div>
 	</div>
 

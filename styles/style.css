@@ -1,7 +1,8 @@
 :root {
 	/* Colors */
 	--main-color: hsla(0, 0%, 98%, 1);
-	--accent-color: green;
+	--accent-color: hsla(80, 76%, 53%, 1);
+	--accent-color-hover: hsla(80, 76%, 73%, 1);
 	--background-color: hsla(0, 0%, 90%, 1);
 	--semi-transparent-hover: hsla(0, 0%, 30%, 0.3);
 	--text-color: hsla(0, 0%, 20%, 1);
@@ -29,8 +30,6 @@ body {
 .theme-colored {
 	background-color: var(--main-color);
 	color: var(--text-color);
-	font-family: var(--main-font);
-	font-size: 20px;
 }
 
 .theme-colored-icon {
@@ -49,11 +48,25 @@ body {
 	pointer-events: none;
 }
 
+.btn-accent {
+	background-color: var(--accent-color);
+}
+
+.btn-accent:hover {
+	background-color: var(--accent-color-hover);
+}
+
+.btn-accent:disabled {
+	pointer-events: none;
+}
+
 /* Specific */
 
 .toolbar {
 	margin: 0px;
 	height: 65px;
+	font-family: var(--main-font);
+	font-size: 20px;
 	border-bottom: 1px solid var(--icon-color);
 	/* box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); */
 }
@@ -61,13 +74,13 @@ body {
 .toolbar-button {
 	width: 50px;
 	height: 50px;
-	border-radius: 50px;
 	display: flex;
+	border-radius: 50px;
 }
 
 .app-name {
-	width: 100%;
 	padding-left: 15px;
+	width: 100%;
 }
 
 .work-area {
@@ -76,10 +89,9 @@ body {
 }
 
 .side-menu {
-	background-color: var(--main-color);
+	padding: 0px;
 	width: 0px;
 	height: calc(100% - 65px);
-	padding: 0px;
 	position: absolute;
 	left: 0px;
 }
@@ -89,7 +101,6 @@ body {
 	height: 85vh;
 	max-width: 750px;
 	min-width: 350px;
-	background-color: var(--main-color);
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
@@ -98,15 +109,15 @@ body {
 }
 
 .list-title {
-	font-size: 25px;
+	margin-top: 10px;
 	color: var(--text-color);
 	font-family: var(--main-font);
-	margin-top: 10px;
+	font-size: 25px;
 }
 
 .list-group-item {
-	color: var(--text-color);
 	background-color: var(--main-color);
+	color: var(--text-color);
 	font-family: var(--main-font);
 	border: none;
 }
@@ -118,30 +129,30 @@ input[type="checkbox"] {
 }
 
 .checkbox {
-	display: inline-block;
+	margin: 0 .5em;
 	width: 20px;
 	height: 20px;
+	display: inline-block;
 	vertical-align: middle;
 	background: #ededed;
 	border: 1px solid #aeaeae;
 	border-radius: 4px;
-	margin: 0 .5em;
 }
 
 /* Style checkmark when checked */
 
 input[type="checkbox"]:checked+span:after {
-	/*Add a block-level blank space*/
-	content: "";
-	display: block;
+	/*Position it on top of the custom checkbox*/
+	margin-left: 0.4rem;
 	/*Make a small rectangle*/
 	width: 6px;
 	height: 18px;
+	/*Add a block-level blank space*/
+	content: "";
+	display: block;
 	/*Add a border on the bottom and right, creating an 'L' */
 	border: solid #000000;
 	border-width: 0 4px 4px 0;
-	/*Position it on top of the custom checkbox*/
-	margin-left: 0.4rem;
 	/*Rotate the L to make it look like a checkmark*/
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
@@ -153,4 +164,19 @@ input[type="checkbox"]:checked+span:after {
 input[type="checkbox"]:checked~span.checkbox-label {
 	text-decoration-line: line-through;
 	opacity: 0.65;
+}
+
+.list-add-button {
+	width: 50px;
+	height: 50px;
+	display: flex;
+	border-radius: 50px;
+}
+
+.list-add-input {
+	padding-left: 10px;
+	height: 50%;
+	border: 1px solid var(--icon-color);
+	border-radius: 5px;
+	font-family: var(--main-font);
 }
