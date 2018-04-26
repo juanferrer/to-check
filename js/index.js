@@ -66,13 +66,14 @@ let toggleCheckbox = e => {
  */
 let addItemToList = e => {
 	let itemName = e.currentTarget.nextElementSibling.textContent;
+	if (itemName) {
+		lists[currentListName] = lists[currentListName] || {};
 
-	lists[currentListName] = lists[currentListName] || {};
-
-	lists[currentListName][convertToVarName(itemName)] = false;
-	populateList();
-	saveLists();
-	$("#list-add-input").empty();
+		lists[currentListName][convertToVarName(itemName)] = false;
+		populateList();
+		saveLists();
+		$("#list-add-input").empty();
+	}
 };
 
 /**
