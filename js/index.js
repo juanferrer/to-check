@@ -5,6 +5,7 @@ var lists;
 var currentListName;
 const elementPrefaceString = "elename";
 const listPrefaceString = "lisname";
+var currentTheme;
 
 /** Open and close the side menu */
 let toggleSideMenu = () => {
@@ -41,7 +42,10 @@ let switchTheme = () => {
 		$("#dark-theme-icon").css("display", "none");
 	}
 
-	$("#theme-button").attr("data-theme", switchToLightTheme ? "light" : "dark");
+	let newTheme = switchToLightTheme ? "light" : "dark";
+
+	$("#theme-button").attr("data-theme", newTheme);
+	localStorage.setItem("currentTheme", newTheme);
 };
 
 /**
@@ -160,6 +164,14 @@ let handleKeyPress = e => {
 	if (e.key === "Enter") $("#list-add-button").click();
 };
 
+/**
+ * Set the theme in use
+ */
+let loadTheme = () => {
+	currentTheme = localStorage.getItem("currentTheme") || "light";
+	if (currentTheme !== $("#theme-button").attr("data-theme")) switchTheme();
+};
+
 /** Load the lists */
 let loadLists = () => {
 	let listsJSONStr = localStorage.getItem("toCheckLists");
@@ -243,6 +255,7 @@ let saveLists = () => {
 
 let main = () => {
 	feather.replace();
+	loadTheme();
 	loadLists();
 	populateList();
 	populateSideMenu();
