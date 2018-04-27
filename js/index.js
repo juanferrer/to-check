@@ -76,6 +76,41 @@ let changeListSelection = e => {
 };
 
 /**
+ * Create and select a new list
+ * @param {Event} e
+ * @listens click
+ */
+let addList = () => {
+	currentListName = convertToVarName("New List", true);
+
+	populateList();
+	lists[currentListName] = {};
+	saveLists();
+	populateSideMenu();
+
+};
+
+/**
+ * Remove the selected list
+ * @param {Event} e
+ * @listens click
+ */
+let removeList = e => {
+	let listToRemove = convertToVarName(e.currentTarget.previousElementSibling.textContent, true);
+
+
+	lists[listToRemove] = undefined;
+	populateSideMenu();
+	if (currentListName === listToRemove) {
+		if ($("#side-menu-list").children().length === 0) {
+			addList();
+		} else currentListName = convertToVarName($("#side-menu-list").children()[0].firstChild.textContent, true);
+	}
+	populateList();
+	saveLists();
+};
+
+/**
  * Change the status of the clicked checkbox
  * @param {Event} e
  * @listens click
@@ -161,13 +196,16 @@ let populateSideMenu = () => {
 		if (lists[itemName]) {
 			let newElement = document.createElement("li");
 			newElement.setAttribute("class", "list-group-item d-flex align-items-center");
-			newElement.innerHTML = convertToTitle(itemName);
+			newElement.innerHTML = `<span class="side-menu-list-name" >${convertToTitle(itemName)}</span>` +
+				'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash theme-colored-icon btn-list-delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
 			$("#side-menu-list")[0].appendChild(newElement);
 		}
 	}
 
 	$("#side-menu-list").children().off(changeListSelection);
 	$("#side-menu-list").children().click(changeListSelection);
+	$(".btn-list-delete").off(removeList);
+	$(".btn-list-delete").click(removeList);
 };
 
 /** Fill the list area with the currently selected list */
@@ -216,6 +254,8 @@ $("#menu-button").click(toggleSideMenu);
 $("#theme-button").click(switchTheme);
 
 $("#side-menu-list").children().click(changeListSelection);
+
+$("#side-menu-list-add-button").click(addList);
 
 $("#list-title").blur(updateListTitle);
 
