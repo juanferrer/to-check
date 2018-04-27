@@ -1,27 +1,24 @@
-/*var CACHE_NAME = "pwgen-cache-v1";
-var urlsToCache = [
-	"./?v3",
-	"sw.js?v3",
-	"manifest.json?v3",
-	"style.css?v3",
-	"script.js?v3",
-	"logo.png?v3",
-	"logo_192.png?v3",
-	"logo_256.png?v3",
-	"logo_512.png?v3",
-	"https://fonts.googleapis.com/css?family=Special+Elite"
-];
+/* globals importScripts */
 
-self.addEventListener("install", function (event) {
-	// Perform install steps
-	event.waitUntil(
-		caches.open(CACHE_NAME)
-			.then(function (cache) {
-				var x = cache.addAll(urlsToCache);
-				return x;
-			})
+importScripts("js/cache-polyfill.js");
+
+self.addEventListener("install", function (e) {
+	e.waitUntil(
+		caches.open("tocheck").then(function (cache) {
+			return cache.addAll([
+				"index.html",
+				"index.html?homescreen=1",
+				"?homescreen=1",
+				"styles/style.css",
+				"styles/boostrap.min.css",
+				"js/index.js",
+				"3rd-party/jquery-3.3.1.slim.min.js",
+				"3rd-party/bootstrap.min.js",
+				"3rd-party/feather.min.js",
+			]);
+		})
 	);
-});*/
+});
 
 self.addEventListener("fetch", function (event) {
 	// event.respondWith(

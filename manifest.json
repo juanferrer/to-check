@@ -1,7 +1,7 @@
 {
 	"name": "To Check",
 	"short_name": "To Check",
-	"start_url": "index.html?utm_source=homescreen",
+	"start_url": "index.html?homescreen=1",
 	"scope": ".",
 	"icons": [
 		{
