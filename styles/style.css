@@ -155,6 +155,7 @@ body {
 
 .list {
 	padding: 10px;
+	height: 90%;
 	overflow-y: scroll;
 }
 

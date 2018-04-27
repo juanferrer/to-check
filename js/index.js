@@ -173,7 +173,7 @@ let loadLists = () => {
  */
 let convertToTitle = s => {
 	let firstCharOfName = s.startsWith(listPrefaceString) || s.startsWith(elementPrefaceString) ? elementPrefaceString.length : 0;
-	return s.slice(firstCharOfName).split(/(?=[A-Z])|(?=[0-9])/g).join(" ").trim();
+	return s.slice(firstCharOfName).split(/(?=[A-Z])/g).join(" ").trim().replace(/(\d+)/, " $1");
 };
 
 /**
