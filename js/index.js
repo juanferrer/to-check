@@ -180,26 +180,21 @@ let loadLists = () => {
 };
 
 /**
- * Capitalise the first letter of each word, turning it into a title
+ * Extract a title from the var name
  * @param {string} s String to be titleised
  */
 let convertToTitle = s => {
 	let firstCharOfName = s.startsWith(listPrefaceString) || s.startsWith(elementPrefaceString) ? elementPrefaceString.length : 0;
-	//return s.slice(firstCharOfName).split(/(?=[A-Z])/g).join(" ").trim().replace(/(\d+)/, " $1");
 	return decodeURI(s.slice(firstCharOfName));
 };
 
 /**
- * Remove spaces and convert to a camel case string
- * @param {string} s String that needs to become a variable name
+ * Convert to a valid var name
+ * @param {string} s String that needs to become a var name
  * @param {boolean} isList Whether the var name needs to be for an element or a list
  */
 let convertToVarName = (s, isList = false) => {
-	/*let pascalCaseStr = s.split(" ").reduce((a, c) => {
-		return a + c.charAt(0).toUpperCase() + c.slice(1);
-	}, "");*/
-	let pascalCaseStr = encodeURI(s);
-	return (isList ? listPrefaceString : elementPrefaceString) + pascalCaseStr.trim();
+	return (isList ? listPrefaceString : elementPrefaceString) + encodeURI(s).trim();
 };
 
 /** Load the list names on the side menu */
