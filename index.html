@@ -100,6 +100,17 @@
 
 	<!-- Custom scripts -->
 	<script src="./js/index.js"></script>
+
+	<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('service-worker.js')
+				.then(function (reg) {
+					// Worker regiestered
+				}).catch(function (err) {
+					// Error
+				});
+		}
+	</script>
 </body>
 
 </html>
