@@ -87,8 +87,8 @@ let changeListSelection = e => {
 let addList = () => {
 	currentListName = convertToVarName("New List", true);
 
-	populateList();
 	lists[currentListName] = {};
+	populateList();
 	saveLists();
 	populateSideMenu();
 
@@ -185,7 +185,8 @@ let loadLists = () => {
  */
 let convertToTitle = s => {
 	let firstCharOfName = s.startsWith(listPrefaceString) || s.startsWith(elementPrefaceString) ? elementPrefaceString.length : 0;
-	return s.slice(firstCharOfName).split(/(?=[A-Z])/g).join(" ").trim().replace(/(\d+)/, " $1");
+	//return s.slice(firstCharOfName).split(/(?=[A-Z])/g).join(" ").trim().replace(/(\d+)/, " $1");
+	return decodeURI(s.slice(firstCharOfName));
 };
 
 /**
@@ -194,9 +195,10 @@ let convertToTitle = s => {
  * @param {boolean} isList Whether the var name needs to be for an element or a list
  */
 let convertToVarName = (s, isList = false) => {
-	let pascalCaseStr = s.split(" ").reduce((a, c) => {
+	/*let pascalCaseStr = s.split(" ").reduce((a, c) => {
 		return a + c.charAt(0).toUpperCase() + c.slice(1);
-	}, "");
+	}, "");*/
+	let pascalCaseStr = encodeURI(s);
 	return (isList ? listPrefaceString : elementPrefaceString) + pascalCaseStr.trim();
 };
 
@@ -207,7 +209,7 @@ let populateSideMenu = () => {
 	for (let itemName in lists) {
 		if (lists[itemName]) {
 			let newElement = document.createElement("li");
-			newElement.setAttribute("class", "list-group-item d-flex align-items-center");
+			newElement.setAttribute("class", `list-group-item d-flex align-items-center ${currentListName === itemName ? "selected" : ""}`);
 			newElement.innerHTML = `<span class="side-menu-list-name" >${convertToTitle(itemName)}</span>` +
 				'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash theme-colored-icon btn-list-delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
 			$("#side-menu-list")[0].appendChild(newElement);
@@ -225,7 +227,7 @@ let populateList = () => {
 	$("#list").empty();
 	$("#list-title")[0].innerHTML = convertToTitle(currentListName);
 	//for (let itemName in lists[currentListName]) {
-	Object.keys(lists.lisnameMovies).sort().forEach(itemName => {
+	Object.keys(lists[currentListName]).sort().forEach(itemName => {
 		let newElement = document.createElement("li");
 		newElement.setAttribute("class", "list-group-item d-flex align-items-center");
 		newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +

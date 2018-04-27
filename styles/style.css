@@ -125,7 +125,7 @@ body {
 
 /* TODO: Change to :selected */
 
-.side-menu-list>.list-group-item:hover {
+.side-menu-list>.list-group-item.selected {
 	background-color: var(--semi-transparent-hover);
 }
 
