@@ -1,8 +1,8 @@
 {
 	"name": "To Check",
 	"short_name": "To Check",
-	"start_url": "index.html",
-	"scope": "./to-check/",
+	"start_url": "/index.html",
+	"scope": "./",
 	"icons": [
 		{
 			"src": "/android-chrome-192x192.png",
