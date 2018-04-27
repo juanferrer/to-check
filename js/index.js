@@ -176,7 +176,7 @@ let loadTheme = () => {
 let loadLists = () => {
 	let listsJSONStr = localStorage.getItem("toCheckLists");
 	lists = listsJSONStr ? JSON.parse(listsJSONStr) : {};
-	currentListName = localStorage.getItem("currentList");
+	currentListName = localStorage.getItem("currentList") || convertToVarName("New List", true);
 };
 
 /**
@@ -222,22 +222,24 @@ let populateList = () => {
 	$("#list").empty();
 	$("#list-title")[0].innerHTML = convertToTitle(currentListName);
 	//for (let itemName in lists[currentListName]) {
-	Object.keys(lists[currentListName]).sort().forEach(itemName => {
-		let newElement = document.createElement("li");
-		newElement.setAttribute("class", "list-group-item d-flex align-items-center");
-		newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
-			'<span class="checkbox"></span>' +
-			`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
-			'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
-		$("#list")[0].appendChild(newElement);
-	});
+	if (lists[currentListName]) {
+		Object.keys(lists[currentListName]).sort().forEach(itemName => {
+			let newElement = document.createElement("li");
+			newElement.setAttribute("class", "list-group-item d-flex align-items-center");
+			newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
+				'<span class="checkbox"></span>' +
+				`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
+				'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+			$("#list")[0].appendChild(newElement);
+		});
 
-	$(".checkbox").off("click", toggleCheckbox);
-	$(".checkbox").click(toggleCheckbox);
-	$(".checkbox-label").off(saveLists);
-	$(".checkbox-label").blur(saveLists);
-	$(".btn-item-delete").off(removeItem);
-	$(".btn-item-delete").click(removeItem);
+		$(".checkbox").off("click", toggleCheckbox);
+		$(".checkbox").click(toggleCheckbox);
+		$(".checkbox-label").off(saveLists);
+		$(".checkbox-label").blur(saveLists);
+		$(".btn-item-delete").off(removeItem);
+		$(".btn-item-delete").click(removeItem);
+	}
 };
 
 /** Save the lists */
