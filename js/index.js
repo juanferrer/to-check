@@ -20,8 +20,9 @@ let toggleSideMenu = () => {
 
 /** Change the app theme */
 let switchTheme = () => {
-	let switchToLightTheme = $("#theme-button").attr("data-theme") === "dark";
-	if (switchToLightTheme) {
+	// let switchToLightTheme = $("#theme-button").attr("data-theme") === "dark";
+
+	/*if (switchToLightTheme) {
 		$(":root").css("--main-color", "hsla(0, 0%, 98%, 1)");
 		$(":root").css("--background-color", "hsla(0, 0%, 90%, 1)");
 		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 30%, 0.3)");
@@ -40,9 +41,13 @@ let switchTheme = () => {
 		$(":root").css("--textbox-color", "hsla(0, 0%, 60%, 1)");
 		$("#light-theme-icon").css("display", "initial");
 		$("#dark-theme-icon").css("display", "none");
-	}
+	}*/
 
-	let newTheme = switchToLightTheme ? "light" : "dark";
+	//let newTheme = switchToLightTheme ? "light" : "dark";
+	let oldTheme = $("input[name=theme]:checked").val();
+	let newTheme = oldTheme === "light" ? "dark" : "light";
+
+	$(`input[value=${newTheme}`).click();
 
 	$("#theme-button").attr("data-theme", newTheme);
 	localStorage.setItem("currentTheme", newTheme);
@@ -205,7 +210,7 @@ let populateSideMenu = () => {
 		if (lists[itemName]) {
 			let newElement = document.createElement("li");
 			newElement.setAttribute("class", `list-group-item d-flex align-items-center ${currentListName === itemName ? "selected" : ""}`);
-			newElement.innerHTML = `<span class="side-menu-list-name" >${convertToTitle(itemName)}</span>` +
+			newElement.innerHTML = `<span class="side-menu-list-name theme-colored-text" >${convertToTitle(itemName)}</span>` +
 				'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash theme-colored-icon btn-list-delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
 			$("#side-menu-list")[0].appendChild(newElement);
 		}
