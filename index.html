@@ -28,7 +28,7 @@
 
 <body>
 	<input type="radio" name="theme" id="light-theme-radio" value="light" checked />
-	<input type="radio" name="theme" id="dark-theme-radio" value="dark"/>
+	<input type="radio" name="theme" id="dark-theme-radio" value="dark" />
 	<!-- UI -->
 	<!-- Toolbar -->
 	<div class="container-fluid d-flex justify-content-between align-items-center toolbar theme-colored">
@@ -42,9 +42,9 @@
 			<i data-feather="sun" class="theme-colored-icon" id="light-theme-icon" style="display: none"></i>
 			<i data-feather="moon" class="theme-colored-icon" id="dark-theme-icon"></i>
 		</button>
-		<button type="button" class="btn btn-transparent toolbar-button layout-button" disabled id="layout-button" aria-label="Change layout">
-			<!-- <i data-feather="list" class="theme-colored-icon"></i> -->
-			<i data-feather="list" class="theme-colored-icon"></i>
+		<button type="button" class="btn btn-transparent toolbar-button completed-button" id="completed-button" data-hide="false" aria-label="Change layout">
+			<i data-feather="eye" class="theme-colored-icon" id="show-completed-icon" style="display: none"></i>
+			<i data-feather="eye-off" class="theme-colored-icon" id="hide-completed-icon"></i>
 		</button>
 		<button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button" aria-label="Open profile">
 			<i data-feather="user" class="theme-colored-icon"></i>

@@ -6,6 +6,7 @@ var currentListName;
 const elementPrefaceString = "elename";
 const listPrefaceString = "lisname";
 var currentTheme;
+var hideCompleted = false;
 
 /** Open and close the side menu */
 let toggleSideMenu = () => {
@@ -47,10 +48,25 @@ let switchTheme = () => {
 	let oldTheme = $("input[name=theme]:checked").val();
 	let newTheme = oldTheme === "light" ? "dark" : "light";
 
+	$(`#${newTheme}-theme-icon`).css("display", "none");
+	$(`#${oldTheme}-theme-icon`).css("display", "initial");
+
 	$(`input[value=${newTheme}`).click();
 
 	$("#theme-button").attr("data-theme", newTheme);
 	localStorage.setItem("currentTheme", newTheme);
+};
+
+let toggleHideCompleted = () => {
+	hideCompleted = !hideCompleted;
+
+	$("#hide-completed-icon").css("display", hideCompleted ? "none" : "initial");
+	$("#show-completed-icon").css("display", hideCompleted ? "initial" : "none");
+
+	$("#completed-button").attr("data-hide", hideCompleted);
+	localStorage.setItem("hideCompleted", hideCompleted);
+
+	populateList();
 };
 
 /**
@@ -172,9 +188,12 @@ let handleKeyPress = e => {
 /**
  * Set the theme in use
  */
-let loadTheme = () => {
+let loadSettings = () => {
 	currentTheme = localStorage.getItem("currentTheme") || "light";
 	if (currentTheme !== $("#theme-button").attr("data-theme")) switchTheme();
+
+	hideCompleted = localStorage.getItem("hideCompleted") === "false";
+	if (hideCompleted !== $("#completed-button").attr("data-hide")) toggleHideCompleted();
 };
 
 /** Load the lists */
@@ -226,16 +245,19 @@ let populateSideMenu = () => {
 let populateList = () => {
 	$("#list").empty();
 	$("#list-title")[0].innerHTML = convertToTitle(currentListName);
-	//for (let itemName in lists[currentListName]) {
 	if (lists[currentListName]) {
 		Object.keys(lists[currentListName]).sort().forEach(itemName => {
-			let newElement = document.createElement("li");
-			newElement.setAttribute("class", "list-group-item d-flex align-items-center");
-			newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
-				'<span class="checkbox"></span>' +
-				`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
-				'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
-			$("#list")[0].appendChild(newElement);
+			if (hideCompleted && lists[currentListName][itemName]) {
+				// Don't add
+			} else {
+				let newElement = document.createElement("li");
+				newElement.setAttribute("class", "list-group-item d-flex align-items-center");
+				newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
+					'<span class="checkbox"></span>' +
+					`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
+					'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+				$("#list")[0].appendChild(newElement);
+			}
 		});
 
 		$(".checkbox").off("click", toggleCheckbox);
@@ -259,8 +281,8 @@ let saveLists = () => {
 
 let main = () => {
 	feather.replace();
-	loadTheme();
 	loadLists();
+	loadSettings();
 	populateList();
 	populateSideMenu();
 };
@@ -270,6 +292,8 @@ let main = () => {
 $("#menu-button").click(toggleSideMenu);
 
 $("#theme-button").click(switchTheme);
+
+$("#completed-button").click(toggleHideCompleted);
 
 $("#side-menu-list").children().click(changeListSelection);
 
