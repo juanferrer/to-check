@@ -233,6 +233,11 @@ input[value="dark"]:checked~div .side-menu-list>.list-group-item.selected {
 	border: none;
 }
 
+.list-group-item.hidden {
+	/* Important because it needs to override d-flex from Bootstrap...*/
+	display: none!important;
+}
+
 input[value="light"]:checked~div .list>.list-group-item {
 	color: var(--text-color-light);
 }

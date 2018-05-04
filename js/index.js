@@ -154,6 +154,7 @@ let toggleCheckbox = e => {
 	else checkbox.removeAttribute("checked");
 
 	saveLists();
+	populateList();
 };
 
 /**
@@ -253,17 +254,17 @@ let populateList = () => {
 	$("#list-title")[0].innerHTML = convertToTitle(currentListName);
 	if (lists[currentListName]) {
 		Object.keys(lists[currentListName]).sort().forEach(itemName => {
-			if (hideCompleted && lists[currentListName][itemName]) {
+			/*if (hideCompleted && lists[currentListName][itemName]) {
 				// Don't add
-			} else {
-				let newElement = document.createElement("li");
-				newElement.setAttribute("class", "list-group-item d-flex align-items-center");
-				newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
-					'<span class="checkbox"></span>' +
-					`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
-					'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
-				$("#list")[0].appendChild(newElement);
-			}
+			} else {*/
+			let newElement = document.createElement("li");
+			newElement.setAttribute("class", `list-group-item d-flex align-items-center ${lists[currentListName][itemName] && hideCompleted ? "hidden" : ""}`);
+			newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
+				'<span class="checkbox"></span>' +
+				`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
+				'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+			$("#list")[0].appendChild(newElement);
+			//}
 		});
 
 		$(".checkbox").off("click", toggleCheckbox);
