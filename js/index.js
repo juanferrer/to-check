@@ -108,6 +108,12 @@ let changeListSelection = e => {
 let addList = () => {
 	currentListName = convertToVarName("New List", true);
 
+	let newListNum = 2;
+	while (lists[currentListName] !== undefined) {
+		currentListName = convertToVarName(`New List ${newListNum}`, true);
+		newListNum++;
+	}
+
 	lists[currentListName] = {};
 	populateList();
 	saveLists();
