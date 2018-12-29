@@ -98,6 +98,7 @@ let changeListSelection = e => {
 	populateList();
 	populateSideMenu();
 	saveLists();
+	toggleSideMenu();
 };
 
 /**
@@ -118,7 +119,7 @@ let addList = () => {
 	populateList();
 	saveLists();
 	populateSideMenu();
-
+	toggleSideMenu();
 };
 
 /**
