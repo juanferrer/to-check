@@ -1,6 +1,6 @@
 /* globals importScripts */
 
-var CACHE_VERSION = "v1.3";
+const CACHE_VERSION = "v1.5";
 
 importScripts("js/cache-polyfill.js");
 

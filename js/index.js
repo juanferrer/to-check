@@ -288,19 +288,41 @@ let saveLists = () => {
 };
 
 let main = () => {
+	// Store the Add to Home Screen prompt
+	let deferredPrompt;
+	window.addEventListener("beforeinstallprompt", e => {
+		// Prevent Chrome 67 and earlier from automatically showing the prompt
+		e.preventDefault();
+		// Stash the event so it can be triggered later.
+		deferredPrompt = e;
+
+		if (localStorage.getItem("appInstalled") === "false") {
+			setTimeout(() => {
+				deferredPrompt.prompt();
+				localStorage.setItem("appInstalled", true);
+				deferredPrompt.userChoice.then(result => {
+					if (result.outcome === "accepted") {
+						// Installed
+					} else {
+						// Prompt dismissed
+					}
+				});
+			}, 5000);
+		}
+	});
+
 	feather.replace();
 	loadLists();
 	loadSettings();
 	populateList();
 	populateSideMenu();
 
-	window["isUpdateAvailable"]
-		.then(isAvailable => {
-			if (isAvailable) {
-				// Show new update notification
-				$("#alert-modal").modal();
-			}
-		});
+	window["isUpdateAvailable"].then(isAvailable => {
+		if (isAvailable) {
+			// Show new update notification
+			$("#alert-modal").modal();
+		}
+	});
 };
 
 // #region Event handlers
