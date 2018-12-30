@@ -1,26 +1,25 @@
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck_";
-const CACHE_VERSION = "v1.6";
+const CACHE_VERSION = "v1.5";
 const CACHE_NAME = APP_PREFIX + CACHE_VERSION;
 const URLS = [
-	"/to-check/",
-	"/to-check/index.html",
-	"/to-check/index.html",
-	"/to-check/styles/style.css",
-	"/to-check/styles/boostrap.min.css",
-	"/to-check/webfonts/open-sans.css",
-	"/to-check/webfonts/mem8YaGs126MiZpBA-UFWJ0bbck.woff2",
-	"/to-check/webfonts/mem8YaGs126MiZpBA-UFUZ0bbck.woff2",
-	"/to-check/webfonts/mem8YaGs126MiZpBA-UFWZ0bbck.woff2",
-	"/to-check/webfonts/mem8YaGs126MiZpBA-UFVp0bbck.woff2",
-	"/to-check/webfonts/mem8YaGs126MiZpBA-UFWp0bbck.woff2",
-	"/to-check/webfonts/mem8YaGs126MiZpBA-UFW50bbck.woff2",
-	"/to-check/webfonts/mem8YaGs126MiZpBA-UFVZ0b.woff2",
-	"/to-check/js/index.js",
-	"/to-check/3rd-party/jquery-3.3.1.slim.min.js",
-	"/to-check/3rd-party/bootstrap.min.js",
-	"/to-check/3rd-party/feather.min.js",
+	//".",
+	"./index.html",
+	/*"./styles/style.css",
+	"./styles/boostrap.min.css",
+	"./webfonts/open-sans.css",
+	"./webfonts/mem8YaGs126MiZpBA-UFWJ0bbck.woff2",
+	"./webfonts/mem8YaGs126MiZpBA-UFUZ0bbck.woff2",
+	"./webfonts/mem8YaGs126MiZpBA-UFWZ0bbck.woff2",
+	"./webfonts/mem8YaGs126MiZpBA-UFVp0bbck.woff2",
+	"./webfonts/mem8YaGs126MiZpBA-UFWp0bbck.woff2",
+	"./webfonts/mem8YaGs126MiZpBA-UFW50bbck.woff2",
+	"./webfonts/mem8YaGs126MiZpBA-UFVZ0b.woff2",
+	"./js/index.js",
+	"./3rd-party/jquery-3.3.1.slim.min.js",
+	"./3rd-party/bootstrap.min.js",
+	"./3rd-party/feather.min.js",*/
 ];
 
 importScripts("js/cache-polyfill.js");
@@ -29,7 +28,9 @@ importScripts("js/cache-polyfill.js");
 self.addEventListener("install", function (e) {
 	e.waitUntil(
 		caches.open(CACHE_NAME).then(function (cache) {
-			return cache.addAll(URLS);
+			return cache.addAll(URLS)
+				.then(() => { console.log("Content is now available offline"); })
+				.catch((e) => { console.log("Service worker error: " + e); });
 		})
 	);
 });
@@ -49,7 +50,7 @@ self.addEventListener("fetch", function (e) {
 });
 
 // Delete outdated caches
-self.addEventListener("activate", function (e) {
+/*self.addEventListener("activate", function (e) {
 	e.waitUntil(
 		caches.keys().then(function (keyList) {
 			// keyList contains all cache names under your username.github.io
@@ -68,3 +69,4 @@ self.addEventListener("activate", function (e) {
 		})
 	);
 });
+*/

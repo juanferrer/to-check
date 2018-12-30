@@ -17,7 +17,7 @@
 		if ("serviceWorker" in navigator) {
 			window.addEventListener("load", () => {
 				// register service worker file
-				navigator.serviceWorker.register("/to-check/service-worker.js", { scope: "/to-check/" });
+				navigator.serviceWorker.register("service-worker.js", { scope: "/to-check/" });
 			});
 		}
 	</script>
@@ -77,7 +77,7 @@
 					<i data-feather="plus" class="theme-colored-icon"></i>
 				</button>
 			</div>
-			<span class="theme-colored-text version-number" id="version-number">v1.6</span>
+			<span class="theme-colored-text version-number" id="version-number">v1.5</span>
 		</div>
 		<!-- List area -->
 		<div class="container d-flex flex-column list-area theme-colored" id="list-area">
