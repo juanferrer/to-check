@@ -317,12 +317,12 @@ let main = () => {
 	populateList();
 	populateSideMenu();
 
-	window["isUpdateAvailable"].then(isAvailable => {
+	/*window["isUpdateAvailable"].then(isAvailable => {
 		if (isAvailable) {
 			// Show new update notification
 			$("#alert-modal").modal();
 		}
-	});
+	});*/
 };
 
 // #region Event handlers
