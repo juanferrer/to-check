@@ -1,7 +1,7 @@
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck_";
-const CACHE_VERSION = "v1.5";
+const CACHE_VERSION = "v1.6";
 const CACHE_NAME = APP_PREFIX + CACHE_VERSION;
 const URLS = [
 	"./",
@@ -20,7 +20,6 @@ const URLS = [
 	"./3rd-party/jquery-3.3.1.slim.min.js",
 	"./3rd-party/bootstrap.min.js",
 	"./3rd-party/feather.min.js",
-	/**/
 ];
 
 importScripts("js/cache-polyfill.js");
@@ -29,9 +28,7 @@ importScripts("js/cache-polyfill.js");
 self.addEventListener("install", function (e) {
 	e.waitUntil(
 		caches.open(CACHE_NAME).then(function (cache) {
-			return cache.addAll(URLS)
-				.then(() => { console.log("Content is now available offline"); })
-				.catch((e) => { console.log("Service worker error: " + e); });
+			return cache.addAll(URLS);
 		})
 	);
 });
