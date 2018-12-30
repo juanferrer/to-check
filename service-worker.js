@@ -4,9 +4,9 @@ const APP_PREFIX = "ToCheck_";
 const CACHE_VERSION = "v1.5";
 const CACHE_NAME = APP_PREFIX + CACHE_VERSION;
 const URLS = [
-	//".",
+	"./",
 	"./index.html",
-	/*"./styles/style.css",
+	"./styles/style.css",
 	"./styles/boostrap.min.css",
 	"./webfonts/open-sans.css",
 	"./webfonts/mem8YaGs126MiZpBA-UFWJ0bbck.woff2",
@@ -19,7 +19,8 @@ const URLS = [
 	"./js/index.js",
 	"./3rd-party/jquery-3.3.1.slim.min.js",
 	"./3rd-party/bootstrap.min.js",
-	"./3rd-party/feather.min.js",*/
+	"./3rd-party/feather.min.js",
+	/**/
 ];
 
 importScripts("js/cache-polyfill.js");
