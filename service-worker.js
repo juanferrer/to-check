@@ -8,7 +8,7 @@ const URLS = [
 	"./index.html",
 	"./styles/style.css",
 	"./styles/boostrap.min.css",
-	"./webfonts/open-sans.css",
+	// "./webfonts/open-sans.css",
 	/*"./webfonts/mem8YaGs126MiZpBA-UFWJ0bbck.woff2",
 	"./webfonts/mem8YaGs126MiZpBA-UFUZ0bbck.woff2",
 	"./webfonts/mem8YaGs126MiZpBA-UFWZ0bbck.woff2",
