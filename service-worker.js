@@ -6,7 +6,7 @@ const CACHE_NAME = APP_PREFIX + CACHE_VERSION;
 const URLS = [
 	//"./",
 	"./index.html",
-	/*"./styles/style.css",
+	"./styles/style.css",
 	"./styles/boostrap.min.css",
 	// "./webfonts/open-sans.css",
 	/*"./webfonts/mem8YaGs126MiZpBA-UFWJ0bbck.woff2",
