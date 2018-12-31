@@ -28,6 +28,9 @@ let toggleSideMenu = () => {
 let toggleSort = () => {
 	sortKeys = !sortKeys;
 
+	$("#sort-button").toggleClass("on");
+	$("#sort-button").toggleClass("off");
+
 	$("#sort-button").attr("data-sort", sortKeys);
 	localStorage.setItem("sortKeys", sortKeys);
 	populateList();
@@ -74,8 +77,11 @@ let switchTheme = () => {
 let toggleHideCompleted = () => {
 	hideCompleted = !hideCompleted;
 
-	$("#hide-completed-icon").css("display", hideCompleted ? "none" : "initial");
-	$("#show-completed-icon").css("display", hideCompleted ? "initial" : "none");
+	// $("#hide-completed-icon").css("display", hideCompleted ? "none" : "initial");
+	// $("#show-completed-icon").css("display", hideCompleted ? "initial" : "none");
+
+	$("#completed-button").toggleClass("on");
+	$("#completed-button").toggleClass("off");
 
 	$("#completed-button").attr("data-hide", hideCompleted);
 	localStorage.setItem("hideCompleted", hideCompleted);

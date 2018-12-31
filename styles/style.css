@@ -393,6 +393,8 @@ input[value="dark"]:checked~div .list-add-input {
 	cursor: pointer;
 }
 
+/* #region Media queries */
+
 @media (max-width: 576px) {
 	/* Disable focus outline in phones */
 	.toolbar-button:focus {
@@ -404,3 +406,78 @@ input[value="dark"]:checked~div .list-add-input {
 		opacity: 1;
 	}
 }
+
+/* #endregion */
+
+/* #region Animations and keyframes */
+
+.icon-bar {
+	position: absolute;
+	content: '';
+	display: block;
+	width: 24px;
+	height: 1.7px;
+	transform-origin: top left;
+}
+
+.transparent-bar {
+	background-color: #fff;
+	transform: translate(4px, 3px) rotate(45deg);
+}
+
+input[value="light"]:checked~div .transparent-bar {
+	background-color: var(--main-color-light);
+}
+
+input[value="dark"]:checked~div .transparent-bar {
+	background-color: var(--main-color-dark);
+}
+
+.colored-bar {
+	background-color: #000;
+	transform: translate(3px, 4px) rotate(45deg);
+}
+
+input[value="light"]:checked~div .colored-bar {
+	background-color: var(--icon-color-light);
+}
+
+input[value="dark"]:checked~div .colored-bar {
+	background-color: var(--icon-color-dark);
+}
+
+.on-off-icon.on i:nth-child(1) {
+	animation: turn-on 0.8s forwards;
+}
+
+.on-off-icon.on i:nth-child(2) {
+	animation: turn-on 0.8s forwards;
+}
+
+.on-off-icon.off i:nth-child(1) {
+	animation: turn-off 0.8s forwards;
+}
+
+.on-off-icon.off i:nth-child(2) {
+	animation: turn-off 0.8s forwards;
+}
+
+@keyframes turn-off {
+	0% {
+		width: 0px;
+	}
+	100% {
+		width: 24px;
+	}
+}
+
+@keyframes turn-on {
+	0% {
+		width: 24px;
+	}
+	100% {
+		width: 0px;
+	}
+}
+
+/* #endregion */
