@@ -266,9 +266,7 @@ input[value="dark"]:checked~div .list>.list-group-item {
 	background: #555;
 }
 
-/* #endregion */
-
-/* #region Checkboxes */
+/* Checkboxes */
 
 input[type="checkbox"] {
 	display: none;
