@@ -18,7 +18,7 @@ const URLS = [
 	"./webfonts/mem8YaGs126MiZpBA-UFVZ0b.woff2",*/
 	"./js/index.js",
 	"./3rd-party/jquery-3.3.1.slim.min.js",
-	"./3rd-party/bootstrap.min.js",
+	"./3rd-party/bootstrap.bundle.min.js",
 	"./3rd-party/feather.min.js",
 ];
 
