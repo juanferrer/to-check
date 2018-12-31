@@ -1,7 +1,7 @@
 /* globals importScripts */
 
-const APP_PREFIX = "ToCheck_";
-const CACHE_VERSION = "v1.8";
+const APP_PREFIX = "ToCheck";
+const CACHE_VERSION = "";//"_v1.8";
 const CACHE_NAME = APP_PREFIX + CACHE_VERSION;
 const URLS = [
 	"./",
@@ -44,7 +44,7 @@ self.addEventListener("install", function (e) {
 
 // Respond with cached resources
 self.addEventListener("fetch", function (e) {
-	console.log(e.request.url);	// eslint-disable-line no-console
+	//console.log(e.request.url);	// eslint-disable-line no-console
 	e.respondWith(
 		caches.match(e.request).then(function (response) {
 			if (response) {
