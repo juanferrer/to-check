@@ -393,8 +393,14 @@ input[value="dark"]:checked~div .list-add-input {
 	cursor: pointer;
 }
 
-@media (min-width: 576px) {
-	#alert-modal .modal-dialog {
-		margin-top: calc(100vh - 58px - 1.75rem);
+@media (max-width: 576px) {
+	/* Disable focus outline in phones */
+	.toolbar-button:focus {
+		box-shadow: none !important;
+		outline: none !important;
+	}
+	/* Always show delete list icon in phones */
+	.btn-list-delete {
+		opacity: 1;
 	}
 }
