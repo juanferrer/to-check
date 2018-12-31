@@ -8,6 +8,10 @@ const listPrefaceString = "lisname";
 var currentTheme;
 var hideCompleted = false;
 
+let refresh = () => {
+	location.reload(true);
+};
+
 /** Open and close the side menu */
 let toggleSideMenu = () => {
 	if ($("#side-menu").attr("data-open")) {

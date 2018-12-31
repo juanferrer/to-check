@@ -369,3 +369,17 @@ input[value="light"]:checked~div .list-add-input {
 input[value="dark"]:checked~div .list-add-input {
 	border: 1px solid var(--textbox-color-dark);
 }
+
+#alert-modal {
+	position: fixed;
+	top: auto;
+	right: auto;
+	left: auto;
+	bottom: 0;
+}
+
+.refresh-link {
+	font-weight: bold;
+	color: #2579c3;
+	cursor: pointer;
+}
