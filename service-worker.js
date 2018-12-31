@@ -1,8 +1,8 @@
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck";
-const CACHE_VERSION = "";//"_v1.8";
-const CACHE_NAME = APP_PREFIX + CACHE_VERSION;
+const CACHE_VERSION = "_v1.8";
+const CACHE_NAME = APP_PREFIX;
 const URLS = [
 	"./",
 	"./index.html",
