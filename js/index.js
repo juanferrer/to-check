@@ -7,6 +7,7 @@ const elementPrefaceString = "elename";
 const listPrefaceString = "lisname";
 var currentTheme;
 var hideCompleted = false;
+var sortKeys = false;
 
 // eslint-disable-next-line no-unused-vars
 let refresh = () => {
@@ -22,6 +23,14 @@ let toggleSideMenu = () => {
 		$("#side-menu")[0].style.left = "0px";
 		$("#side-menu").attr("data-open", true);
 	}
+};
+
+let toggleSort = () => {
+	sortKeys = !sortKeys;
+
+	$("#sort-button").attr("data-sort", sortKeys);
+	localStorage.setItem("sortKeys", sortKeys);
+	populateList();
 };
 
 /** Change the app theme */
@@ -207,6 +216,9 @@ let loadSettings = () => {
 
 	hideCompleted = localStorage.getItem("hideCompleted") === "false";
 	if (hideCompleted !== $("#completed-button").attr("data-hide")) toggleHideCompleted();
+
+	sortKeys = localStorage.getItem("sortKeys") || "false";
+	if (sortKeys !== $("#sort-keys").attr("data-sort")) toggleSort();
 };
 
 /** Load the lists */
@@ -260,7 +272,13 @@ let populateList = () => {
 	$("#list").empty();
 	$("#list-title")[0].innerHTML = convertToTitle(currentListName);
 	if (lists[currentListName]) {
-		Object.keys(lists[currentListName]).sort().forEach(itemName => {
+
+		let keys = Object.keys(lists[currentListName]);
+
+		if (sortKeys) keys = keys.sort();
+
+		//Object.keys(lists[currentListName]).sort().forEach(itemName => {
+		keys.forEach(itemName => {
 			/*if (hideCompleted && lists[currentListName][itemName]) {
 				// Don't add
 			} else {*/
@@ -270,7 +288,7 @@ let populateList = () => {
 				'<span class="checkbox"></span>' +
 				`<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
 				//'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
-				'<i class="material-icons theme-colored-icon btn-item-delete">remove</i>';
+				'<i class="material-icons theme-colored-icon btn-item-delete">cancel</i>';
 			$("#list")[0].appendChild(newElement);
 			//}
 		});
@@ -325,7 +343,7 @@ let main = () => {
 			}
 		});
 
-	feather.replace();
+	//feather.replace();
 	loadLists();
 	loadSettings();
 	populateList();
@@ -353,6 +371,9 @@ $("#list-add-button").click(addItemToList);
 $(".btn-item-delete").click(removeItem);
 
 $("#list-add-input").keydown(handleKeyPress);
+
+$("#sort-button").click(toggleSort);
+
 // #endregion
 
 main();
