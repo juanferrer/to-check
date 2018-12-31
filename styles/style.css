@@ -137,10 +137,6 @@ input[value="dark"]:checked~.toolbar {
 	border-radius: 50px;
 }
 
-.toolbar-button:focus {
-	box-shadow: none;
-}
-
 .app-name {
 	padding-left: 15px;
 	width: 100%;
@@ -397,5 +393,14 @@ input[value="dark"]:checked~div .list-add-input {
 @media (min-width: 576px) {
 	#alert-modal .modal-dialog {
 		margin-top: calc(100vh - 58px - 1.75rem);
+	}
+}
+
+/* Disable focus outline in phones */
+
+@media (max-width: 576px) {
+	.toolbar-button:focus {
+		box-shadow: none !important;
+		outline: none !important;
 	}
 }
