@@ -20,6 +20,9 @@
 				navigator.serviceWorker.register("service-worker.js", { scope: "/to-check/" });
 			});
 		}
+
+		// If showing update modal, use this for refresh: location.reload(true)
+		// https://github.com/GoogleChromeLabs/sw-precache/issues/309
 	</script>
 
 	<!-- Bootstrap CSS -->
