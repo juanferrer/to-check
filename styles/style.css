@@ -377,7 +377,10 @@ input[value="dark"]:checked~div .list-add-input {
 /* #endregion */
 
 #alert-modal .modal-dialog {
-	margin-top: calc(100vh - 58px - 0.5rem);
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
 }
 
 #alert-modal-message {
@@ -393,14 +396,5 @@ input[value="dark"]:checked~div .list-add-input {
 @media (min-width: 576px) {
 	#alert-modal .modal-dialog {
 		margin-top: calc(100vh - 58px - 1.75rem);
-	}
-}
-
-/* Disable focus outline in phones */
-
-@media (max-width: 576px) {
-	.toolbar-button:focus {
-		box-shadow: none !important;
-		outline: none !important;
 	}
 }
