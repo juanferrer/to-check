@@ -29,6 +29,8 @@ body {
 	padding: 0;
 	width: 100vw;
 	height: 100vh;
+	min-width: 300px;
+	min-height: 430px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -38,7 +40,7 @@ input[name=theme] {
 	display: none;
 }
 
-/* General */
+/* #region General */
 
 input[value="light"]:checked~div.theme-colored {
 	background-color: var(--main-color-light);
@@ -108,7 +110,9 @@ input[value="dark"]:checked~div .btn-transparent:hover {
 	pointer-events: none;
 }
 
-/* Specific */
+/* #endregion */
+
+/* #region Specific */
 
 .toolbar {
 	margin: 0px;
@@ -131,6 +135,10 @@ input[value="dark"]:checked~.toolbar {
 	height: 50px;
 	display: flex;
 	border-radius: 50px;
+}
+
+.toolbar-button:focus {
+	box-shadow: none;
 }
 
 .app-name {
@@ -177,8 +185,6 @@ input[value="dark"]:checked~.work-area {
 	font-family: var(--main-font);
 	cursor: pointer;
 }
-
-/* TODO: Change to :selected */
 
 input[value="light"]:checked~div .side-menu-list>.list-group-item.selected {
 	background-color: var(--semi-transparent-hover-light);
@@ -264,7 +270,9 @@ input[value="dark"]:checked~div .list>.list-group-item {
 	background: #555;
 }
 
-/* Checkboxes */
+/* #endregion */
+
+/* #region Checkboxes */
 
 input[type="checkbox"] {
 	display: none;
@@ -370,16 +378,24 @@ input[value="dark"]:checked~div .list-add-input {
 	border: 1px solid var(--textbox-color-dark);
 }
 
-#alert-modal {
-	position: fixed;
-	top: auto;
-	right: auto;
-	left: auto;
-	bottom: 0;
+/* #endregion */
+
+#alert-modal .modal-dialog {
+	margin-top: calc(100vh - 58px - 0.5rem);
+}
+
+#alert-modal-message {
+	text-align: center;
 }
 
 .refresh-link {
 	font-weight: bold;
 	color: #2579c3;
 	cursor: pointer;
+}
+
+@media (min-width: 576px) {
+	#alert-modal .modal-dialog {
+		margin-top: calc(100vh - 58px - 1.75rem);
+	}
 }
