@@ -50,13 +50,16 @@
 	<!-- Bootstrap CSS -->
 	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
 	 crossorigin="anonymous"> -->
-	<link rel="stylesheet" href="styles/boostrap.min.css">
+	<link rel="stylesheet" href="styles/boostrap.min.css" type="text/css">
 
 	<!-- Fonts -->
 	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans"> -->
-	<link rel="stylesheet" href="webfonts/open-sans.css">
+	<link rel="stylesheet" href="webfonts/open-sans.css" type="text/css">
 
-	<link rel="stylesheet" href="styles/style.css">
+	<!-- Icon fonts -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="styles/style.css" type="text/css">
 	<link rel="canonical" href="https://juanferrer.github.io/to-check/" />
 	<title>To Check</title>
 </head>
@@ -69,23 +72,34 @@
 	<div class="container-fluid d-flex justify-content-between align-items-center toolbar theme-colored">
 
 		<button type="button" class="btn btn-transparent toolbar-button menu-button" id="menu-button" aria-label="Open side menu">
-			<i data-feather="menu" class="theme-colored-icon"></i>
+			<!-- <i data-feather="menu" class="theme-colored-icon"></i> -->
+			<i class="material-icons theme-colored-icon">menu</i>
 		</button>
 		<span class="app-name">To Check</span>
 
 		<button type="button" class="btn btn-transparent toolbar-button theme-button" id="theme-button" data-theme="light"
 		 aria-label="Change theme">
-			<i data-feather="sun" class="theme-colored-icon" id="light-theme-icon" style="display: none"></i>
-			<i data-feather="moon" class="theme-colored-icon" id="dark-theme-icon"></i>
+			<!-- <i data-feather="sun" class="theme-colored-icon" id="light-theme-icon" style="display: none"></i> -->
+			<!-- <i data-feather="moon" class="theme-colored-icon" id="dark-theme-icon"></i> -->
+			<i class="material-icons theme-colored-icon" id="light-theme-icon" style="display: none">wb_sunny</i>
+			<i class="material-icons theme-colored-icon" id="dark-theme-icon">brightness_2</i>
 		</button>
 		<button type="button" class="btn btn-transparent toolbar-button completed-button" id="completed-button" data-hide="false"
 		 aria-label="Change layout">
-			<i data-feather="eye" class="theme-colored-icon" id="show-completed-icon" style="display: none"></i>
-			<i data-feather="eye-off" class="theme-colored-icon" id="hide-completed-icon"></i>
+			<!-- <i data-feather="eye" class="theme-colored-icon" id="show-completed-icon" style="display: none"></i> -->
+			<!-- <i data-feather="eye-off" class="theme-colored-icon" id="hide-completed-icon"></i> -->
+			<!-- TODO: https://codepen.io/juanferrer/pen/d88bb33a7f6489e30612ce3093d7480f -->
+			<i class="material-icons theme-colored-icon" id="show-completed-icon" style="display: none;">visibility</i>
+			<i class="material-icons theme-colored-icon" id="hide-completed-icon">visibility_off</i>
 		</button>
-		<button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button"
+		<!-- <button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button"
 		 aria-label="Open profile">
 			<i data-feather="user" class="theme-colored-icon"></i>
+		</button> -->
+		<button type="button" class="btn btn-transparent toolbar-button sort-button" id="sort-button" data-sort="true"
+		 aria-label="Sort buttons">
+			<i class="material-icons theme-colored-icon">sort</i>
+
 		</button>
 	</div>
 
@@ -99,7 +113,8 @@
 
 				</ul>
 				<button type="button" class="btn btn-transparent list-add-button" id="side-menu-list-add-button" aria-label="Add list">
-					<i data-feather="plus" class="theme-colored-icon"></i>
+					<!-- <i data-feather="plus" class="theme-colored-icon"></i> -->
+					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 			</div>
 			<span class="theme-colored-text version-number" id="version-number">v1.10</span>
@@ -123,7 +138,8 @@
 			</ul>
 			<div class="container-fluid d-flex flex-row align-items-center list-add">
 				<button type="button" class="btn btn-transparent list-add-button" id="list-add-button" aria-label="Add element to list">
-					<i data-feather="plus" class="theme-colored-icon"></i>
+					<!-- <i data-feather="plus" class="theme-colored-icon"></i> -->
+					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 				<span class="container-fluid d-flex list-add-input" id="list-add-input" contenteditable="true"></span>
 			</div>
