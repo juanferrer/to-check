@@ -8,6 +8,7 @@ const listPrefaceString = "lisname";
 var currentTheme;
 var hideCompleted = false;
 
+// eslint-disable-next-line no-unused-vars
 let refresh = () => {
 	location.reload(true);
 };
