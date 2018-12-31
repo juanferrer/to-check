@@ -311,6 +311,13 @@ let main = () => {
 		}
 	});
 
+	window["isUpdateAvailable"]
+		.then(isAvailable => {
+			if (isAvailable) {
+				$("#alert-modal").modal();
+			}
+		});
+
 	feather.replace();
 	loadLists();
 	loadSettings();
