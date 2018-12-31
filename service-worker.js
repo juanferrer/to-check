@@ -20,6 +20,15 @@ const URLS = [
 	"./3rd-party/jquery-3.3.1.slim.min.js",
 	"./3rd-party/bootstrap.bundle.min.js",
 	"./3rd-party/feather.min.js",
+	"./android-chrome-192x192.png",
+	"./android-chrome-384x384.png",
+	"./android-chrome-512x512.png",
+	"./apple-touch-icon.png",
+	"./favicon-16x16.png",
+	"./favicon-32x32.png",
+	"./mstile-150x150.png",
+	"./safari-pinned-tab.svg",
+	"./favicon.ico",
 ];
 
 importScripts("js/cache-polyfill.js");
