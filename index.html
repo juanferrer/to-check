@@ -53,8 +53,7 @@
 	<link rel="stylesheet" href="styles/boostrap.min.css" type="text/css">
 
 	<!-- Fonts -->
-	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans"> -->
-	<link rel="stylesheet" href="webfonts/open-sans.css" type="text/css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 
 	<!-- Icon fonts -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
@@ -72,26 +71,20 @@
 	<div class="container-fluid d-flex justify-content-between align-items-center toolbar theme-colored">
 
 		<button type="button" class="btn btn-transparent toolbar-button menu-button" id="menu-button" aria-label="Open side menu">
-			<!-- <i data-feather="menu" class="theme-colored-icon"></i> -->
 			<i class="material-icons theme-colored-icon">menu</i>
 		</button>
 		<span class="app-name">To Check</span>
 
 		<button type="button" class="btn btn-transparent toolbar-button theme-button" id="theme-button" data-theme="light"
 		 aria-label="Change theme">
-			<!-- <i data-feather="sun" class="theme-colored-icon" id="light-theme-icon" style="display: none"></i> -->
-			<!-- <i data-feather="moon" class="theme-colored-icon" id="dark-theme-icon"></i> -->
 			<i class="material-icons theme-colored-icon" id="light-theme-icon" style="display: none">wb_sunny</i>
 			<i class="material-icons theme-colored-icon" id="dark-theme-icon">brightness_2</i>
 		</button>
 		<button type="button" class="btn btn-transparent toolbar-button completed-button on-off-icon on" id="completed-button"
 		 data-hide="false" aria-label="Change layout">
-			<!-- <i data-feather="eye" class="theme-colored-icon" id="show-completed-icon" style="display: none"></i> -->
-			<!-- <i data-feather="eye-off" class="theme-colored-icon" id="hide-completed-icon"></i> -->
 			<i class="icon-bar transparent-bar"></i>
 			<i class="icon-bar colored-bar"></i>
 			<i class="material-icons theme-colored-icon" id="show-completed-icon">visibility</i>
-			<!-- <i class="material-icons theme-colored-icon" id="hide-completed-icon">visibility_off</i> -->
 		</button>
 		<!-- <button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button"
 		 aria-label="Open profile">
@@ -115,11 +108,10 @@
 
 				</ul>
 				<button type="button" class="btn btn-transparent list-add-button" id="side-menu-list-add-button" aria-label="Add list">
-					<!-- <i data-feather="plus" class="theme-colored-icon"></i> -->
 					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 			</div>
-			<span class="theme-colored-text version-number" id="version-number">v1.11</span>
+			<span class="theme-colored-text version-number" id="version-number">v1.12</span>
 		</div>
 		<!-- List area -->
 		<div class="container d-flex flex-column list-area theme-colored" id="list-area">
@@ -140,7 +132,6 @@
 			</ul>
 			<div class="container-fluid d-flex flex-row align-items-center list-add">
 				<button type="button" class="btn btn-transparent list-add-button" id="list-add-button" aria-label="Add element to list">
-					<!-- <i data-feather="plus" class="theme-colored-icon"></i> -->
 					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 				<span class="container-fluid d-flex list-add-input" id="list-add-input" contenteditable="true"></span>
@@ -153,19 +144,15 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-body" id="alert-modal-message">New Update available! <span class="refresh-link" onclick="refresh()">REFRESH</span>
-					<!-- <button type="button" class="close alert-close-button" id="alert-title-close-button" data-dismiss="modal"
-					 aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button> -->
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- jQuery -->
-	<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-	 crossorigin="anonymous"></script> -->
-	<script src="3rd-party/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	 crossorigin="anonymous"></script>
+	<!-- <script src="3rd-party/jquery-3.3.1.slim.min.js"></script> -->
 
 	<!-- Bootstrap -->
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
@@ -173,10 +160,6 @@
 	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 	 crossorigin="anonymous"></script> -->
 	<script src="3rd-party/bootstrap.bundle.min.js"></script>
-
-	<!-- Feather icons -->
-	<!-- <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script> -->
-	<!-- <script src="3rd-party/feather.min.js"></script> -->
 
 	<!-- Custom scripts -->
 	<script src="js/index.js"></script>

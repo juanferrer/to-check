@@ -1,26 +1,18 @@
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck";
-const CACHE_VERSION = "_v1.8";
+const CACHE_VERSION = "_v1.12";
 const CACHE_NAME = APP_PREFIX;
 const URLS = [
 	"./",
 	"./index.html",
 	"./styles/style.css",
 	"./styles/boostrap.min.css",
-	"./webfonts/open-sans.css",
-	"./webfonts/mem8YaGs126MiZpBA-UFWJ0bbck.woff2",
-	"./webfonts/mem8YaGs126MiZpBA-UFUZ0bbck.woff2",
-	"./webfonts/mem8YaGs126MiZpBA-UFWZ0bbck.woff2",
-	"./webfonts/mem8YaGs126MiZpBA-UFVp0bbck.woff2",
-	"./webfonts/mem8YaGs126MiZpBA-UFWp0bbck.woff2",
-	"./webfonts/mem8YaGs126MiZpBA-UFW50bbck.woff2",
-	"./webfonts/mem8YaGs126MiZpBA-UFVZ0b.woff2",
+	"https://fonts.googleapis.com/css?family=Open+Sans",
 	"https://fonts.googleapis.com/icon?family=Material+Icons",
 	"./js/index.js",
-	"./3rd-party/jquery-3.3.1.slim.min.js",
+	"https://code.jquery.com/jquery-3.3.1.slim.min.js",
 	"./3rd-party/bootstrap.bundle.min.js",
-	// "./3rd-party/feather.min.js",
 	"./android-chrome-192x192.png",
 	"./android-chrome-384x384.png",
 	"./android-chrome-512x512.png",
