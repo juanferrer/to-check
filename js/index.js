@@ -371,6 +371,10 @@ $("#side-menu-list").children().click(changeListSelection);
 
 $("#side-menu-list-add-button").click(addList);
 
+$("#list-title").click(toggleSideMenu);
+
+$("#list-area").click(toggleSideMenu);
+
 $("#list-title").blur(updateListTitle);
 
 $(".checkbox").click(toggleCheckbox);
