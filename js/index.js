@@ -17,12 +17,20 @@ let refresh = () => {
 /** Open and close the side menu */
 let toggleSideMenu = () => {
 	if ($("#side-menu").attr("data-open")) {
-		$("#side-menu")[0].style.left = "-250px";
-		$("#side-menu").removeAttr("data-open");
+		hideSideMenu();
 	} else {
-		$("#side-menu")[0].style.left = "0px";
-		$("#side-menu").attr("data-open", true);
+		showSideMenu();
 	}
+};
+
+let hideSideMenu = () => {
+	$("#side-menu")[0].style.left = "-250px";
+	$("#side-menu").removeAttr("data-open");
+};
+
+let showSideMenu = () => {
+	$("#side-menu")[0].style.left = "0px";
+	$("#side-menu").attr("data-open", true);
 };
 
 let toggleSort = () => {
@@ -371,9 +379,9 @@ $("#side-menu-list").children().click(changeListSelection);
 
 $("#side-menu-list-add-button").click(addList);
 
-$("#list-title").click(toggleSideMenu);
+$("#list-title").click(hideSideMenu);
 
-$("#list-area").click(toggleSideMenu);
+$("#list-area").click(hideSideMenu);
 
 $("#list-title").blur(updateListTitle);
 
