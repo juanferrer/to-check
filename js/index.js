@@ -116,7 +116,7 @@ let updateListTitle = e => {
  * @listens click
  */
 let changeListSelection = e => {
-	currentListName = convertToVarName(e.currentTarget.textContent, true);
+	currentListName = convertToVarName(e.currentTarget.firstChild.textContent, true);
 
 	populateList();
 	populateSideMenu();
@@ -265,7 +265,7 @@ let populateSideMenu = () => {
 			newElement.setAttribute("class", `list-group-item d-flex align-items-center ${currentListName === itemName ? "selected" : ""}`);
 			newElement.innerHTML = `<span class="side-menu-list-name theme-colored-text" >${convertToTitle(itemName)}</span>` +
 				//'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash theme-colored-icon btn-list-delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
-				'<i class="material-icons theme-colored-icon  btn-list-delete">delete</i>';
+				'<i class="material-icons theme-colored-icon btn-list-delete">delete</i>';
 			$("#side-menu-list")[0].appendChild(newElement);
 		}
 	}
