@@ -65,8 +65,11 @@ let switchTheme = () => {
 	let oldTheme = $("input[name=theme]:checked").val();
 	let newTheme = oldTheme === "light" ? "dark" : "light";
 
-	$(`#${newTheme}-theme-icon`).css("display", "none");
-	$(`#${oldTheme}-theme-icon`).css("display", "initial");
+	// $(`#${newTheme}-theme-icon`).css("display", "none");
+	// $(`#${oldTheme}-theme-icon`).css("display", "initial");
+
+	$("#theme-button").toggleClass("light");
+	$("#theme-button").toggleClass("dark");
 
 	$(`input[value=${newTheme}`).click();
 
