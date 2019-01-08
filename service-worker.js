@@ -40,11 +40,14 @@ self.addEventListener("fetch", function (e) {
 	//console.log(e.request.url);	// eslint-disable-line no-console
 	e.respondWith(
 		caches.match(e.request).then(function (response) {
-			if (response) {
-				return response;     // if valid response is found in cache return it
-			} else {
-				return fetch(e.request);     //fetch from internet
-			}
+			// If valid response is found in cache return it, otherwise,
+			// fetch from the Internet and put in cache
+			return response || fetch(e.request).then(function (r) {
+				return caches.open(CACHE_NAME).then(function (cache) {
+					cache.put(e.request, r.clone());
+					return response;
+				});
+			});
 		})
 	);
 });
