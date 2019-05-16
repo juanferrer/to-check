@@ -310,7 +310,8 @@ input[type="checkbox"]:checked+span:after {
 	/*Add a border on the bottom and right, creating an 'L' */
 	border: solid #000000;
 	border-width: 0 4px 4px 0;
-	/*Rotate the L to make it look like a checkmark*/
+    /*Rotate the L to make it look like a checkmark*/
+    transform: rotate(45deg);
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
 	-o-transform: rotate(45deg);
@@ -374,7 +375,7 @@ input[type="checkbox"]:checked~span.checkbox-label {
 .list-add-input {
 	margin-left: 5px;
 	padding-left: 10px;
-	height: 70%;
+	height: 28px;
 	border-radius: 5px;
 	font-family: var(--main-font);
 }
