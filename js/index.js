@@ -1,4 +1,4 @@
-/* globals $, feather */
+/* globals $ */
 
 // #region Globals
 var lists;
