@@ -412,13 +412,22 @@ input[value="dark"]:checked~div .list-add-input {
 @media (max-width: 576px) {
 	/* Disable focus outline in phones */
 	.toolbar-button:focus {
-		box-shadow: none !important;
-		outline: none !important;
-	}
+		box-shadow: none;
+		outline: none;
+    }
+
+    .list-add-button:focus {
+        box-shadow: none;
+		outline: none;
+    }
 	/* Always show delete list icon in phones */
 	.btn-list-delete {
 		opacity: 1;
-	}
+    }
+
+    .btn-transparent:hover {
+        background-color: transparent;
+    }
 }
 
 /* #endregion */
