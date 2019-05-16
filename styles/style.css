@@ -374,7 +374,7 @@ input[type="checkbox"]:checked~span.checkbox-label {
 .list-add-input {
 	margin-left: 5px;
 	padding-left: 10px;
-	height: 50%;
+	height: 70%;
 	border-radius: 5px;
 	font-family: var(--main-font);
 }
