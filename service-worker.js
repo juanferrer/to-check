@@ -1,7 +1,7 @@
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck";
-const CACHE_VERSION = "_v1.17"; //eslint-disable-line no-unused-vars
+const CACHE_VERSION = "_v1.18"; //eslint-disable-line no-unused-vars
 const CACHE_NAME = APP_PREFIX;
 const URLS = [
     "./",
