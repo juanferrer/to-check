@@ -310,8 +310,8 @@ input[type="checkbox"]:checked+span:after {
 	/*Add a border on the bottom and right, creating an 'L' */
 	border: solid #000000;
 	border-width: 0 4px 4px 0;
-    /*Rotate the L to make it look like a checkmark*/
-    transform: rotate(45deg);
+	/*Rotate the L to make it look like a checkmark*/
+	transform: rotate(45deg);
 	-webkit-transform: rotate(45deg);
 	-moz-transform: rotate(45deg);
 	-o-transform: rotate(45deg);
@@ -414,20 +414,18 @@ input[value="dark"]:checked~div .list-add-input {
 	.toolbar-button:focus {
 		box-shadow: none;
 		outline: none;
-    }
-
-    .list-add-button:focus {
-        box-shadow: none;
+	}
+	.list-add-button:focus {
+		box-shadow: none;
 		outline: none;
-    }
+	}
 	/* Always show delete list icon in phones */
 	.btn-list-delete {
 		opacity: 1;
-    }
-
-    .btn-transparent:hover {
-        background-color: transparent;
-    }
+	}
+	.btn-transparent:hover {
+		background-color: transparent;
+	}
 }
 
 /* #endregion */
@@ -461,6 +459,17 @@ input[value="dark"]:checked~div .transparent-bar {
 
 input[value="dark"]:checked~div .btn-transparent:hover .transparent-bar {
 	background-color: var(--hover);
+}
+
+@media (max-width: 576px) {
+	/* No hover on mobile, so don't change the colour of the transparent bar */
+	input[value="light"]:checked~div .btn-transparent:hover .transparent-bar {
+		background-color: var(--main-color-light);
+	}
+
+	input[value="dark"]:checked~div .btn-transparent:hover .transparent-bar {
+		background-color: var(--main-color-dark);
+	}
 }
 
 /*
