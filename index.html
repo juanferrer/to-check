@@ -13,7 +13,7 @@
 	<meta name="msapplication-TileColor" content="#da532c">
 	<meta name="theme-color" content="#ffffff">
 
-	<script>
+	<!-- <script>
 		// make the whole serviceworker process into a promise so later on we can
 		// listen to it and in case new content is available a toast will be shown
 		window.isUpdateAvailable = new Promise(function (resolve, reject) {
@@ -45,7 +45,7 @@
 
 		// If showing update modal, use this for refresh: location.reload(true)
 		// https://github.com/GoogleChromeLabs/sw-precache/issues/309*/
-	</script>
+    </script> -->
 
 	<!-- Bootstrap CSS -->
 	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
@@ -148,6 +148,9 @@
 			</div>
 		</div>
 	</div>
+
+    <!-- Register Service Worker -->
+    <script type="text/javascript" src="sw-register.js"></script>
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
