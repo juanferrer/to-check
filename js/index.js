@@ -9,11 +9,6 @@ var currentTheme;
 var hideCompleted = false;
 var sortKeys = false;
 
-var debug = {
-    dev: false,
-    log: (message) => { console.log(message); }, // eslint-disable-line
-};
-
 // eslint-disable-next-line no-unused-vars
 let refresh = () => {
     location.reload(true);
