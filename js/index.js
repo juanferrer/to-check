@@ -353,12 +353,12 @@ let main = () => {
         }
     });
 
-    window["isUpdateAvailable"]
+    /*window["isUpdateAvailable"]
         .then(isAvailable => {
             if (isAvailable) {
                 $("#alert-modal").modal();
             }
-        });
+        });*/
 
     //feather.replace();
     loadLists();
