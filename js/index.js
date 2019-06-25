@@ -224,9 +224,7 @@ let handleKeyPress = e => {
     if (e.key === "Enter") $("#list-add-button").click();
 };
 
-/**
- * Set the theme in use
- */
+/** Load settings */
 let loadSettings = () => {
     currentTheme = localStorage.getItem("currentTheme") || "light";
     if (currentTheme !== $("#theme-button").attr("data-theme")) switchTheme();
