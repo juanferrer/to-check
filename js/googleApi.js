@@ -1,108 +1,119 @@
-/* globals gapi */
+/* globals gapi, debug */
 
-// Client ID and API key from the Developer Console
-var CLIENT_ID = "<YOUR_CLIENT_ID>";
-var API_KEY = "<YOUR_API_KEY>";
+const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
+const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
 
-// Array of API discovery doc URLs for APIs used by the quickstart
-var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+const SCOPES = "https://www.googleapis.com/auth/drive.appdata";
 
-// Authorization scopes required by the API; multiple scopes can be
-// included, separated by spaces.
-var SCOPES = "https://www.googleapis.com/auth/drive.metadata.readonly";
+const CONFIG_FILENAME = "to-check-config.json";
 
-var authorizeButton = document.getElementById("authorize_button");
-var signoutButton = document.getElementById("signout_button");
+var isSignedIn;
 
-
-/**
- *  On load, called to load the auth2 library and API client library.
- */
-function handleClientLoad() {
-    gapi.load("client:auth2", initClient);
-}
-
-/**
- *  Initializes the API client library and sets up sign-in state
- *  listeners.
- */
 function initClient() {
+    // Initialize the JavaScript client library
     gapi.client.init({
-        apiKey: API_KEY,
-        clientId: CLIENT_ID,
-        discoveryDocs: DISCOVERY_DOCS,
-        scope: SCOPES
+        "apiKey": API_KEY,
+        "clientId": CLIENT_ID,
+        "scope": SCOPES,
     }).then(function () {
-        // Listen for sign-in state changes.
+        // Listen for sign-in state changes
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-        // Handle the initial sign-in state.
-        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        authorizeButton.onclick = handleAuthClick;
-        signoutButton.onclick = handleSignoutClick;
-    }, function (error) {
-        appendPre(JSON.stringify(error, null, 2));
+        // Handle the initial sign-in state
+        isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+        updateSigninStatus(isSignedIn);
+
+        if (isSignedIn) {
+            gapi.client.load("drive", "v3", onDriveAPILoaded);
+        }
+    }).then(function (response) {
+        debug.log(response.result);
+    }, function (reason) {
+        debug.log(`Error: ${reason.result.error.message}`);
     });
 }
 
 /**
-       *  Called when the signed in status changes, to update the UI
-       *  appropriately. After a sign-in, the API is called.
-       */
+ * What to do when the Drive API has been loaded
+ */
+function onDriveAPILoaded() {
+    gapi.client.drive.files.list({
+        spaces: "appDataFolder",
+        fields: "nextPageToken, files(id, name)",
+        pageSize: 10
+    }).then(function (response) {
+        let configFileFound = false;
+        let files = response.result.files;
+        if (files) {
+            // Otherwise, replace local with Drive
+            for (let i = 0; i < files.length; ++i) {
+                debug.log(`Found file: ${files[0].name} - ${files[0].id}`);
+                if (files[0].name === CONFIG_FILENAME) {
+                    // Config file found, use this file to load everything
+                    configFileFound = true;
+                }
+            }
+
+            if (configFileFound) {
+                // Set data from here
+
+            } else {
+                // If file not in Drive, upload local (first time)
+                debug.log("Config file not found");
+                uploadDataToDrive(jsonFromLocalStorage());
+            }
+        }
+    });
+}
+
+/**
+ * Generate a JSON object from the local storage
+ * @returns {*} JSON data object containing everything that can be stored
+ */
+function jsonFromLocalStorage() {
+    let jsonData = {};
+    jsonData.currentTheme = localStorage.getItem("currentTheme");
+    jsonData.hideCompleted = localStorage.getItem("hideCompleted");
+    jsonData.sortKeys = localStorage.getItem("sortKeys");
+    jsonData.toCheckLists = localStorage.getItem("toCheckLists");
+    jsonData.currentList = localStorage.getItem("currentList");
+
+    return jsonData;
+}
+
+function uploadDataToDrive(jsonData) {
+    gapi.client.drive.files.create({
+        name: CONFIG_FILENAME,
+        parents: ["appDataFolder"],
+        mimeType: "application/json",
+        body: JSON.stringify(jsonData)
+    }).then(function (response) {
+        debug.log(`File uploaded. ID: ${response.result.id}`);
+    });
+}
+
+/**
+ *  Called when the signed in status changes, to update the UI
+ *  appropriately. After a sign-in, the API is called
+ */
 function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
-        authorizeButton.style.display = "none";
-        signoutButton.style.display = "block";
-        listFiles();
+        // TODO: Replace with user profile icon
     } else {
-        authorizeButton.style.display = "block";
-        signoutButton.style.display = "none";
+        // TODO: Replace with person icon
     }
 }
 
-/**
- *  Sign in the user upon button click.
- */
-function handleAuthClick(event) {
+/**  Sign in the user upon button click */
+function signIn(event) {
     gapi.auth2.getAuthInstance().signIn();
 }
 
-/**
- *  Sign out the user upon button click.
- */
-function handleSignoutClick(event) {
+/** Sign out the user upon button click */
+function signOut(event) {
     gapi.auth2.getAuthInstance().signOut();
 }
 
-/**
- * Append a pre element to the body containing the given message
- * as its text node. Used to display the results of the API call.
- *
- * @param {string} message Text to be placed in pre element.
- */
-function appendPre(message) {
-    var pre = document.getElementById("content");
-    var textContent = document.createTextNode(message + "\n");
-    pre.appendChild(textContent);
-}
-
-/**
- * Print files.
- */
-function listFiles() {
-    gapi.client.drive.files.list({
-        "pageSize": 10,
-        "fields": "nextPageToken, files(id, name)"
-    }).then(function (response) {
-        appendPre("Files:");
-        var files = response.result.files;
-        if (files && files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                appendPre(file.name + " (" + file.id + ")");
-            }
-        } else {
-            appendPre("No files found.");
-        }
-    });
+function loadClient() {
+    gapi.load("client:auth2", initClient);
 }
