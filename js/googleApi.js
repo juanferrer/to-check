@@ -40,22 +40,28 @@ function onDriveAPILoaded() {
     gapi.client.drive.files.list({
         spaces: "appDataFolder",
         fields: "nextPageToken, files(id, name)",
-        pageSize: 10
+        pageSize: 100
     }).then(function (response) {
-        let configFileFound = false;
+        let configFileId = "";
         let files = response.result.files;
         if (files) {
             // Otherwise, replace local with Drive
             for (let i = 0; i < files.length; ++i) {
-                debug.log(`Found file: ${files[0].name} - ${files[0].id}`);
-                if (files[0].name === CONFIG_FILENAME) {
+                debug.log(`Found file: ${files[i].name} - ${files[i].id}`);
+                if (files[i].name === CONFIG_FILENAME) {
                     // Config file found, use this file to load everything
-                    configFileFound = true;
+                    configFileId = files[i].id;
                 }
             }
 
-            if (configFileFound) {
+            if (configFileId !== "") {
                 // Set data from here
+                gapi.client.drive.files.export({
+                    fileId: configFileId,
+                    mimeType: "application/json"
+                }).then(function (response) {
+                    debug.log(response);
+                });
 
             } else {
                 // If file not in Drive, upload local (first time)
