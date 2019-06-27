@@ -77,6 +77,9 @@ function onDriveAPILoaded() {
                     
                 });*/
 
+                // Needs Bearer token
+                // https://developers.google.com/drive/api/v3/manage-downloads
+                // https://stackoverflow.com/questions/12503437/google-drive-service-account-returns-403-usagelimits
                 gapi.client.request({
                     "path": `https://www.googleapis.com/drive/v3/files/${configFileId}?alt=media`,
                     "method": "GET",
