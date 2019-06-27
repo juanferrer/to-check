@@ -3,7 +3,8 @@
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
 
-const SCOPES = "https://www.googleapis.com/auth/drive.appdata";
+const SCOPES = "https://www.googleapis.com/auth/drive";
+const DISCOVERY_DOCUMENTS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
 const CONFIG_FILENAME = "to-check-config.json";
 
@@ -15,6 +16,7 @@ function initClient() {
         "apiKey": API_KEY,
         "clientId": CLIENT_ID,
         "scope": SCOPES,
+        "discoveryDocs": DISCOVERY_DOCUMENTS
     }).then(function () {
         // Listen for sign-in state changes
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
@@ -56,11 +58,22 @@ function onDriveAPILoaded() {
 
             if (configFileId !== "") {
                 // Set data from here
-                gapi.client.drive.files.export({
+                gapi.client.drive.files.get({
                     fileId: configFileId,
-                    mimeType: "application/json"
+                    mimeType: "application/json",
+                    fields: "webContentLink"
                 }).then(function (response) {
-                    debug.log(response);
+                    debug.log(response.result);
+                    fetch(response.result.webContentLink)
+                        .then(result => result.blob())
+                        .then(function (blob) {
+                            let reader = new FileReader();
+                            reader.addEventListener("loadend", function () {
+                            // reader.result
+                                debug.log(reader.result);
+                            });
+                            reader.readAsText(blob);
+                        });
                 });
 
             } else {
@@ -121,5 +134,7 @@ function signOut(event) {
 }
 
 function loadClient() {
-    gapi.load("client:auth2", initClient);
+    if (debug.dev) {
+        gapi.load("client:auth2", initClient);
+    }
 }
