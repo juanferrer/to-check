@@ -1,9 +1,9 @@
-/* globals gapi, debug */
+/* globals gapi, debug, $ */
 
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
 
-const SCOPES = "https://www.googleapis.com/auth/drive";
+const SCOPES = "https://www.googleapis.com/auth/drive.appdata";
 const DISCOVERY_DOCUMENTS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
 const CONFIG_FILENAME = "to-check-config.json";
@@ -58,7 +58,7 @@ function onDriveAPILoaded() {
 
             if (configFileId !== "") {
                 // Set data from here
-                gapi.client.drive.files.get({
+                /*gapi.client.drive.files.get({
                     fileId: configFileId,
                     mimeType: "application/json",
                     fields: "webContentLink"
@@ -74,6 +74,17 @@ function onDriveAPILoaded() {
                             });
                             reader.readAsText(blob);
                         });
+                    
+                });*/
+                $.ajax({
+                    url: `https://www.googleapis.com/drive/v3/files/${configFileId}?alt=media`,
+                    method: "GET",
+                    success: function (response) {
+                        debug.log(response);
+                    },
+                    error: function (error) {
+                        debug.log(error);
+                    }
                 });
 
             } else {
