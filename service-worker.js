@@ -37,8 +37,8 @@ self.addEventListener("install", function (e) {
     );
 });
 
-self.addEventListener("activate", function () {
-    event.waitUntil(self.clients.claim());
+self.addEventListener("activate", function (e) {
+    e.waitUntil(self.clients.claim());
 });
 
 // // Respond with cached resources
