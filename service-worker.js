@@ -4,7 +4,7 @@ const APP_PREFIX = "ToCheck";
 // const CACHE_VERSION = "_v1.18"; //eslint-disable-line no-unused-vars
 const CACHE_NAME = APP_PREFIX;
 const URLS = [
-    "./",
+    /*"./",
     "./index.html",
     "./styles/style.css",
     "./styles/boostrap.min.css",
@@ -21,7 +21,7 @@ const URLS = [
     "./favicon-32x32.png",
     "./mstile-150x150.png",
     "./safari-pinned-tab.svg",
-    "./favicon.ico",
+    "./favicon.ico",*/
 ];
 
 importScripts("js/cache-polyfill.js");
@@ -41,38 +41,21 @@ self.addEventListener("activate", function (e) {
     e.waitUntil(self.clients.claim());
 });
 
-// // Respond with cached resources
-// self.addEventListener("fetch", function (e) {
-//     //console.log(e.request.url);	// eslint-disable-line no-console
-//     e.respondWith(
-//         caches.match(e.request).then(function (response) {
-//             // If valid response is found in cache return it, otherwise,
-//             // fetch from the Internet and put in cache
-//             return response || fetch(e.request).then(function (r) {
-//                 return caches.open(CACHE_NAME).then(function (cache) {
-//                     cache.put(e.request, r.clone());
-//                     return response;
-//                 });
-//             });
-//         })
-//     );
-// });
-
 // If any fetch fails, it will look for the request in the cache and serve it from there first
 self.addEventListener("fetch", function(e) {
     if (e.request.method !== "GET") return;
 
     // If request was success, add or update it in the cache
-    e.respondWith(
-        fetch(e.request)
-            .then(function (response) {
-                debug.log("[PWA] add page to offline cache: " + response.url);
-                e.waitUntil(updateCache(e.request, response.clone()));
-                return response;
-            }).catch(function (error) {
-                debug.log("[PWA] " + error);
-                return fromCache(e.request);
-            }));
+    e.respondWith(fetch(e.request)
+        .then(function (response) {
+            debug.log("[PWA] add page to offline cache: " + response.url);
+            e.waitUntil(updateCache(e.request, response.clone()));
+            return response;
+        }).catch(function (error) {
+            debug.log("[PWA] " + error);
+            return fromCache(e.request);
+        })
+    );
 });
 
 function fromCache(request) {
