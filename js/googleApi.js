@@ -76,15 +76,14 @@ function onDriveAPILoaded() {
                         });
                     
                 });*/
-                $.ajax({
-                    url: `https://www.googleapis.com/drive/v3/files/${configFileId}?alt=media`,
-                    method: "GET",
-                    success: function (response) {
-                        debug.log(response);
-                    },
-                    error: function (error) {
-                        debug.log(error);
-                    }
+
+                gapi.client.request({
+                    "path": `https://www.googleapis.com/drive/v3/files/${configFileId}?alt=media`,
+                    "method": "GET",
+                    "params": "",
+                    "headers": "",
+                }).then(function (response) {
+                    debug.log(response);
                 });
 
             } else {

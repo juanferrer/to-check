@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck";
@@ -64,7 +65,7 @@ function fromCache(request) {
     // If not in the cache, then return error page
     return caches.open(CACHE_NAME).then(function (cache) {
         return cache.match(request).then(function (response) {
-            return response || fetch(request)
+            return response || fetch(request);
         }).then(function (response) {
             const responseClone = response.clone();
             cache.put(request, responseClone);
