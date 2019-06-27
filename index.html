@@ -86,15 +86,15 @@
 			<i class="icon-bar colored-bar"></i>
 			<i class="material-icons theme-colored-icon" id="show-completed-icon">visibility</i>
 		</button>
-		<!-- <button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button"
-		 aria-label="Open profile">
-			<i data-feather="user" class="theme-colored-icon"></i>
-		</button> -->
 		<button type="button" class="btn btn-transparent toolbar-button sort-button on-off-icon on" id="sort-button"
 		 data-sort="true" aria-label="Sort items">
 			<i class="icon-bar transparent-bar"></i>
 			<i class="icon-bar colored-bar"></i>
 			<i class="material-icons theme-colored-icon">sort_by_alpha</i>
+		</button>
+		<button type="button" class="btn btn-transparent toolbar-button profile-button" id="profile-button"
+		 data-hide="false" aria-label="Open profile">
+			<i class="material-icons theme-colored-icon" id="user-icon">person</i>
 		</button>
 	</div>
 
@@ -111,7 +111,7 @@
 					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 			</div>
-			<span class="theme-colored-text version-number" id="version-number">v1.19</span>
+			<span class="theme-colored-text version-number" id="version-number">v1.20</span>
 		</div>
 		<!-- List area -->
 		<div class="container d-flex flex-column list-area theme-colored" id="list-area">
@@ -162,17 +162,18 @@
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	 crossorigin="anonymous"></script>
-	<!-- <script src="3rd-party/jquery-3.3.1.slim.min.js"></script> -->
 
-	<!-- Bootstrap -->
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-	 crossorigin="anonymous"></script> -->
-	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-	 crossorigin="anonymous"></script> -->
-	<script src="3rd-party/bootstrap.bundle.min.js"></script>
+	 <!-- Bootstrap -->
+	 <script src="3rd-party/bootstrap.bundle.min.js"></script>
 
 	<!-- Custom scripts -->
 	<script src="js/index.js"></script>
+
+	<!-- Google API -->
+    <script src="js/googleApi.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js"
+     onload="this.onload=function(){}; loadClient()"
+     onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
 </body>
 
 </html>
