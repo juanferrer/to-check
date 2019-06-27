@@ -63,13 +63,16 @@ self.addEventListener("fetch", function(e) {
     if (e.request.method !== "GET") return;
 
     // If request was success, add or update it in the cache
-    e.respondWith(fetch(e.request).then(function (response) {
-        debug.log("[PWA] add page to offline cache: " + response.url);
-        e.waitUntil(updateCache(e.request, response.clone()));
-    }).catch(function (error) {
-        debug.log("[PWA] " + error);
-        return fromCache(e.request);
-    }));
+    e.respondWith(
+        fetch(e.request)
+            .then(function (response) {
+                debug.log("[PWA] add page to offline cache: " + response.url);
+                e.waitUntil(updateCache(e.request, response.clone()));
+                return response;
+            }).catch(function (error) {
+                debug.log("[PWA] " + error);
+                return fromCache(e.request);
+            }));
 });
 
 function fromCache(request) {
