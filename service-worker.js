@@ -1,4 +1,4 @@
-/* globals importScripts, debug */
+/* globals importScripts */
 
 const APP_PREFIX = "ToCheck";
 // const CACHE_VERSION = "_v1.18"; //eslint-disable-line no-unused-vars
@@ -43,16 +43,16 @@ self.addEventListener("activate", function (e) {
 
 // If any fetch fails, it will look for the request in the cache and serve it from there first
 self.addEventListener("fetch", function(e) {
-    //if (e.request.method !== "GET") return;
+    if (e.request.method !== "GET") return;
 
     // If request was success, add or update it in the cache
     e.respondWith(fetch(e.request)
         .then(function (response) {
-            debug.log("[PWA] add page to offline cache: " + response.url);
+            console.log("[PWA] add page to offline cache: " + response.url);
             e.waitUntil(updateCache(e.request, response.clone()));
             return response;
         }).catch(function (error) {
-            debug.log("[PWA] " + error);
+            console.log("[PWA] " + error);
             return fromCache(e.request);
         })
     );
