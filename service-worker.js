@@ -43,7 +43,7 @@ self.addEventListener("activate", function (e) {
 
 // If any fetch fails, it will look for the request in the cache and serve it from there first
 self.addEventListener("fetch", function(e) {
-    if (e.request.method !== "GET") return;
+    //if (e.request.method !== "GET") return;
 
     // If request was success, add or update it in the cache
     e.respondWith(fetch(e.request)
@@ -53,7 +53,8 @@ self.addEventListener("fetch", function(e) {
             return response;
         }).catch(function (error) {
             debug.log("[PWA] " + error);
-            return fromCache(e.request);
+            //return fromCache(e.request);
+            return caches.match(e.request);
         })
     );
 });
