@@ -1,4 +1,4 @@
-/* globals gapi, debug, $ */
+/* globals gapi, debug, gdad, settings, applySettings, populateList */
 
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
@@ -8,8 +8,12 @@ const DISCOVERY_DOCUMENTS = ["https://www.googleapis.com/discovery/v1/apis/drive
 
 const CONFIG_FILENAME = "to-check-config.json";
 
-var isSignedIn;
+var isSignedIn = false;
+var appData;
 
+/**
+ * Initialize the gapi client and prepare for signin state changes
+ */
 function initClient() {
     // Initialize the JavaScript client library
     gapi.client.init({
@@ -25,13 +29,10 @@ function initClient() {
         isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
         updateSigninStatus(isSignedIn);
 
-        if (isSignedIn) {
-            gapi.client.load("drive", "v3", onDriveAPILoaded);
-        }
     }).then(function (response) {
-        debug.log(response.result);
-    }, function (reason) {
-        debug.log(`Error: ${reason.result.error.message}`);
+        debug.log(response);
+    }, function (error) {
+        debug.log(`Error: ${error}`);
     });
 }
 
@@ -41,7 +42,7 @@ function initClient() {
 function onDriveAPILoaded() {
     gapi.client.drive.files.list({
         spaces: "appDataFolder",
-        fields: "nextPageToken, files(id, name)",
+        fields: "files(id, name)",
         pageSize: 100
     }).then(function (response) {
         let configFileId = "";
@@ -58,45 +59,49 @@ function onDriveAPILoaded() {
 
             if (configFileId !== "") {
                 // Set data from here
-                /*gapi.client.drive.files.get({
-                    fileId: configFileId,
-                    mimeType: "application/json",
-                    fields: "webContentLink"
-                }).then(function (response) {
-                    debug.log(response.result);
-                    fetch(response.result.webContentLink)
-                        .then(result => result.blob())
-                        .then(function (blob) {
-                            let reader = new FileReader();
-                            reader.addEventListener("loadend", function () {
-                            // reader.result
-                                debug.log(reader.result);
-                            });
-                            reader.readAsText(blob);
-                        });
-                    
-                });*/
 
-                // Needs Bearer token
-                // https://developers.google.com/drive/api/v3/manage-downloads
-                // https://stackoverflow.com/questions/12503437/google-drive-service-account-returns-403-usagelimits
-                gapi.client.request({
-                    "path": `https://www.googleapis.com/drive/v3/files/${configFileId}?alt=media`,
-                    "method": "GET",
-                    "params": "",
-                    "headers": "",
-                }).then(function (response) {
-                    debug.log(response);
+                downloadAppData().then(result => {
+
+                    let settingsTemp = {};
+                    let key;
+                    for (key in settings) {
+                        if (settings.hasOwnProperty(key) && result.hasOwnProperty(key)) {
+                            // Both of them have the key, compare and decide which one to keep
+                            settingsTemp[key] = result[key] || settings[key];
+                        } else {
+                            // result doesn't have the key, keep the one in settings
+                            settingsTemp[key] = settings[key];
+                        }
+                    }
+                    settings = settingsTemp; // eslint-disable-line no-global-assign
+                    applySettings();
+                    populateList();
                 });
 
             } else {
                 // If file not in Drive, upload local (first time)
                 debug.log("Config file not found");
-                uploadDataToDrive(jsonFromLocalStorage());
+                uploadAppData();
             }
         }
     });
 }
+
+let uploadAppData = () => {
+    appData.save(settings);
+};
+
+/**
+ * @returns {Promise<*>} Settings object
+ */
+let downloadAppData = () => {
+    appData.read().then(function (response) {
+        debug.log(response);
+        return response;
+    }, function (error) {
+        debug.log(error);
+    });
+};
 
 /**
  * Generate a JSON object from the local storage
@@ -113,17 +118,6 @@ function jsonFromLocalStorage() {
     return jsonData;
 }
 
-function uploadDataToDrive(jsonData) {
-    gapi.client.drive.files.create({
-        name: CONFIG_FILENAME,
-        parents: ["appDataFolder"],
-        mimeType: "application/json",
-        body: JSON.stringify(jsonData)
-    }).then(function (response) {
-        debug.log(`File uploaded. ID: ${response.result.id}`);
-    });
-}
-
 /**
  *  Called when the signed in status changes, to update the UI
  *  appropriately. After a sign-in, the API is called
@@ -131,22 +125,38 @@ function uploadDataToDrive(jsonData) {
 function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         // TODO: Replace with user profile icon
+        if (debug.dev) {
+            if (gapi.client && !gapi.client.drive) {
+                // The client is ready, but the drive API is not loaded yet
+                gapi.client.load("drive", "v3", onDriveAPILoaded);
+            }
+            
+            if (!appData) {
+                // Also load appData
+                appData = gdad(CONFIG_FILENAME, CLIENT_ID);
+            }
+
+        }
+
     } else {
         // TODO: Replace with person icon
     }
 }
 
 /**  Sign in the user upon button click */
-function signIn(event) {
+function signIn(event) { // eslint-disable-line no-unused-vars
+    debug.log(event);
     gapi.auth2.getAuthInstance().signIn();
 }
 
 /** Sign out the user upon button click */
-function signOut(event) {
+function signOut(event) { // eslint-disable-line no-unused-vars
+    debug.log(event);
     gapi.auth2.getAuthInstance().signOut();
 }
 
-function loadClient() {
+/** Load the client:auth2 library */
+function loadClient() { // eslint-disable-line no-unused-vars
     if (debug.dev) {
         gapi.load("client:auth2", initClient);
     }

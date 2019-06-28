@@ -5,7 +5,7 @@ const APP_PREFIX = "ToCheck";
 // const CACHE_VERSION = "_v1.18"; //eslint-disable-line no-unused-vars
 const CACHE_NAME = APP_PREFIX;
 const URLS = [
-    /*"./",
+    "./",
     "./index.html",
     "./styles/style.css",
     "./styles/boostrap.min.css",
@@ -22,7 +22,7 @@ const URLS = [
     "./favicon-32x32.png",
     "./mstile-150x150.png",
     "./safari-pinned-tab.svg",
-    "./favicon.ico",*/
+    "./favicon.ico",
 ];
 
 importScripts("js/cache-polyfill.js");
