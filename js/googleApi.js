@@ -68,8 +68,11 @@ function syncSettingsFromDrive() {
                         if (settings.hasOwnProperty(key) && result.hasOwnProperty(key)) {
                             // Both of them have the key, compare and decide which one to keep
                             if (key === "toCheckLists") {
-                                // The lists should be combined, so that both sides are maintained
-                                settingsTemp[key] = {...result[key], ...settings[key]};
+                                // The lists should be combined so that both sides are maintained
+                                settingsTemp[key] = Object.assign({}, result[key], settings[key]);
+                            } else if (key === "currentList") {
+                                // If it's the current list, ignore remote
+                                settingsTemp[key] = settings[key];
                             } else {
                                 settingsTemp[key] = result[key] || settings[key];
                             }
@@ -121,7 +124,7 @@ function updateSigninStatus(isSignedIn) {
                 // The client is ready, but the drive API is not loaded yet
                 gapi.client.load("drive", "v3", syncSettingsFromDrive);
             }
-            
+
             if (!appData) {
                 // Also load appData
                 appData = gdad(CONFIG_FILENAME, CLIENT_ID);
