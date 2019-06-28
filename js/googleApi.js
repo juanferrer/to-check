@@ -1,4 +1,4 @@
-/* globals gapi, debug, gdad, settings, applySettings, populateList */
+/* globals gapi, debug, gdad, settings, applySettings, populateList, populateSideMenu */
 
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
@@ -39,7 +39,7 @@ function initClient() {
 /**
  * What to do when the Drive API has been loaded
  */
-function onDriveAPILoaded() {
+function syncSettingsFromDrive() {
     gapi.client.drive.files.list({
         spaces: "appDataFolder",
         fields: "files(id, name)",
@@ -67,7 +67,12 @@ function onDriveAPILoaded() {
                     for (key in settings) {
                         if (settings.hasOwnProperty(key) && result.hasOwnProperty(key)) {
                             // Both of them have the key, compare and decide which one to keep
-                            settingsTemp[key] = result[key] || settings[key];
+                            if (key === "toCheckLists") {
+                                // The lists should be combined, so that both sides are maintained
+                                settingsTemp[key] = {...result[key], ...settings[key]};
+                            } else {
+                                settingsTemp[key] = result[key] || settings[key];
+                            }
                         } else {
                             // result doesn't have the key, keep the one in settings
                             settingsTemp[key] = settings[key];
@@ -76,6 +81,7 @@ function onDriveAPILoaded() {
                     settings = settingsTemp; // eslint-disable-line no-global-assign
                     applySettings();
                     populateList();
+                    populateSideMenu();
                 });
 
             } else {
@@ -95,28 +101,13 @@ let uploadAppData = () => {
  * @returns {Promise<*>} Settings object
  */
 let downloadAppData = () => {
-    appData.read().then(function (response) {
+    return appData.read();/*.then(function (response) {
         debug.log(response);
         return response;
     }, function (error) {
         debug.log(error);
-    });
+    });*/
 };
-
-/**
- * Generate a JSON object from the local storage
- * @returns {*} JSON data object containing everything that can be stored
- */
-function jsonFromLocalStorage() {
-    let jsonData = {};
-    jsonData.currentTheme = localStorage.getItem("currentTheme");
-    jsonData.hideCompleted = localStorage.getItem("hideCompleted");
-    jsonData.sortKeys = localStorage.getItem("sortKeys");
-    jsonData.toCheckLists = localStorage.getItem("toCheckLists");
-    jsonData.currentList = localStorage.getItem("currentList");
-
-    return jsonData;
-}
 
 /**
  *  Called when the signed in status changes, to update the UI
@@ -128,7 +119,7 @@ function updateSigninStatus(isSignedIn) {
         if (debug.dev) {
             if (gapi.client && !gapi.client.drive) {
                 // The client is ready, but the drive API is not loaded yet
-                gapi.client.load("drive", "v3", onDriveAPILoaded);
+                gapi.client.load("drive", "v3", syncSettingsFromDrive);
             }
             
             if (!appData) {
