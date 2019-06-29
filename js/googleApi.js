@@ -1,4 +1,4 @@
-/* globals gapi, debug, gdad, settings, applySettings, populateList, populateSideMenu */
+/* globals gapi, debug, gdad, settings, settingsLast, applySettings, populateList, populateSideMenu */
 
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
@@ -37,6 +37,28 @@ function initClient() {
 }
 
 /**
+ * Compare the options and decide what change should be maintained
+ * @param {*} last Copy of last push
+ * @param {*} local Current
+ * @param {*} remote Remote
+ */
+function decideWhichToKeep(last, local, remote) {
+    if (last === local) {
+        // No changes since last. If there are changes, remote has them
+        return remote;
+    } else if (last === remote) {
+        // Last push was by this device. If there are changes, local has them
+        return local;
+    } else if (last === local === remote) {
+        // No changes, keep any
+        return local;
+    } else {
+        // Changes in both. Assume remote is correct
+        return remote;
+    }
+}
+
+/**
  * What to do when the Drive API has been loaded
  */
 function syncSettingsFromDrive() {
@@ -60,25 +82,46 @@ function syncSettingsFromDrive() {
             if (configFileId !== "") {
                 // Set data from here
 
-                downloadAppData().then(result => {
+                downloadAppData().then(remoteSettings => {
 
-                    let settingsTemp = {};
-                    let key;
+                    // In principle, copy remoteSettings and decide which changes to keep
+                    let settingsTemp = remoteSettings;
+                    let key, list, item;
                     for (key in settings) {
-                        if (settings.hasOwnProperty(key) && result.hasOwnProperty(key)) {
-                            // Both of them have the key, compare and decide which one to keep
+                        // Special cases
+                        if (key === "currentList") {
+                            // If it's currentList, ignore remote
+                            settingsTemp[key] = settings[key];
+                        } else if (settingsLast[key] !== settings[key] !== remoteSettings[key]) {
+                            // There are changes in both settings and remote
+                            // What to do depends on the setting
                             if (key === "toCheckLists") {
-                                // The lists should be combined so that both sides are maintained
-                                settingsTemp[key] = Object.assign({}, result[key], settings[key]);
-                            } else if (key === "currentList") {
-                                // If it's the current list, ignore remote
-                                settingsTemp[key] = settings[key];
+                                // Lists may be different, so we need to go through each list and decide which one to keep
+                                // Same conditions as above so no explanation
+                                for (list in settings) {
+                                    let settingsLastList = settingsLast[key][list];
+                                    let settingsList = settings[key][list];
+                                    let remoteSettingsList = remoteSettings[key][list];
+                                    if (settingsLastList !== settingsList !== remoteSettingsList) {
+                                        // Compare each item in the list
+                                        for (item in list) {
+                                            if (settingsLastList[item] !== settingsList[item] !== remoteSettingsList[item]) {
+                                                // They all are different. I don't know. Remote is right
+                                                settingsTemp[key][list][item] = remoteSettingsList[item];
+                                            } else {
+                                                settingsTemp[key][list][item] = decideWhichToKeep(settingsLastList[item], settingsList[item], remoteSettingsList[item]);
+                                            }
+                                        }
+                                    } else {
+                                        settingsTemp[key][list] = decideWhichToKeep(settingsLastList, settingsList, remoteSettingsList);
+                                    }
+                                }
                             } else {
-                                settingsTemp[key] = result[key] || settings[key];
+                                // For everything else assume remote is correct
+                                settingsTemp[key] = remoteSettings[key];
                             }
                         } else {
-                            // result doesn't have the key, keep the one in settings
-                            settingsTemp[key] = settings[key];
+                            settingsTemp[key] = decideWhichToKeep(settingsLast[key], settings[key], remoteSettings[key]);
                         }
                     }
                     settings = settingsTemp; // eslint-disable-line no-global-assign
@@ -98,6 +141,7 @@ function syncSettingsFromDrive() {
 
 let uploadAppData = () => {
     appData.save(settings);
+    settingsLast = settings; // eslint-disable-line no-global-assign
 };
 
 /**

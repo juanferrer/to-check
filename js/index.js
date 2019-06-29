@@ -1,6 +1,8 @@
 /* globals $, debug, isSignedIn, uploadAppData */
 
 // #region Globals
+
+/** Settings */
 var settings = {
     toCheckLists: "",
     currentList: "",
@@ -8,6 +10,10 @@ var settings = {
     hideCompleted: false,
     sortKeys: false
 };
+
+/** Settings as they were after last sync */
+var settingsLast = {}; 
+
 const listPrefaceString = "lisname";
 const elementPrefaceString = "elename";
 
