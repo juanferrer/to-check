@@ -55,35 +55,8 @@ let toggleSort = () => {
 
 /** Change the app theme */
 let switchTheme = () => {
-    // let switchToLightTheme = $("#theme-button").attr("data-theme") === "dark";
-
-    /*if (switchToLightTheme) {
-		$(":root").css("--main-color", "hsla(0, 0%, 98%, 1)");
-		$(":root").css("--background-color", "hsla(0, 0%, 90%, 1)");
-		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 30%, 0.3)");
-		$(":root").css("--text-color", "hsla(0, 0%, 20%, 1)");
-		$(":root").css("--icon-color", "hsla(0, 0%, 20%, 1)");
-		$(":root").css("--textbox-color", "hsla(0, 0%, 40%, 1)");
-		$("#light-theme-icon").css("display", "none");
-		$("#dark-theme-icon").css("display", "initial");
-
-	} else {
-		$(":root").css("--main-color", "hsla(0, 0%, 20%, 1)");
-		$(":root").css("--background-color", "hsla(0, 0%, 15%, 1)");
-		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 70%, 0.3)");
-		$(":root").css("--text-color", "hsla(0, 0%, 90%, 1)");
-		$(":root").css("--icon-color", "hsla(0, 0%, 90%, 1)");
-		$(":root").css("--textbox-color", "hsla(0, 0%, 60%, 1)");
-		$("#light-theme-icon").css("display", "initial");
-		$("#dark-theme-icon").css("display", "none");
-	}*/
-
-    //let newTheme = switchToLightTheme ? "light" : "dark";
     let oldTheme = $("input[name=theme]:checked").val();
     let newTheme = oldTheme === "light" ? "dark" : "light";
-
-    // $(`#${newTheme}-theme-icon`).css("display", "none");
-    // $(`#${oldTheme}-theme-icon`).css("display", "initial");
 
     $("#theme-button").toggleClass("light");
     $("#theme-button").toggleClass("dark");
@@ -92,14 +65,12 @@ let switchTheme = () => {
 
     $("#theme-button").attr("data-theme", newTheme);
     localStorage.setItem("currentTheme", newTheme);
+    settings.currentTheme = newTheme;
     saveSettings();
 };
 
 let toggleHideCompleted = () => {
     settings.hideCompleted = !settings.hideCompleted;
-
-    // $("#hide-completed-icon").css("display", hideCompleted ? "none" : "initial");
-    // $("#show-completed-icon").css("display", hideCompleted ? "initial" : "none");
 
     $("#completed-button").toggleClass("on");
     $("#completed-button").toggleClass("off");
@@ -389,10 +360,10 @@ let main = () => {
     //feather.replace();
     loadLists();
     loadSettings();
-    settingsLast = deepCopy(settings);
     applySettings();
     populateList();
     populateSideMenu();
+    settingsLast = deepCopy(settings);
 };
 
 // #region Event handlers

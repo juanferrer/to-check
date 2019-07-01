@@ -49,11 +49,8 @@ function decideWhichToKeep(last, local, remote) {
     } else if (last === remote) {
         // Last push was by this device. If there are changes, local has them
         return local;
-    } else if (last === local === remote) {
-        // No changes, keep any
-        return local;
     } else {
-        // Changes in both. Assume remote is correct
+        // Either local === remote or they're all different. Assume remote is correct
         return remote;
     }
 }
@@ -127,7 +124,11 @@ function syncSettingsFromDrive() {
                                 }
                             } else {
                                 // For everything else assume remote is correct
-                                settingsTemp[key] = remoteSettings[key];
+                                //settingsTemp[key] = remoteSettings[key];
+                                settingsTemp[key] = decideWhichToKeep(
+                                    settingsLast[key],
+                                    settings[key],
+                                    remoteSettings[key]);
                             }
                         } else {
                             settingsTemp[key] = decideWhichToKeep(settingsLast[key], settings[key], remoteSettings[key]);
@@ -135,6 +136,7 @@ function syncSettingsFromDrive() {
                     }
                     settings = deepCopy(settingsTemp); // eslint-disable-line no-global-assign
                     applySettings();
+                    settings = deepCopy(settingsTemp); // eslint-disable-line no-global-assign
                     populateList();
                     populateSideMenu();
                     //uploadAppData();
