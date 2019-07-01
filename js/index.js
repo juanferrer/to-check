@@ -348,7 +348,12 @@ let populateSideMenu = () => {
     $(".btn-list-delete").click(removeList);
 };
 
-
+/**
+ * "Deep copy"
+ */
+let deepCopy = (o) => {
+    return JSON.parse(JSON.stringify(o));
+};
 
 let main = () => {
     // Store the Add to Home Screen prompt
@@ -384,6 +389,7 @@ let main = () => {
     //feather.replace();
     loadLists();
     loadSettings();
+    settingsLast = deepCopy(settings);
     applySettings();
     populateList();
     populateSideMenu();
