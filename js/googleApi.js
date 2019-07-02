@@ -154,7 +154,7 @@ function syncSettingsFromDrive() {
 let uploadAppData = () => {
     if (isSignedIn) {
         appData.save(settings);
-        settingsLast = settings; // eslint-disable-line no-global-assign
+        settingsLast = deepCopy(settings); // eslint-disable-line no-global-assign
     }
 };
 

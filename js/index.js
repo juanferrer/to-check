@@ -12,7 +12,7 @@ var settings = {
 };
 
 /** Settings as they were after last sync */
-var settingsLast = {}; 
+var settingsLast = {}; // eslint-disable-line no-unused-vars
 
 const listPrefaceString = "lisname";
 const elementPrefaceString = "elename";
@@ -41,18 +41,6 @@ let showSideMenu = () => {
     $("#side-menu").attr("data-open", true);
 };
 
-let toggleSort = () => {
-    settings.sortKeys = !settings.sortKeys;
-
-    $("#sort-button").toggleClass("on");
-    $("#sort-button").toggleClass("off");
-
-    $("#sort-button").attr("data-sort", settings.sortKeys);
-    localStorage.setItem("sortKeys", settings.sortKeys);
-    saveSettings();
-    populateList();
-};
-
 /** Change the app theme */
 let switchTheme = () => {
     let oldTheme = $("input[name=theme]:checked").val();
@@ -70,15 +58,39 @@ let switchTheme = () => {
 };
 
 let toggleHideCompleted = () => {
-    settings.hideCompleted = !settings.hideCompleted;
+    // Check if the attribute is present
+    let newHideCompleted = $("#completed-button")[0].hasAttribute("data-hide");
 
     $("#completed-button").toggleClass("on");
     $("#completed-button").toggleClass("off");
 
-    $("#completed-button").attr("data-hide", settings.hideCompleted);
-    localStorage.setItem("hideCompleted", settings.hideCompleted);
+    if (newHideCompleted) {
+        $("#completed-button").removeAttr("data-hide");
+    } else {
+        $("#completed-button").attr("data-hide", "");
+    }
+    localStorage.setItem("hideCompleted", !newHideCompleted);
+    settings.hideCompleted = !newHideCompleted;
     saveSettings();
 
+    populateList();
+};
+
+let toggleSortKeys = () => {
+    // Check if the attribute is present
+    let newSortKeys = $("#sort-button")[0].hasAttribute("data-sort");
+
+    $("#sort-button").toggleClass("on");
+    $("#sort-button").toggleClass("off");
+
+    if (newSortKeys) {
+        $("#sort-button").removeAttr("data-sort");
+    } else {
+        $("#sort-button").attr("data-sort", "");
+    }
+    localStorage.setItem("sortKeys", !newSortKeys);
+    settings.sortKeys = !newSortKeys;
+    saveSettings();
     populateList();
 };
 
@@ -209,15 +221,15 @@ let handleKeyPress = e => {
 /** Load settings */
 let loadSettings = () => {
     settings.currentTheme = localStorage.getItem("currentTheme") || "light";
-    settings.hideCompleted = localStorage.getItem("hideCompleted") === "false";
-    settings.sortKeys = localStorage.getItem("sortKeys") || "false";
+    settings.hideCompleted = localStorage.getItem("hideCompleted") === "true";
+    settings.sortKeys = localStorage.getItem("sortKeys") === "true";
 };
 
 /** Make necessary changes to match settings */
 let applySettings = () => {
     if (settings.currentTheme !== $("#theme-button").attr("data-theme")) switchTheme();
-    if (settings.hideCompleted !== $("#completed-button").attr("data-hide")) toggleHideCompleted();
-    if (settings.sortKeys !== $("#sort-keys").attr("data-sort")) toggleSort();
+    if (settings.hideCompleted !== $("#completed-button")[0].hasAttribute("data-hide")) toggleHideCompleted();
+    if (settings.sortKeys !== $("#sort-button")[0].hasAttribute("data-sort")) toggleSortKeys();
 };
 
 /** If logged in, sync settings to Google Drive*/
@@ -363,7 +375,7 @@ let main = () => {
     applySettings();
     populateList();
     populateSideMenu();
-    settingsLast = deepCopy(settings);
+    settingsLast = localStorage.getItem("settingsLast");
 };
 
 // #region Event handlers
@@ -392,7 +404,7 @@ $(".btn-item-delete").click(removeItem);
 
 $("#list-add-input").keydown(handleKeyPress);
 
-$("#sort-button").click(toggleSort);
+$("#sort-button").click(toggleSortKeys);
 
 // #endregion
 
