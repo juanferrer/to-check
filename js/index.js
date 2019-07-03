@@ -1,6 +1,4 @@
-/* globals $, debug, isSignedIn, uploadAppData */
-
-// #region Globals
+/* globals $, debug, isSignedIn, uploadAppData, gapi, loadClient, signIn, signOut */
 
 /** Settings */
 var settings = {
@@ -10,6 +8,8 @@ var settings = {
     hideCompleted: false,
     sortKeys: false
 };
+
+var isOnline = false;
 
 /** Settings as they were after last sync */
 var settingsLast = {}; // eslint-disable-line no-unused-vars
@@ -92,6 +92,18 @@ let toggleSortKeys = () => {
     settings.sortKeys = !newSortKeys;
     saveSettings();
     populateList();
+};
+
+let pressProfileButton = () => {
+    if (isOnline) {
+        if (isSignedIn) {
+            debug.log("Signing out");
+            signOut();
+        } else {
+            debug.log("Signing in");
+            signIn();
+        }
+    }
 };
 
 /**
@@ -335,9 +347,58 @@ let populateSideMenu = () => {
 /**
  * "Deep copy"
  */
+// eslint-disable-next-line no-unused-vars
 let deepCopy = (o) => {
     return JSON.parse(JSON.stringify(o));
 };
+
+let handleConnectionChange = () => {
+    if (navigator.onLine) {
+        isReachable("https://juanferrer.github.io/to-check").then(online => {
+            isOnline = true;
+            if (online) {
+                debug.log("Online");
+                if (!gapi) {
+                    // If gapi is there, client must be available
+                    $.getScript("https://apis.google.com/js/api.js", () => {
+                        loadClient();
+                    });
+                } else if (!gapi.client) {
+                    // Somehow, gapi is loaded, but client is not
+                    loadClient();
+                } else {
+                    // Well, we must have lost connection at some point, but we reconnected now. Continue normally
+                }
+            } else {
+                isOnline = false;
+                debug.log("Server unreachable");
+            }
+        });
+    } else {
+        debug.log("Offline");
+        isOnline = false;
+        isSignedIn = false; // eslint-disable-line no-global-assign
+    }
+};
+
+/**
+ * Attempt to connect to the passed URL.
+ *
+ * Note: fetch() still "succeeds" for 404s on subdirectories,
+ * which is OK when only testing for domain reachability
+ * @param {string} url
+ * @returns {Boolean}
+ */
+let isReachable = (url) => {
+    return fetch(url, { method: "HEAD", mode: "no-cors" })
+        .then(resp => {
+            return resp && (resp.ok || resp.type === "opaque");
+        })
+        .catch(err => {
+            debug.warn("[conn test failure]:", err);
+        });
+};
+
 
 let main = () => {
     // Store the Add to Home Screen prompt
@@ -370,7 +431,11 @@ let main = () => {
             }
         });*/
 
-    //feather.replace();
+
+    window.addEventListener("online", handleConnectionChange);
+    window.addEventListener("offline", handleConnectionChange);
+    handleConnectionChange();
+
     loadLists();
     loadSettings();
     applySettings();
@@ -406,6 +471,8 @@ $(".btn-item-delete").click(removeItem);
 $("#list-add-input").keydown(handleKeyPress);
 
 $("#sort-button").click(toggleSortKeys);
+
+$("#profile-button").click(pressProfileButton);
 
 // #endregion
 

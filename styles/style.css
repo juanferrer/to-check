@@ -265,6 +265,11 @@ input[value="dark"]:checked~div .list>.list-group-item {
 	color: var(--text-color-dark);
 }
 
+.profile-button {
+	position: absolute;
+	right: 20px;
+}
+
 /* Scrollbar */
 
 ::-webkit-scrollbar {

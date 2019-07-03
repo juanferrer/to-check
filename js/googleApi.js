@@ -59,6 +59,11 @@ function decideWhichToKeep(last, local, remote) {
  * What to do when the Drive API has been loaded
  */
 function syncSettingsFromDrive() {
+    if (!appData) {
+        // Load appData if not already loaded
+        appData = gdad(CONFIG_FILENAME, CLIENT_ID);
+    }
+
     gapi.client.drive.files.list({
         spaces: "appDataFolder",
         fields: "files(id, name)",
@@ -162,12 +167,7 @@ let uploadAppData = () => {
  * @returns {Promise<*>} Settings object
  */
 let downloadAppData = () => {
-    return appData.read();/*.then(function (response) {
-        debug.log(response);
-        return response;
-    }, function (error) {
-        debug.log(error);
-    });*/
+    return appData.read();
 };
 
 /**
@@ -178,18 +178,18 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         // TODO: Replace with user profile icon
         if (debug.dev) {
-            if (gapi.client && !gapi.client.drive) {
+            if (gapi && gapi.client && !gapi.client.drive) {
                 // The client is ready, but the drive API is not loaded yet
                 gapi.client.load("drive", "v3", syncSettingsFromDrive);
-            }
-
-            if (!appData) {
+            } else if (!appData) {
                 // Also load appData
                 appData = gdad(CONFIG_FILENAME, CLIENT_ID);
+                syncSettingsFromDrive();
+            } else {
+                // Everything is ready, we just need to sync the settings
+                syncSettingsFromDrive();
             }
-
         }
-
     } else {
         // TODO: Replace with person icon
     }
