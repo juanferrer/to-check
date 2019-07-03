@@ -399,6 +399,23 @@ let isReachable = (url) => {
         });
 };
 
+/**
+ *
+ * @param {*} url
+ */
+// eslint-disable-next-line no-unused-vars
+let setProfileImage = (url) => {
+    if (url) {
+        // We have a profile image, use that
+        $("#profile-button").css("background-image", `url(${url})`);
+        $("#user-icon").css("opacity", 0);
+    } else {
+        // No image provided, show the person icon
+        $("#profile-button").css("background-image", "");
+        $("#user-icon").css("opacity", 1);
+    }
+};
+
 
 let main = () => {
     // Store the Add to Home Screen prompt

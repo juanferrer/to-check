@@ -1,4 +1,5 @@
-/* globals _, gapi, debug, gdad, settings, settingsLast, applySettings, populateList, populateSideMenu, deepCopy */
+/* globals _, gapi, debug, gdad, settings, settingsLast, applySettings, populateList,
+populateSideMenu, deepCopy, setProfileImage */
 
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
@@ -177,6 +178,16 @@ let downloadAppData = () => {
 function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         // TODO: Replace with user profile icon
+        gapi.client.request({
+            path: "https://people.googleapis.com/v1/people/me",
+            params: { personFields: "photos" }
+        }).then(response => {
+            debug.log(response);
+            setProfileImage(response.result.photos[0].url);
+        }, error => {
+            debug.log(error);
+        });
+
         if (debug.dev) {
             if (gapi && gapi.client && !gapi.client.drive) {
                 // The client is ready, but the drive API is not loaded yet
