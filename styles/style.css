@@ -36,6 +36,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	/* Disable pull to refresh */
+	overscroll-behavior-y: contain;
 }
 
 input[name=theme] {
@@ -466,7 +468,6 @@ input[value="dark"]:checked~div .btn-transparent:hover .transparent-bar {
 	input[value="light"]:checked~div .btn-transparent:hover .transparent-bar {
 		background-color: var(--main-color-light);
 	}
-
 	input[value="dark"]:checked~div .btn-transparent:hover .transparent-bar {
 		background-color: var(--main-color-dark);
 	}
