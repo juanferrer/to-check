@@ -236,6 +236,7 @@ let applySettings = () => {
 let saveSettings = () => {
     if (debug.dev && isSignedIn) {
         uploadAppData();
+        localStorage.setItem("settingsLast", JSON.stringify(settingsLast));
     }
 };
 
@@ -375,7 +376,7 @@ let main = () => {
     applySettings();
     populateList();
     populateSideMenu();
-    settingsLast = localStorage.getItem("settingsLast");
+    settingsLast = JSON.parse(localStorage.getItem("settingsLast") || JSON.stringify(settings));
 };
 
 // #region Event handlers
