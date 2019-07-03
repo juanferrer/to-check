@@ -1,13 +1,21 @@
-/* globals $ */
+/* globals $, debug, isSignedIn, uploadAppData */
 
 // #region Globals
-var lists;
-var currentListName;
-const elementPrefaceString = "elename";
+
+/** Settings */
+var settings = {
+    toCheckLists: "",
+    currentList: "",
+    currentTheme: "",
+    hideCompleted: false,
+    sortKeys: false
+};
+
+/** Settings as they were after last sync */
+var settingsLast = {}; // eslint-disable-line no-unused-vars
+
 const listPrefaceString = "lisname";
-var currentTheme;
-var hideCompleted = false;
-var sortKeys = false;
+const elementPrefaceString = "elename";
 
 // eslint-disable-next-line no-unused-vars
 let refresh = () => {
@@ -33,48 +41,10 @@ let showSideMenu = () => {
     $("#side-menu").attr("data-open", true);
 };
 
-let toggleSort = () => {
-    sortKeys = !sortKeys;
-
-    $("#sort-button").toggleClass("on");
-    $("#sort-button").toggleClass("off");
-
-    $("#sort-button").attr("data-sort", sortKeys);
-    localStorage.setItem("sortKeys", sortKeys);
-    populateList();
-};
-
 /** Change the app theme */
 let switchTheme = () => {
-    // let switchToLightTheme = $("#theme-button").attr("data-theme") === "dark";
-
-    /*if (switchToLightTheme) {
-		$(":root").css("--main-color", "hsla(0, 0%, 98%, 1)");
-		$(":root").css("--background-color", "hsla(0, 0%, 90%, 1)");
-		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 30%, 0.3)");
-		$(":root").css("--text-color", "hsla(0, 0%, 20%, 1)");
-		$(":root").css("--icon-color", "hsla(0, 0%, 20%, 1)");
-		$(":root").css("--textbox-color", "hsla(0, 0%, 40%, 1)");
-		$("#light-theme-icon").css("display", "none");
-		$("#dark-theme-icon").css("display", "initial");
-
-	} else {
-		$(":root").css("--main-color", "hsla(0, 0%, 20%, 1)");
-		$(":root").css("--background-color", "hsla(0, 0%, 15%, 1)");
-		$(":root").css("--semi-transparent-hover", "hsla(0, 0%, 70%, 0.3)");
-		$(":root").css("--text-color", "hsla(0, 0%, 90%, 1)");
-		$(":root").css("--icon-color", "hsla(0, 0%, 90%, 1)");
-		$(":root").css("--textbox-color", "hsla(0, 0%, 60%, 1)");
-		$("#light-theme-icon").css("display", "initial");
-		$("#dark-theme-icon").css("display", "none");
-	}*/
-
-    //let newTheme = switchToLightTheme ? "light" : "dark";
     let oldTheme = $("input[name=theme]:checked").val();
     let newTheme = oldTheme === "light" ? "dark" : "light";
-
-    // $(`#${newTheme}-theme-icon`).css("display", "none");
-    // $(`#${oldTheme}-theme-icon`).css("display", "initial");
 
     $("#theme-button").toggleClass("light");
     $("#theme-button").toggleClass("dark");
@@ -83,20 +53,44 @@ let switchTheme = () => {
 
     $("#theme-button").attr("data-theme", newTheme);
     localStorage.setItem("currentTheme", newTheme);
+    settings.currentTheme = newTheme;
+    saveSettings();
 };
 
 let toggleHideCompleted = () => {
-    hideCompleted = !hideCompleted;
-
-    // $("#hide-completed-icon").css("display", hideCompleted ? "none" : "initial");
-    // $("#show-completed-icon").css("display", hideCompleted ? "initial" : "none");
+    // Check if the attribute is present
+    let newHideCompleted = $("#completed-button")[0].hasAttribute("data-hide");
 
     $("#completed-button").toggleClass("on");
     $("#completed-button").toggleClass("off");
 
-    $("#completed-button").attr("data-hide", hideCompleted);
-    localStorage.setItem("hideCompleted", hideCompleted);
+    if (newHideCompleted) {
+        $("#completed-button").removeAttr("data-hide");
+    } else {
+        $("#completed-button").attr("data-hide", "");
+    }
+    localStorage.setItem("hideCompleted", !newHideCompleted);
+    settings.hideCompleted = !newHideCompleted;
+    saveSettings();
 
+    populateList();
+};
+
+let toggleSortKeys = () => {
+    // Check if the attribute is present
+    let newSortKeys = $("#sort-button")[0].hasAttribute("data-sort");
+
+    $("#sort-button").toggleClass("on");
+    $("#sort-button").toggleClass("off");
+
+    if (newSortKeys) {
+        $("#sort-button").removeAttr("data-sort");
+    } else {
+        $("#sort-button").attr("data-sort", "");
+    }
+    localStorage.setItem("sortKeys", !newSortKeys);
+    settings.sortKeys = !newSortKeys;
+    saveSettings();
     populateList();
 };
 
@@ -107,10 +101,10 @@ let toggleHideCompleted = () => {
  */
 let updateListTitle = e => {
     let newListName = e.currentTarget.textContent;
-    if (convertToVarName(newListName, true) !== currentListName) {
-        lists[convertToVarName(newListName, true)] = lists[currentListName];
-        lists[currentListName] = undefined;
-        currentListName = convertToVarName(newListName, true);
+    if (convertToVarName(newListName, true) !== settings.currentList) {
+        settings.toCheckLists[convertToVarName(newListName, true)] = settings.toCheckLists[settings.currentList];
+        settings.toCheckLists[settings.currentList] = undefined;
+        settings.currentList = convertToVarName(newListName, true);
 
         saveLists();
         populateList();
@@ -124,7 +118,7 @@ let updateListTitle = e => {
  * @listens click
  */
 let changeListSelection = e => {
-    currentListName = convertToVarName(e.currentTarget.firstChild.textContent, true);
+    settings.currentList = convertToVarName(e.currentTarget.firstChild.textContent, true);
 
     populateList();
     populateSideMenu();
@@ -138,15 +132,15 @@ let changeListSelection = e => {
  * @listens click
  */
 let addList = () => {
-    currentListName = convertToVarName("New List", true);
+    settings.currentList = convertToVarName("New List", true);
 
     let newListNum = 2;
-    while (lists[currentListName] !== undefined) {
-        currentListName = convertToVarName(`New List ${newListNum}`, true);
+    while (settings.toCheckLists[settings.currentList] !== undefined) {
+        settings.currentList = convertToVarName(`New List ${newListNum}`, true);
         newListNum++;
     }
 
-    lists[currentListName] = {};
+    settings.toCheckLists[settings.currentList] = {};
     populateList();
     saveLists();
     populateSideMenu();
@@ -162,12 +156,12 @@ let removeList = e => {
     let listToRemove = convertToVarName(e.currentTarget.previousElementSibling.textContent, true);
 
 
-    lists[listToRemove] = undefined;
+    settings.toCheckLists[listToRemove] = undefined;
     populateSideMenu();
-    if (currentListName === listToRemove) {
+    if (settings.currentList === listToRemove) {
         if ($("#side-menu-list").children().length === 0) {
             addList();
-        } else currentListName = convertToVarName($("#side-menu-list").children()[0].firstChild.textContent, true);
+        } else settings.currentList = convertToVarName($("#side-menu-list").children()[0].firstChild.textContent, true);
     }
     populateList();
     saveLists();
@@ -197,9 +191,9 @@ let toggleCheckbox = e => {
 let addItemToList = e => {
     let itemName = e.currentTarget.nextElementSibling.textContent;
     if (itemName) {
-        lists[currentListName] = lists[currentListName] || {};
+        settings.toCheckLists[settings.currentList] = settings.toCheckLists[settings.currentList] || {};
 
-        lists[currentListName][convertToVarName(itemName)] = false;
+        settings.toCheckLists[settings.currentList][convertToVarName(itemName)] = false;
         populateList();
         saveLists();
         $("#list-add-input").empty();
@@ -226,21 +220,77 @@ let handleKeyPress = e => {
 
 /** Load settings */
 let loadSettings = () => {
-    currentTheme = localStorage.getItem("currentTheme") || "light";
-    if (currentTheme !== $("#theme-button").attr("data-theme")) switchTheme();
+    settings.currentTheme = localStorage.getItem("currentTheme") || "light";
+    settings.hideCompleted = localStorage.getItem("hideCompleted") === "true";
+    settings.sortKeys = localStorage.getItem("sortKeys") === "true";
+};
 
-    hideCompleted = localStorage.getItem("hideCompleted") === "false";
-    if (hideCompleted !== $("#completed-button").attr("data-hide")) toggleHideCompleted();
+/** Make necessary changes to match settings */
+let applySettings = () => {
+    if (settings.currentTheme !== $("#theme-button").attr("data-theme")) switchTheme();
+    if (settings.hideCompleted !== $("#completed-button")[0].hasAttribute("data-hide")) toggleHideCompleted();
+    if (settings.sortKeys !== $("#sort-button")[0].hasAttribute("data-sort")) toggleSortKeys();
+};
 
-    sortKeys = localStorage.getItem("sortKeys") || "false";
-    if (sortKeys !== $("#sort-keys").attr("data-sort")) toggleSort();
+/** If logged in, sync settings to Google Drive*/
+let saveSettings = () => {
+    if (debug.dev && isSignedIn) {
+        uploadAppData();
+        localStorage.setItem("settingsLast", JSON.stringify(settingsLast));
+    }
 };
 
 /** Load the lists */
 let loadLists = () => {
     let listsJSONStr = localStorage.getItem("toCheckLists");
-    lists = listsJSONStr ? JSON.parse(listsJSONStr) : {};
-    currentListName = localStorage.getItem("currentList") || convertToVarName("New List", true);
+    settings.toCheckLists = listsJSONStr ? JSON.parse(listsJSONStr) : {};
+    settings.currentList = localStorage.getItem("currentList") || convertToVarName("New List", true);
+};
+
+/** Fill the list area with the currently selected list */
+let populateList = () => {
+    $("#list").empty();
+    $("#list-title")[0].innerHTML = convertToTitle(settings.currentList);
+    if (settings.toCheckLists[settings.currentList]) {
+
+        let keys = Object.keys(settings.toCheckLists[settings.currentList]);
+
+        if (settings.sortKeys) keys = keys.sort();
+
+        //Object.keys(toCheckLists[currentListName]).sort().forEach(itemName => {
+        keys.forEach(itemName => {
+            /*if (hideCompleted && toCheckLists[currentListName][itemName]) {
+                // Don't add
+            } else {*/
+            let newElement = document.createElement("li");
+            newElement.setAttribute("class", `list-group-item d-flex align-items-center ${settings.toCheckLists[settings.currentList][itemName] && settings.hideCompleted ? "hidden" : ""}`);
+            newElement.innerHTML = `<input type="checkbox" ${settings.toCheckLists[settings.currentList][itemName] ? 'checked="true"' : ""}>` +
+                '<span class="checkbox"></span>' +
+                `<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
+                //'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+                '<i class="material-icons theme-colored-icon btn-item-delete">cancel</i>';
+            $("#list")[0].appendChild(newElement);
+            //}
+        });
+
+        $(".checkbox").off("click", toggleCheckbox);
+        $(".checkbox").click(toggleCheckbox);
+        $(".checkbox-label").off(saveLists);
+        $(".checkbox-label").blur(saveLists);
+        $(".btn-item-delete").off(removeItem);
+        $(".btn-item-delete").click(removeItem);
+    }
+};
+
+/** Save the lists */
+let saveLists = () => {
+    settings.toCheckLists[settings.currentList] = {};
+    Array.from($("#list").children()).forEach(e => {
+        settings.toCheckLists[settings.currentList][convertToVarName(e.children[2].textContent)] = e.firstChild.getAttribute("checked") === "true";
+    });
+    localStorage.setItem("toCheckLists", JSON.stringify(settings.toCheckLists));
+    localStorage.setItem("currentList", settings.currentList);
+    saveSettings();
 };
 
 /**
@@ -265,10 +315,10 @@ let convertToVarName = (s, isList = false) => {
 let populateSideMenu = () => {
     $("#side-menu-list").empty();
 
-    for (let itemName in lists) {
-        if (lists[itemName]) {
+    for (let itemName in settings.toCheckLists) {
+        if (settings.toCheckLists[itemName]) {
             let newElement = document.createElement("li");
-            newElement.setAttribute("class", `list-group-item d-flex align-items-center ${currentListName === itemName ? "selected" : ""}`);
+            newElement.setAttribute("class", `list-group-item d-flex align-items-center ${settings.currentList === itemName ? "selected" : ""}`);
             newElement.innerHTML = `<span class="side-menu-list-name theme-colored-text" >${convertToTitle(itemName)}</span>` +
                 //'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash theme-colored-icon btn-list-delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
                 '<i class="material-icons theme-colored-icon btn-list-delete">delete</i>';
@@ -282,49 +332,11 @@ let populateSideMenu = () => {
     $(".btn-list-delete").click(removeList);
 };
 
-/** Fill the list area with the currently selected list */
-let populateList = () => {
-    $("#list").empty();
-    $("#list-title")[0].innerHTML = convertToTitle(currentListName);
-    if (lists[currentListName]) {
-
-        let keys = Object.keys(lists[currentListName]);
-
-        if (sortKeys) keys = keys.sort();
-
-        //Object.keys(lists[currentListName]).sort().forEach(itemName => {
-        keys.forEach(itemName => {
-            /*if (hideCompleted && lists[currentListName][itemName]) {
-				// Don't add
-			} else {*/
-            let newElement = document.createElement("li");
-            newElement.setAttribute("class", `list-group-item d-flex align-items-center ${lists[currentListName][itemName] && hideCompleted ? "hidden" : ""}`);
-            newElement.innerHTML = `<input type="checkbox" ${lists[currentListName][itemName] ? 'checked="true"' : ""}>` +
-                '<span class="checkbox"></span>' +
-                `<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
-                //'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
-                '<i class="material-icons theme-colored-icon btn-item-delete">cancel</i>';
-            $("#list")[0].appendChild(newElement);
-            //}
-        });
-
-        $(".checkbox").off("click", toggleCheckbox);
-        $(".checkbox").click(toggleCheckbox);
-        $(".checkbox-label").off(saveLists);
-        $(".checkbox-label").blur(saveLists);
-        $(".btn-item-delete").off(removeItem);
-        $(".btn-item-delete").click(removeItem);
-    }
-};
-
-/** Save the lists */
-let saveLists = () => {
-    lists[currentListName] = {};
-    Array.from($("#list").children()).forEach(e => {
-        lists[currentListName][convertToVarName(e.children[2].textContent)] = e.firstChild.getAttribute("checked") === "true";
-    });
-    localStorage.setItem("toCheckLists", JSON.stringify(lists));
-    localStorage.setItem("currentList", currentListName);
+/**
+ * "Deep copy"
+ */
+let deepCopy = (o) => {
+    return JSON.parse(JSON.stringify(o));
 };
 
 let main = () => {
@@ -361,8 +373,10 @@ let main = () => {
     //feather.replace();
     loadLists();
     loadSettings();
+    applySettings();
     populateList();
     populateSideMenu();
+    settingsLast = JSON.parse(localStorage.getItem("settingsLast") || JSON.stringify(settings));
 };
 
 // #region Event handlers
@@ -391,7 +405,7 @@ $(".btn-item-delete").click(removeItem);
 
 $("#list-add-input").keydown(handleKeyPress);
 
-$("#sort-button").click(toggleSort);
+$("#sort-button").click(toggleSortKeys);
 
 // #endregion
 

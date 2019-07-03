@@ -1,15 +1,19 @@
-/* globals gapi, debug */
+/* globals _, gapi, debug, gdad, settings, settingsLast, applySettings, populateList, populateSideMenu, deepCopy */
 
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
 
-const SCOPES = "https://www.googleapis.com/auth/drive";
+const SCOPES = "https://www.googleapis.com/auth/drive.appdata";
 const DISCOVERY_DOCUMENTS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
 const CONFIG_FILENAME = "to-check-config.json";
 
-var isSignedIn;
+var isSignedIn = false;
+var appData;
 
+/**
+ * Initialize the gapi client and prepare for signin state changes
+ */
 function initClient() {
     // Initialize the JavaScript client library
     gapi.client.init({
@@ -25,23 +29,39 @@ function initClient() {
         isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
         updateSigninStatus(isSignedIn);
 
-        if (isSignedIn) {
-            gapi.client.load("drive", "v3", onDriveAPILoaded);
-        }
     }).then(function (response) {
-        debug.log(response.result);
-    }, function (reason) {
-        debug.log(`Error: ${reason.result.error.message}`);
+        debug.log(response);
+    }, function (error) {
+        debug.log(`Error: ${error}`);
     });
+}
+
+/**
+ * Compare the options and decide what change should be maintained
+ * @param {*} last Copy of last push
+ * @param {*} local Current
+ * @param {*} remote Remote
+ */
+function decideWhichToKeep(last, local, remote) {
+    if (last === local) {
+        // No changes since last. If there are changes, remote has them
+        return remote;
+    } else if (last === remote) {
+        // Last push was by this device. If there are changes, local has them
+        return local;
+    } else {
+        // Either local === remote or they're all different. Assume remote is correct
+        return remote;
+    }
 }
 
 /**
  * What to do when the Drive API has been loaded
  */
-function onDriveAPILoaded() {
+function syncSettingsFromDrive() {
     gapi.client.drive.files.list({
         spaces: "appDataFolder",
-        fields: "nextPageToken, files(id, name)",
+        fields: "files(id, name)",
         pageSize: 100
     }).then(function (response) {
         let configFileId = "";
@@ -58,58 +78,97 @@ function onDriveAPILoaded() {
 
             if (configFileId !== "") {
                 // Set data from here
-                gapi.client.drive.files.get({
-                    fileId: configFileId,
-                    mimeType: "application/json",
-                    fields: "webContentLink"
-                }).then(function (response) {
-                    debug.log(response.result);
-                    fetch(response.result.webContentLink)
-                        .then(result => result.blob())
-                        .then(function (blob) {
-                            let reader = new FileReader();
-                            reader.addEventListener("loadend", function () {
-                            // reader.result
-                                debug.log(reader.result);
-                            });
-                            reader.readAsText(blob);
-                        });
+
+                downloadAppData().then(remoteSettings => {
+
+                    // In principle, copy remoteSettings and decide which changes to keep
+                    let settingsTemp = deepCopy(remoteSettings);
+                    let key, list, item;
+                    for (key in settings) {
+                        // Special cases
+                        if (key === "currentList") {
+                            // If it's currentList, ignore remote
+                            settingsTemp[key] = settings[key];
+                        } else if (!_.isEqual(settingsLast[key], settings[key]) &&
+                            !_.isEqual(settings[key], remoteSettings[key]) &&
+                            !_.isEqual(settingsLast[key], remoteSettings[key])) {
+                            // There are changes in both settings and remote
+                            // What to do depends on the setting
+                            if (key === "toCheckLists") {
+                                // Lists may be different, so we need to go through each list and decide which one to keep
+                                // Same conditions as above so no explanation
+                                for (list in settings[key]) {
+                                    if (!_.isEqual(settingsLast[key][list], settings[key][list]) &&
+                                        !_.isEqual(settings[key][list], remoteSettings[key][list]) &&
+                                        !_.isEqual(settingsLast[key][list], remoteSettings[key][list])) {
+                                        // Compare each item in the list
+                                        for (item in settingsLast[key][list]) {
+                                            if (!_.isEqual(settingsLast[key][list][item], settings[key][list][item]) &&
+                                                !_.isEqual(settings[key][list][item].remoteSettings[key][list][item]) &&
+                                                !_.isEqual(settingsLast[key][list][item], remoteSettings[key][list][item])) {
+                                                // They all are different. I don't know. Remote is right
+                                                settingsTemp[key][list][item] = remoteSettings[key][list][item];
+                                            } else {
+                                                settingsTemp[key][list][item] = decideWhichToKeep(
+                                                    settingsLast[key][list][item],
+                                                    settings[key][list][item],
+                                                    remoteSettings[key][list][item]);
+                                            }
+                                        }
+                                    } else {
+                                        settingsTemp[key][list] = decideWhichToKeep(
+                                            settingsLast[key][list],
+                                            settings[key][list],
+                                            remoteSettings[key][list]);
+                                    }
+                                }
+                            } else {
+                                // For everything else assume remote is correct
+                                //settingsTemp[key] = remoteSettings[key];
+                                settingsTemp[key] = decideWhichToKeep(
+                                    settingsLast[key],
+                                    settings[key],
+                                    remoteSettings[key]);
+                            }
+                        } else {
+                            settingsTemp[key] = decideWhichToKeep(settingsLast[key], settings[key], remoteSettings[key]);
+                        }
+                    }
+                    settings = deepCopy(settingsTemp); // eslint-disable-line no-global-assign
+                    applySettings();
+                    settings = deepCopy(settingsTemp); // eslint-disable-line no-global-assign
+                    populateList();
+                    populateSideMenu();
+                    //uploadAppData();
                 });
 
             } else {
                 // If file not in Drive, upload local (first time)
                 debug.log("Config file not found");
-                uploadDataToDrive(jsonFromLocalStorage());
+                uploadAppData();
             }
         }
     });
 }
 
+let uploadAppData = () => {
+    if (isSignedIn) {
+        appData.save(settings);
+        settingsLast = deepCopy(settings); // eslint-disable-line no-global-assign
+    }
+};
+
 /**
- * Generate a JSON object from the local storage
- * @returns {*} JSON data object containing everything that can be stored
+ * @returns {Promise<*>} Settings object
  */
-function jsonFromLocalStorage() {
-    let jsonData = {};
-    jsonData.currentTheme = localStorage.getItem("currentTheme");
-    jsonData.hideCompleted = localStorage.getItem("hideCompleted");
-    jsonData.sortKeys = localStorage.getItem("sortKeys");
-    jsonData.toCheckLists = localStorage.getItem("toCheckLists");
-    jsonData.currentList = localStorage.getItem("currentList");
-
-    return jsonData;
-}
-
-function uploadDataToDrive(jsonData) {
-    gapi.client.drive.files.create({
-        name: CONFIG_FILENAME,
-        parents: ["appDataFolder"],
-        mimeType: "application/json",
-        body: JSON.stringify(jsonData)
-    }).then(function (response) {
-        debug.log(`File uploaded. ID: ${response.result.id}`);
-    });
-}
+let downloadAppData = () => {
+    return appData.read();/*.then(function (response) {
+        debug.log(response);
+        return response;
+    }, function (error) {
+        debug.log(error);
+    });*/
+};
 
 /**
  *  Called when the signed in status changes, to update the UI
@@ -118,22 +177,38 @@ function uploadDataToDrive(jsonData) {
 function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         // TODO: Replace with user profile icon
+        if (debug.dev) {
+            if (gapi.client && !gapi.client.drive) {
+                // The client is ready, but the drive API is not loaded yet
+                gapi.client.load("drive", "v3", syncSettingsFromDrive);
+            }
+
+            if (!appData) {
+                // Also load appData
+                appData = gdad(CONFIG_FILENAME, CLIENT_ID);
+            }
+
+        }
+
     } else {
         // TODO: Replace with person icon
     }
 }
 
 /**  Sign in the user upon button click */
-function signIn(event) {
+function signIn(event) { // eslint-disable-line no-unused-vars
+    debug.log(event);
     gapi.auth2.getAuthInstance().signIn();
 }
 
 /** Sign out the user upon button click */
-function signOut(event) {
+function signOut(event) { // eslint-disable-line no-unused-vars
+    debug.log(event);
     gapi.auth2.getAuthInstance().signOut();
 }
 
-function loadClient() {
+/** Load the client:auth2 library */
+function loadClient() { // eslint-disable-line no-unused-vars
     if (debug.dev) {
         gapi.load("client:auth2", initClient);
     }

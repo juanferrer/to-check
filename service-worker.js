@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck";
 // const CACHE_VERSION = "_v1.18"; //eslint-disable-line no-unused-vars
 const CACHE_NAME = APP_PREFIX;
 const URLS = [
-    /*"./",
+    "./",
     "./index.html",
     "./styles/style.css",
     "./styles/boostrap.min.css",
@@ -21,7 +22,7 @@ const URLS = [
     "./favicon-32x32.png",
     "./mstile-150x150.png",
     "./safari-pinned-tab.svg",
-    "./favicon.ico",*/
+    "./favicon.ico",
 ];
 
 importScripts("js/cache-polyfill.js");
@@ -42,7 +43,7 @@ self.addEventListener("activate", function (e) {
 });
 
 // If any fetch fails, it will look for the request in the cache and serve it from there first
-self.addEventListener("fetch", function(e) {
+self.addEventListener("fetch", function (e) {
     if (e.request.method !== "GET") return;
 
     // If request was success, add or update it in the cache
@@ -64,25 +65,16 @@ function fromCache(request) {
     // If not in the cache, then return error page
     return caches.open(CACHE_NAME).then(function (cache) {
         return cache.match(request).then(function (response) {
-            return response || fetch(request)
-        }).then(function (response) {
-            const responseClone = response.clone();
-            cache.put(request, responseClone);
+            return response || fetch(request).then(function (response) {
+                cache.put(request, response.clone());
+            });
         });
     });
-
-    /*        if (!response || response.status === 404) {
-                return Promise.reject("no-match");
-            }
-
-            return response;
-        });
-    });*/
 }
 
 function updateCache(request, response) {
     return caches.open(CACHE_NAME).then(function (cache) {
-        if(!request.url.includes("chrome-extension://")){
+        if (!request.url.includes("chrome-extension://")) {
             return cache.put(request, response);
         }
 

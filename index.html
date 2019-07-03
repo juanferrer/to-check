@@ -70,44 +70,49 @@
 	<!-- Toolbar -->
 	<div class="container-fluid d-flex justify-content-between align-items-center toolbar theme-colored">
 
-		<button type="button" class="btn btn-transparent toolbar-button menu-button" id="menu-button" aria-label="Open side menu">
+		<button type="button" class="btn btn-transparent toolbar-button menu-button" id="menu-button"
+			aria-label="Open side menu">
 			<i class="material-icons theme-colored-icon">menu</i>
 		</button>
 		<span class="app-name">To Check</span>
 
-		<button type="button" class="btn btn-transparent toolbar-button theme-button light-dark-icon light" id="theme-button"
-		 data-theme="light" aria-label="Change theme">
+		<button type="button" class="btn btn-transparent toolbar-button theme-button light-dark-icon light"
+			id="theme-button" data-theme="light" aria-label="Change theme">
 			<i class="material-icons theme-colored-icon" id="light-theme-icon">wb_sunny</i>
-			<i class="material-icons theme-colored-icon" id="dark-theme-icon" style="transform: rotateY(90deg); position: absolute;">brightness_2</i>
+			<i class="material-icons theme-colored-icon" id="dark-theme-icon"
+				style="transform: rotateY(90deg); position: absolute;">brightness_2</i>
 		</button>
-		<button type="button" class="btn btn-transparent toolbar-button completed-button on-off-icon on" id="completed-button"
-		 data-hide="false" aria-label="Change layout">
+		<button type="button" class="btn btn-transparent toolbar-button completed-button on-off-icon on"
+			id="completed-button" aria-label="Change layout">
 			<i class="icon-bar transparent-bar"></i>
 			<i class="icon-bar colored-bar"></i>
 			<i class="material-icons theme-colored-icon" id="show-completed-icon">visibility</i>
 		</button>
 		<button type="button" class="btn btn-transparent toolbar-button sort-button on-off-icon on" id="sort-button"
-		 data-sort="true" aria-label="Sort items">
+			aria-label="Sort items">
 			<i class="icon-bar transparent-bar"></i>
 			<i class="icon-bar colored-bar"></i>
 			<i class="material-icons theme-colored-icon">sort_by_alpha</i>
 		</button>
-		<button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button"
+		<!-- <button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button"
 		 data-hide="false" aria-label="Open profile">
 			<i class="material-icons theme-colored-icon" id="user-icon">person</i>
-		</button>
+		</button> -->
 	</div>
 
 	<!-- Work area -->
 	<div class="container-fluid d-flex flex-direction-row align-items-center work-area" id="work-area">
 		<!-- Side menu -->
-		<div class="container d-flex flex-column justify-content-between align-items-center side-menu theme-colored" id="side-menu">
-			<div class="container d-flex flex-column align-items-center side-menu-list-container" id="side-menu-list-container">
+		<div class="container d-flex flex-column justify-content-between align-items-center side-menu theme-colored"
+			id="side-menu">
+			<div class="container d-flex flex-column align-items-center side-menu-list-container"
+				id="side-menu-list-container">
 
 				<ul class="container-fluid list-group-flush side-menu-list" id="side-menu-list">
 
 				</ul>
-				<button type="button" class="btn btn-transparent list-add-button" id="side-menu-list-add-button" aria-label="Add list">
+				<button type="button" class="btn btn-transparent list-add-button" id="side-menu-list-add-button"
+					aria-label="Add list">
 					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 			</div>
@@ -116,14 +121,15 @@
 		<!-- List area -->
 		<div class="container d-flex flex-column list-area theme-colored" id="list-area">
 			<div class="container-fluid d-flex justify-content-center list-title theme-colored-text" id="list-title"
-			 contenteditable="true">TITLE</div>
+				contenteditable="true">TITLE</div>
 			<ul class="container-fluid align-items-begin list-group-flush list" id="list">
 				<li class="list-group-item d-flex align-items-center">
 					<input type="checkbox">
 					<span class="checkbox"></span>
 					<span class="checkbox-label" contenteditable="true">TEST CHECKBOX</span>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-					 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle theme-colored-icon btn-item-delete">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-x-circle theme-colored-icon btn-item-delete">
 						<circle cx="12" cy="12" r="10"></circle>
 						<line x1="15" y1="9" x2="9" y2="15"></line>
 						<line x1="9" y1="9" x2="15" y2="15"></line>
@@ -131,7 +137,8 @@
 				</li>
 			</ul>
 			<div class="container-fluid d-flex flex-row align-items-center list-add">
-				<button type="button" class="btn btn-transparent list-add-button" id="list-add-button" aria-label="Add element to list">
+				<button type="button" class="btn btn-transparent list-add-button" id="list-add-button"
+					aria-label="Add element to list">
 					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 				<span class="container-fluid d-flex list-add-input" id="list-add-input" contenteditable="true"></span>
@@ -143,37 +150,40 @@
 	<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<div class="modal-body" id="alert-modal-message">New Update available! <span class="refresh-link" onclick="location.reload(true)">REFRESH</span>
+				<div class="modal-body" id="alert-modal-message">New Update available! <span class="refresh-link"
+						onclick="location.reload(true)">REFRESH</span>
 				</div>
 			</div>
 		</div>
 	</div>
 
-    <script>
-        var debug = {
-            dev: false,
-            log: (message) => { console.log(message); }, // eslint-disable-line
-        };
-    </script>
+	<script>
+		var debug = {
+			dev: false,
+			log: (message) => { console.log(message); }, // eslint-disable-line
+		};
+	</script>
 
-    <!-- Register Service Worker -->
-    <script type="text/javascript" src="sw-register.js"></script>
+	<!-- Register Service Worker -->
+	<script type="text/javascript" src="sw-register.js"></script>
 
 	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-	 crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-	 <!-- Bootstrap -->
-	 <script src="3rd-party/bootstrap.bundle.min.js"></script>
+	<!-- Underscore -->
+	<script src="https://underscorejs.org/underscore-min.js"></script>
+
+	<!-- Bootstrap -->
+	<script src="3rd-party/bootstrap.bundle.min.js"></script>
+
+	<!-- Google API -->
+	<script src="3rd-party/gdad.js"></script>
+	<script src="js/googleApi.js"></script>
+	<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){}; loadClient()"
+		onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
 
 	<!-- Custom scripts -->
 	<script src="js/index.js"></script>
-
-	<!-- Google API -->
-    <script src="js/googleApi.js"></script>
-    <script async defer src="https://apis.google.com/js/api.js"
-     onload="this.onload=function(){}; loadClient()"
-     onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
 </body>
 
 </html>
