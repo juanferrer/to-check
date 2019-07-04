@@ -82,7 +82,6 @@ function syncSettingsFromDrive() {
 
             if (configFileId !== "") {
                 // Set data from here
-
                 downloadAppData().then(remoteSettings => {
 
                     // In principle, copy remoteSettings and decide which changes to keep
@@ -106,7 +105,7 @@ function syncSettingsFromDrive() {
                                         !_.isEqual(settings[key][list], remoteSettings[key][list]) &&
                                         !_.isEqual(settingsLast[key][list], remoteSettings[key][list])) {
                                         // Compare each item in the list
-                                        for (item in settingsLast[key][list]) {
+                                        for (item in settings[key][list]) {
                                             if (!_.isEqual(settingsLast[key][list][item], settings[key][list][item]) &&
                                                 !_.isEqual(settings[key][list][item].remoteSettings[key][list][item]) &&
                                                 !_.isEqual(settingsLast[key][list][item], remoteSettings[key][list][item])) {
