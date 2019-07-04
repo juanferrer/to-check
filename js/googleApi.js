@@ -9,7 +9,6 @@ const DISCOVERY_DOCUMENTS = ["https://www.googleapis.com/discovery/v1/apis/drive
 
 const CONFIG_FILENAME = "to-check-config.json";
 
-var isSignedIn = false;
 var appData;
 
 /**
@@ -27,8 +26,7 @@ function initClient() {
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
         // Handle the initial sign-in state
-        isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-        updateSigninStatus(isSignedIn);
+        updateSigninStatus();
 
     }).then(function (response) {
         debug.log(response);
@@ -158,7 +156,7 @@ function syncSettingsFromDrive() {
 }
 
 let uploadAppData = () => {
-    if (isSignedIn) {
+    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
         appData.save(settings);
         settingsLast = deepCopy(settings); // eslint-disable-line no-global-assign
     }
@@ -175,9 +173,9 @@ let downloadAppData = () => {
  *  Called when the signed in status changes, to update the UI
  *  appropriately. After a sign-in, the API is called
  */
-function updateSigninStatus(isSignedIn) {
-    if (isSignedIn) {
-        // TODO: Replace with user profile icon
+function updateSigninStatus() {
+    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        // Replace with user profile icon
         gapi.client.request({
             path: "https://people.googleapis.com/v1/people/me",
             params: { personFields: "photos" }
@@ -202,7 +200,8 @@ function updateSigninStatus(isSignedIn) {
             }
         }
     } else {
-        // TODO: Replace with person icon
+        // Replace with person icon
+        setProfileImage();
     }
 }
 

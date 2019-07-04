@@ -1,4 +1,4 @@
-/* globals $, debug, isSignedIn, uploadAppData, gapi, loadClient, signIn, signOut */
+/* globals $, debug, uploadAppData, gapi, loadClient, signIn, signOut */
 
 /** Settings */
 var settings = {
@@ -96,7 +96,7 @@ let toggleSortKeys = () => {
 
 let pressProfileButton = () => {
     if (isOnline) {
-        if (isSignedIn) {
+        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
             debug.log("Signing out");
             signOut();
         } else {
@@ -246,7 +246,7 @@ let applySettings = () => {
 
 /** If logged in, sync settings to Google Drive*/
 let saveSettings = () => {
-    if (debug.dev && isSignedIn) {
+    if (debug.dev && gapi.auth2.getAuthInstance().isSignedIn.get()) {
         uploadAppData();
         localStorage.setItem("settingsLast", JSON.stringify(settingsLast));
     }
@@ -377,7 +377,6 @@ let handleConnectionChange = () => {
     } else {
         debug.log("Offline");
         isOnline = false;
-        isSignedIn = false; // eslint-disable-line no-global-assign
     }
 };
 
