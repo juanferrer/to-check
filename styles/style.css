@@ -311,7 +311,7 @@ input[type="checkbox"]:checked+span:after {
 	margin-left: 0.4rem;
 	/*Make a small rectangle*/
 	width: 6px;
-	height: 18px;
+	height: 16px;
 	/*Add a block-level blank space*/
 	content: "";
 	display: block;
