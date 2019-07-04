@@ -4,7 +4,7 @@ Tests to be performed before a new release
 
 ## Google Drive Settings
 
-**LGD00** - Before each test, clear app data from Google Drive and from application.
+**LGD00** - Before each test, clear app data from Google Drive and from application.<br/>
 *Lists, items and settings are not lost. Selected list remains the same. Side menu gets updated.*
 
 **LGD01** -  While signed-out, perform changes and sign-in.<br/>
