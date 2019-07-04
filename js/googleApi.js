@@ -1,4 +1,5 @@
-/* globals _, gapi, debug, gdad, settings, settingsLast, applySettings, populateList, populateSideMenu, deepCopy */
+/* globals _, gapi, debug, gdad, settings, settingsLast, applySettings, populateList,
+populateSideMenu, deepCopy, setProfileImage */
 
 const API_KEY = "AIzaSyCuZUd6F2KNE8QSFGMNMWVv6HxiK8NuU0M";
 const CLIENT_ID = "672870556931-ptqqho5vg0ni763q8srvhr3kpahndjae.apps.googleusercontent.com";
@@ -8,7 +9,6 @@ const DISCOVERY_DOCUMENTS = ["https://www.googleapis.com/discovery/v1/apis/drive
 
 const CONFIG_FILENAME = "to-check-config.json";
 
-var isSignedIn = false;
 var appData;
 
 /**
@@ -26,8 +26,7 @@ function initClient() {
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
         // Handle the initial sign-in state
-        isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-        updateSigninStatus(isSignedIn);
+        updateSigninStatus();
 
     }).then(function (response) {
         debug.log(response);
@@ -59,6 +58,11 @@ function decideWhichToKeep(last, local, remote) {
  * What to do when the Drive API has been loaded
  */
 function syncSettingsFromDrive() {
+    if (!appData) {
+        // Load appData if not already loaded
+        appData = gdad(CONFIG_FILENAME, CLIENT_ID);
+    }
+
     gapi.client.drive.files.list({
         spaces: "appDataFolder",
         fields: "files(id, name)",
@@ -78,7 +82,6 @@ function syncSettingsFromDrive() {
 
             if (configFileId !== "") {
                 // Set data from here
-
                 downloadAppData().then(remoteSettings => {
 
                     // In principle, copy remoteSettings and decide which changes to keep
@@ -102,7 +105,7 @@ function syncSettingsFromDrive() {
                                         !_.isEqual(settings[key][list], remoteSettings[key][list]) &&
                                         !_.isEqual(settingsLast[key][list], remoteSettings[key][list])) {
                                         // Compare each item in the list
-                                        for (item in settingsLast[key][list]) {
+                                        for (item in settings[key][list]) {
                                             if (!_.isEqual(settingsLast[key][list][item], settings[key][list][item]) &&
                                                 !_.isEqual(settings[key][list][item].remoteSettings[key][list][item]) &&
                                                 !_.isEqual(settingsLast[key][list][item], remoteSettings[key][list][item])) {
@@ -152,7 +155,7 @@ function syncSettingsFromDrive() {
 }
 
 let uploadAppData = () => {
-    if (isSignedIn) {
+    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
         appData.save(settings);
         settingsLast = deepCopy(settings); // eslint-disable-line no-global-assign
     }
@@ -162,36 +165,42 @@ let uploadAppData = () => {
  * @returns {Promise<*>} Settings object
  */
 let downloadAppData = () => {
-    return appData.read();/*.then(function (response) {
-        debug.log(response);
-        return response;
-    }, function (error) {
-        debug.log(error);
-    });*/
+    return appData.read();
 };
 
 /**
  *  Called when the signed in status changes, to update the UI
  *  appropriately. After a sign-in, the API is called
  */
-function updateSigninStatus(isSignedIn) {
-    if (isSignedIn) {
-        // TODO: Replace with user profile icon
+function updateSigninStatus() {
+    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        // Replace with user profile icon
+        gapi.client.request({
+            path: "https://people.googleapis.com/v1/people/me",
+            params: { personFields: "photos" }
+        }).then(response => {
+            debug.log(response);
+            setProfileImage(response.result.photos[0].url);
+        }, error => {
+            debug.log(error);
+        });
+
         if (debug.dev) {
-            if (gapi.client && !gapi.client.drive) {
+            if (gapi && gapi.client && !gapi.client.drive) {
                 // The client is ready, but the drive API is not loaded yet
                 gapi.client.load("drive", "v3", syncSettingsFromDrive);
-            }
-
-            if (!appData) {
+            } else if (!appData) {
                 // Also load appData
                 appData = gdad(CONFIG_FILENAME, CLIENT_ID);
+                syncSettingsFromDrive();
+            } else {
+                // Everything is ready, we just need to sync the settings
+                syncSettingsFromDrive();
             }
-
         }
-
     } else {
-        // TODO: Replace with person icon
+        // Replace with person icon
+        setProfileImage();
     }
 }
 
