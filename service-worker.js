@@ -6,6 +6,7 @@ const APP_PREFIX = "ToCheck";
 const CACHE_NAME = APP_PREFIX;
 const URLS = [
     "./",
+    "./index.html?homescreen=1",
     "./index.html",
     "./styles/style.css",
     "./styles/boostrap.min.css",
