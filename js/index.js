@@ -96,7 +96,7 @@ let toggleSortKeys = () => {
 
 let pressProfileButton = () => {
     if (isOnline) {
-        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance().isSignedIn.get()) {
             debug.log("Signing out");
             signOut();
         } else {
@@ -246,7 +246,7 @@ let applySettings = () => {
 
 /** If logged in, sync settings to Google Drive*/
 let saveSettings = () => {
-    if (debug.dev && gapi.auth2.getAuthInstance().isSignedIn.get()) {
+    if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance().isSignedIn.get()) {
         uploadAppData();
         localStorage.setItem("settingsLast", JSON.stringify(settingsLast));
     }

@@ -267,6 +267,7 @@ input[value="dark"]:checked~div .list>.list-group-item {
 
 .profile-button {
 	background-size: contain;
+	background-origin: border-box;
 	position: absolute;
 	right: 20px;
 }
