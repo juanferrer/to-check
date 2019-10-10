@@ -221,7 +221,8 @@ function updateSigninStatus() {
 /**  Sign in the user upon button click */
 function signIn(event) { // eslint-disable-line no-unused-vars
     debug.log(event);
-    gapi.auth2.getAuthInstance().signIn();
+    let signInOptions = {prompt: "consent"};
+    gapi.auth2.getAuthInstance().signIn(signInOptions);
 }
 
 /** Sign out the user upon button click */
