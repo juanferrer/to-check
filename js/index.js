@@ -354,7 +354,7 @@ let deepCopy = (o) => {
 
 let handleConnectionChange = () => {
     if (navigator.onLine) {
-        isReachable("https://juanferrer.github.io/to-check").then(online => {
+        isReachable("https://juanferrer.dev/to-check").then(online => {
             isOnline = true;
             if (online) {
                 debug.log("Online");
