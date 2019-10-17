@@ -274,7 +274,7 @@ input[value="dark"]:checked~div .list>.list-group-item {
 	right: 20px;
 }
 
-.privacy-policy {
+.side-menu-privacy-policy {
 	bottom: 30px;
 	left: 20px;
 	font-size: 10px;
