@@ -425,7 +425,7 @@ let main = () => {
         // Stash the event so it can be triggered later.
         deferredPrompt = e;
 
-        if (localStorage.getItem("appInstalled")) {
+        if (!localStorage.getItem("appInstalled")) {
             setTimeout(() => {
                 deferredPrompt.prompt();
                 localStorage.setItem("appInstalled", true);
