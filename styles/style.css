@@ -401,6 +401,8 @@ input[type="checkbox"]:checked~span.checkbox-label {
 	height: 28px;
 	border-radius: 5px;
 	font-family: var(--main-font);
+	white-space: nowrap;
+	overflow-x: hidden;
 }
 
 input[value="light"]:checked~div .list-add-input {
