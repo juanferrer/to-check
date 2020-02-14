@@ -6,8 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 	<meta name="description" content="A webapp to keep track of TO CHECK lists">
 	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="16x16.png">
 	<link rel="manifest" href="manifest.json">
 	<link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
 	<meta name="msapplication-TileColor" content="#da532c">
@@ -60,7 +60,7 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
 	<link rel="stylesheet" href="styles/style.css" type="text/css">
-	<link rel="canonical" href="https://juanferrer.github.io/to-check/" />
+	<link rel="canonical" href="https://juanferrer.dev/to-check/" />
 	<title>To Check</title>
 </head>
 
@@ -103,10 +103,6 @@
 			<i class="icon-bar colored-bar"></i>
 			<i class="material-icons theme-colored-icon">sort_by_alpha</i>
 		</button>
-		<!-- <button type="button" class="btn btn-transparent toolbar-button profile-button" disabled id="profile-button"
-			aria-label="Open profile">
-			<i class="material-icons theme-colored-icon" id="user-icon">person</i>
-		</button> -->
 	</div>
 
 	<!-- Work area -->
@@ -135,9 +131,6 @@
 					aria-label="Open profile">
 					<i class="material-icons theme-colored-icon" id="user-icon">person</i>
 				</button>
-
-				<span class="theme-colored-text version-number" id="version-number">v1.21</span>
-
 			</div>
 		</div>
 		<!-- List area -->
@@ -182,7 +175,8 @@
 	<script>
 		var debug = {
 			dev: false,
-			log: (message) => { console.log(message); }, // eslint-disable-line
+			log: (message) => { console.log(message); }, // eslint-disable-line no-console
+			warn: (message) => { console.warn(message); },
 		};
 	</script>
 
@@ -190,18 +184,18 @@
 	<script type="text/javascript" src="sw-register.js"></script>
 
 	<!-- jQuery -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 	<!-- Underscore -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 
 	<!-- Bootstrap -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.0/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Google API -->
 	<script src="3rd-party/gdad.js"></script>
 	<script src="js/googleApi.js"></script>
-	<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){}; loadClient()"
+	<script src="https://apis.google.com/js/api.js" onload="this.onload=function(){}; loadClient()"
 		onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
 
 	<!-- Custom scripts -->

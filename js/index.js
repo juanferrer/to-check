@@ -96,7 +96,7 @@ let toggleSortKeys = () => {
 
 let pressProfileButton = () => {
     if (isOnline) {
-        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance().isSignedIn.get()) {
             debug.log("Signing out");
             signOut();
         } else {
@@ -246,7 +246,7 @@ let applySettings = () => {
 
 /** If logged in, sync settings to Google Drive*/
 let saveSettings = () => {
-    if (debug.dev && gapi.auth2.getAuthInstance().isSignedIn.get()) {
+    if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance().isSignedIn.get()) {
         uploadAppData();
         localStorage.setItem("settingsLast", JSON.stringify(settingsLast));
     }
@@ -354,7 +354,7 @@ let deepCopy = (o) => {
 
 let handleConnectionChange = () => {
     if (navigator.onLine) {
-        isReachable("https://juanferrer.github.io/to-check").then(online => {
+        isReachable("https://juanferrer.dev/to-check").then(online => {
             isOnline = true;
             if (online) {
                 debug.log("Online");
@@ -425,7 +425,7 @@ let main = () => {
         // Stash the event so it can be triggered later.
         deferredPrompt = e;
 
-        if (localStorage.getItem("appInstalled") === "false") {
+        if (!localStorage.getItem("appInstalled")) {
             setTimeout(() => {
                 deferredPrompt.prompt();
                 localStorage.setItem("appInstalled", true);

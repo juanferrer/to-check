@@ -192,10 +192,12 @@ input[value="dark"]:checked~.work-area {
 
 .side-menu-list-container {
 	padding: 0px;
+	overflow-y: auto;
 }
 
 .side-menu-list {
 	padding: 0;
+	overflow-y: auto;
 }
 
 .side-menu-list>.list-group-item {
@@ -239,7 +241,7 @@ input[value="dark"]:checked~div .side-menu-list>.list-group-item.selected {
 .list {
 	padding: 10px;
 	height: 90%;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .list-title {
@@ -274,8 +276,16 @@ input[value="dark"]:checked~div .list>.list-group-item {
 
 .profile-button {
 	background-size: contain;
+	background-origin: border-box;
 	position: absolute;
 	right: 20px;
+}
+
+.side-menu-privacy-policy {
+	bottom: 30px;
+	left: 20px;
+	font-size: 10px;
+	position: absolute;
 }
 
 /* Scrollbar */
@@ -387,12 +397,19 @@ input[type="checkbox"]:checked~span.checkbox-label {
 	border-radius: 50px;
 }
 
+#side-menu-list-add-button {
+	position: relative;
+	top: -15px;
+}
+
 .list-add-input {
 	margin-left: 5px;
 	padding-left: 10px;
 	height: 28px;
 	border-radius: 5px;
 	font-family: var(--main-font);
+	white-space: nowrap;
+	overflow-x: hidden;
 }
 
 input[value="light"]:checked~div .list-add-input {
