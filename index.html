@@ -13,40 +13,6 @@
 	<meta name="msapplication-TileColor" content="#da532c">
 	<meta name="theme-color" content="#ffffff">
 
-	<!-- <script>
-		// make the whole serviceworker process into a promise so later on we can
-		// listen to it and in case new content is available a toast will be shown
-		window.isUpdateAvailable = new Promise(function (resolve, reject) {
-			// lazy way of disabling service workers while developing
-			if ("serviceWorker" in navigator && ["localhost", "127"].indexOf(location.hostname) === -1) {
-				// register service worker file
-				navigator.serviceWorker.register("service-worker.js")
-					.then(reg => {
-						reg.onupdatefound = () => {
-							const installingWorker = reg.installing;
-							installingWorker.onstatechange = () => {
-								switch (installingWorker.state) {
-									case "installed":
-										if (navigator.serviceWorker.controller) {
-											// new update available
-											resolve(true);
-										} else {
-											// no update available
-											resolve(false);
-										}
-										break;
-								}
-							};
-						};
-					})
-					.catch(err => console.error("[SW ERROR]", err));
-			}
-		});
-
-		// If showing update modal, use this for refresh: location.reload(true)
-		// https://github.com/GoogleChromeLabs/sw-precache/issues/309*/
-    </script> -->
-
 	<!-- Bootstrap CSS -->
 	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
 	 crossorigin="anonymous"> -->
@@ -84,7 +50,6 @@
 				alt="Donate with PayPal button" class="btn btn-transparent toolbar-button donate-button"
 				id="donate-button"><i class="material-icons theme-colored-icon"
 					id="donate-icon">credit_card</i></button>
-			<img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
 		</form>
 		<button type="button" class="btn btn-transparent toolbar-button theme-button light-dark-icon light"
 			id="theme-button" data-theme="light" aria-label="Change theme">
