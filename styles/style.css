@@ -462,7 +462,7 @@ input[value="dark"]:checked~div .list-add-input {
 
 @media (max-width: 380px) {
 	/* Thinner toolbar buttons */
-	.toolbar-button {
+	.toolbar-button:not(.profile-button) {
 		width: 40px;
 	}
 	
