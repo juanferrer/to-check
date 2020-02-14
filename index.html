@@ -175,8 +175,8 @@
 	<script>
 		var debug = {
 			dev: false,
-			log: (message) => { console.log(message); }, // eslint-disable-line no-console
-			warn: (message) => { console.warn(message); },
+			log: (message) => { if(dev) console.log(message); }, // eslint-disable-line no-console
+			warn: (message) => { if(dev) console.warn(message); },
 		};
 	</script>
 
