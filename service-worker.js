@@ -33,6 +33,7 @@ const offlineFallbackPage = "index.html";
 
 // Cache resources
 self.addEventListener("install", function (e) {
+    self.skipWaiting();
     e.waitUntil(
         caches.open(CACHE_NAME).then(function (cache) {
             cache.add(offlineFallbackPage);
