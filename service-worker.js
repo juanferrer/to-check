@@ -9,10 +9,13 @@ const URLS = [
     "./index.html?homescreen=1",
     "./index.html",
     "./styles/style.css",
-    "./styles/toastify.min.js",
+    "./styles/toastify.min.css",
     "https://fonts.googleapis.com/css?family=Open+Sans",
     "https://fonts.googleapis.com/icon?family=Material+Icons",
+    "https://apis.google.com/js/api.js",
     "./js/index.js",
+    "./js/googleApi.js",
+    "./js/cache-polyfill.js",
     "./3rd-party/gdad.js",
     "./3rd-party/jquery.min.js",
     "./3rd-party/toastify.js",
@@ -50,7 +53,7 @@ self.addEventListener("activate", function (e) {
 // If any fetch fails, it will look for the request in the cache and serve it from there first
 self.addEventListener("fetch", function (e) {
     if (e.request.method !== "GET") return;
-
+    console.log("[PWA] About to add " + e.request);
     // If request was success, add or update it in the cache
     e.respondWith(fetch(e.request)
         .then(function (response) {
