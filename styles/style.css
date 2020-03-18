@@ -250,6 +250,7 @@ input[value="dark"]:checked~.work-area {
 	background-color: transparent;
 	font-family: var(--main-font);
 	cursor: pointer;
+	display: flex;
 }
 
 input[value="light"]:checked~div .side-menu-list>.list-group-item.selected {
@@ -292,7 +293,6 @@ input[value="dark"]:checked~div .side-menu-list>.list-group-item.selected {
 
 .list-title {
 	padding: 15px;
-	height: 80px;
 	font-size: 25px;
 	display: flex;
 	justify-content: center;
@@ -309,7 +309,7 @@ input[value="dark"]:checked~div .side-menu-list>.list-group-item.selected {
 	border: none;
 	display: flex;
 	align-items: center;
-	;
+	padding-left: 30px;
 }
 
 .list-group-item.hidden {
@@ -373,6 +373,7 @@ input[type="checkbox"] {
 .checkbox {
 	width: 22px;
 	height: 20px;
+	min-width: 22px;
 	display: inline-block;
 	vertical-align: middle;
 	background: #ededed;
@@ -394,10 +395,10 @@ input[type="checkbox"]:checked+span:after {
 	border: solid #000000;
 	border-width: 0 4px 4px 0;
 	/*Rotate the L to make it look like a checkmark*/
-	transform: rotate(45deg);
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
+	transform: translateY(-2px) rotate(45deg);
+	-webkit-transform: translateY(-2px) rotate(45deg);
+	-moz-transform: translateY(-2px) rotate(45deg);
+	-o-transform: translateY(-2px) rotate(45deg);
 }
 
 .checkbox-label {
@@ -476,6 +477,8 @@ input[type="checkbox"]:checked~span.checkbox-label {
 	overflow-x: hidden;
 	display: flex;
 	width: calc(90%);
+	margin-right: 20px;
+	line-height: 28px;
 }
 
 input[value="light"]:checked~div .list-add-input {

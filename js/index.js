@@ -275,7 +275,7 @@ let populateList = () => {
                 // Don't add
             } else {*/
             let newElement = document.createElement("li");
-            newElement.setAttribute("class", `list-group-item d-flex align-items-center ${settings.toCheckLists[settings.currentList][itemName] && settings.hideCompleted ? "hidden" : ""}`);
+            newElement.setAttribute("class", `list-group-item align-items-center ${settings.toCheckLists[settings.currentList][itemName] && settings.hideCompleted ? "hidden" : ""}`);
             newElement.innerHTML = `<input type="checkbox" ${settings.toCheckLists[settings.currentList][itemName] ? 'checked="true"' : ""}>` +
                 '<span class="checkbox"></span>' +
                 `<span class="checkbox-label" contenteditable="true">${convertToTitle(itemName)}</span>` +
@@ -330,7 +330,7 @@ let populateSideMenu = () => {
     for (let itemName in settings.toCheckLists) {
         if (settings.toCheckLists[itemName]) {
             let newElement = document.createElement("li");
-            newElement.setAttribute("class", `list-group-item d-flex align-items-center ${settings.currentList === itemName ? "selected" : ""}`);
+            newElement.setAttribute("class", `list-group-item align-items-center ${settings.currentList === itemName ? "selected" : ""}`);
             newElement.innerHTML = `<span class="side-menu-list-name theme-colored-text" >${convertToTitle(itemName)}</span>` +
                 //'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash theme-colored-icon btn-list-delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
                 '<i class="material-icons theme-colored-icon btn-list-delete">delete</i>';
