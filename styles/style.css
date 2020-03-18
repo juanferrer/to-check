@@ -533,9 +533,11 @@ input[value="dark"]:checked~span .notification {
 	/* Thinner toolbar buttons */
 	.toolbar-button:not(.profile-button) {
 		width: 40px;
+		height: 40px;
 	}
 	form.toolbar-button {
 		width: 40px;
+		height: 40px;
 	}
 }
 
