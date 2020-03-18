@@ -440,14 +440,6 @@ let main = () => {
         }
     });
 
-    /*window["isUpdateAvailable"]
-        .then(isAvailable => {
-            if (isAvailable) {
-                $("#alert-modal").modal();
-            }
-        });*/
-
-
     window.addEventListener("online", handleConnectionChange);
     window.addEventListener("offline", handleConnectionChange);
     handleConnectionChange();

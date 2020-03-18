@@ -1,4 +1,4 @@
-/* globals debug, $ */
+/* globals debug, Toastify */
 
 if ("serviceWorker" in navigator) {
     let newWorker;
@@ -20,7 +20,15 @@ if ("serviceWorker" in navigator) {
                             // A new service worker was just installed,
                             // so it must have been an update
                             if (navigator.serviceWorker.controller) {
-                                $("#alert-modal").modal();
+                                Toastify({
+                                    text: "New update available! Click here to refresh",
+                                    duration: 0,
+                                    onClick: () => { location.reload(0); },
+                                    close: true,
+                                    gravity: "bottom",
+                                    className: "notification",
+                                    selector: "notification-placeholder"
+                                }).showToast();
                             }
                             break;
                     }
