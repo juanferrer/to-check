@@ -1,4 +1,4 @@
-/* globals $, debug, uploadAppData, gapi, loadClient, signIn, signOut */
+/* globals $, debug, uploadAppData, gapi, loadClient, signIn, signOut, APP_VERSION */
 
 /** Settings */
 var settings = {

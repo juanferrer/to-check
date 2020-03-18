@@ -578,16 +578,6 @@ input[value="dark"]:checked~div .on-off-icon:hover .transparent-bar {
 	background-color: var(--hover);
 }
 
-@media (max-width: 576px) {
-	/* No hover on mobile, so don't change the colour of the transparent bar */
-	input[value="light"]:checked~div .on-off-icon:hover .transparent-bar {
-		background-color: var(--main-color-light);
-	}
-	input[value="dark"]:checked~div .on-off-icon:hover .transparent-bar {
-		background-color: var(--main-color-dark);
-	}
-}
-
 input[value="light"]:checked~div .colored-bar {
 	background-color: var(--icon-color-light);
 }

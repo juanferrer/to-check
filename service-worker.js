@@ -2,7 +2,7 @@
 /* globals importScripts */
 
 const APP_PREFIX = "ToCheck";
-// const CACHE_VERSION = "_v1.18"; //eslint-disable-line no-unused-vars
+// const APP_VERSION = "v1.27"; //eslint-disable-line no-unused-vars
 const CACHE_NAME = APP_PREFIX;
 const URLS = [
     "./",
@@ -13,6 +13,7 @@ const URLS = [
     "https://fonts.googleapis.com/css?family=Open+Sans",
     "https://fonts.googleapis.com/icon?family=Material+Icons",
     "./js/index.js",
+    "./3rd-party/gdad.js",
     "./3rd-party/jquery.min.js",
     "./3rd-party/toastify.js",
     "./3rd-party/underscore-min.js",
