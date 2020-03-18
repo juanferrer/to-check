@@ -38,6 +38,7 @@ body {
 	align-items: center;
 	/* Disable pull to refresh */
 	overscroll-behavior-y: contain;
+	overflow: hidden;
 }
 
 input[name=theme] {
@@ -133,8 +134,14 @@ input[value="dark"]:checked~div .btn-transparent:hover .transparent-bar {
 .toolbar {
 	margin: 0px;
 	height: 65px;
+	width: calc(100% - 30px);
 	font-family: var(--main-font);
 	font-size: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-left: 15px;
+	padding-right: 15px;
 	/* box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); */
 }
 
@@ -146,12 +153,31 @@ input[value="dark"]:checked~.toolbar {
 	border-bottom: 1px solid var(--icon-color-dark);
 }
 
+.btn {
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+	background-color: transparent;
+	border-radius: 50px;
+}
+
+.btn:hover {
+	background-color: var(--hover);
+}
+
+.btn:focus {
+	outline: 0;
+	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
 .toolbar-button {
 	width: 50px;
 	height: 50px;
 	display: flex;
 	align-items: center;
-	border-radius: 50px;
+	justify-content: center;
 }
 
 form.toolbar-button {
@@ -160,6 +186,9 @@ form.toolbar-button {
 	display: flex;
 	align-items: center;
 	border-radius: 50px;
+	justify-content: center;
+	background-color: transparent;
+	border-color: transparent;
 }
 
 .app-name {
@@ -169,6 +198,11 @@ form.toolbar-button {
 
 .work-area {
 	height: calc(100% - 65px);
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 }
 
 input[value="light"]:checked~.work-area {
@@ -181,25 +215,33 @@ input[value="dark"]:checked~.work-area {
 
 .side-menu {
 	padding: 0px;
-	padding-top: 25px;
 	padding-bottom: 25px;
 	width: 250px;
-	height: calc(100% - 65px);
+	height: calc(100% - 65px - 26px);
 	position: absolute;
 	left: -250px;
 	z-index: 2;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 	transition: left var(--transition-time) var(--transition-curve), background-color var(--transition-time) var(--transition-curve);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .side-menu-list-container {
 	padding: 0px;
 	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
 }
 
 .side-menu-list {
 	padding: 0;
 	overflow-y: auto;
+	width: 100%;
 }
 
 .side-menu-list>.list-group-item {
@@ -238,6 +280,8 @@ input[value="dark"]:checked~div .side-menu-list>.list-group-item.selected {
 	max-width: 750px;
 	min-width: 300px;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	display: flex;
+	flex-direction: column;
 }
 
 .list {
@@ -250,6 +294,8 @@ input[value="dark"]:checked~div .side-menu-list>.list-group-item.selected {
 	padding: 15px;
 	height: 80px;
 	font-size: 25px;
+	display: flex;
+	justify-content: center;
 }
 
 .list-title:focus {
@@ -261,6 +307,9 @@ input[value="dark"]:checked~div .side-menu-list>.list-group-item.selected {
 	background-color: transparent;
 	font-family: var(--main-font);
 	border: none;
+	display: flex;
+	align-items: center;
+	;
 }
 
 .list-group-item.hidden {
@@ -274,6 +323,13 @@ input[value="light"]:checked~div .list>.list-group-item {
 
 input[value="dark"]:checked~div .list>.list-group-item {
 	color: var(--text-color-dark);
+}
+
+.side-menu-footer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 
 .profile-button {
@@ -390,6 +446,12 @@ input[type="checkbox"]:checked~span.checkbox-label {
 
 .list-add {
 	margin-bottom: 25px;
+	width: 95%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	align-self: center;
 }
 
 .list-add-button {
@@ -412,6 +474,8 @@ input[type="checkbox"]:checked~span.checkbox-label {
 	font-family: var(--main-font);
 	white-space: nowrap;
 	overflow-x: hidden;
+	display: flex;
+	width: calc(90%);
 }
 
 input[value="light"]:checked~div .list-add-input {
@@ -424,22 +488,25 @@ input[value="dark"]:checked~div .list-add-input {
 
 /* #endregion */
 
-#alert-modal .modal-dialog {
-	position: fixed;
-	bottom: 0px;
-	right: 0px;
-	left: 0px;
+/* #region Toastify */
+
+.notification {
+	box-shadow: none;
+	font-family: var(--main-font);
+	font-weight: 600;
 }
 
-#alert-modal-message {
-	text-align: center;
+input[value="light"]:checked~span .notification {
+	background: var(--background-color-dark);
+	color: var(--text-color-dark);
 }
 
-.refresh-link {
-	font-weight: bold;
-	color: #2579c3;
-	cursor: pointer;
+input[value="dark"]:checked~span .notification {
+	background: var(--background-color-light);
+	color: var(--text-color-light);
 }
+
+/* #endregion */
 
 /* #region Media queries */
 
@@ -476,24 +543,25 @@ input[value="dark"]:checked~div .list-add-input {
 
 /* #region Animations and keyframes */
 
-.icon-bar {
+.icon-bar-container {
 	position: absolute;
+	width: 24px;
+	transform: rotate(45deg);
+}
+
+.icon-bar {
 	content: '';
 	display: block;
 	width: 24px;
-	height: 1.7px;
-	transform-origin: top left;
-}
-
-.transparent-bar {
-	transform: translate(4px, 3px) rotate(45deg);
+	height: 2px;
+	transform-origin: left;
 }
 
 input[value="light"]:checked~div .transparent-bar {
 	background-color: var(--main-color-light);
 }
 
-input[value="light"]:checked~div .btn-transparent:hover .transparent-bar {
+input[value="light"]:checked~div .on-off-icon:hover .transparent-bar {
 	background-color: var(--hover);
 }
 
@@ -501,27 +569,18 @@ input[value="dark"]:checked~div .transparent-bar {
 	background-color: var(--main-color-dark);
 }
 
-input[value="dark"]:checked~div .btn-transparent:hover .transparent-bar {
+input[value="dark"]:checked~div .on-off-icon:hover .transparent-bar {
 	background-color: var(--hover);
 }
 
 @media (max-width: 576px) {
 	/* No hover on mobile, so don't change the colour of the transparent bar */
-	input[value="light"]:checked~div .btn-transparent:hover .transparent-bar {
+	input[value="light"]:checked~div .on-off-icon:hover .transparent-bar {
 		background-color: var(--main-color-light);
 	}
-	input[value="dark"]:checked~div .btn-transparent:hover .transparent-bar {
+	input[value="dark"]:checked~div .on-off-icon:hover .transparent-bar {
 		background-color: var(--main-color-dark);
 	}
-}
-
-/*
-.btn-transparent:hover .transparent-bar {
-	background-color: var(--hover);
-} */
-
-.colored-bar {
-	transform: translate(3px, 4px) rotate(45deg);
 }
 
 input[value="light"]:checked~div .colored-bar {
@@ -532,19 +591,19 @@ input[value="dark"]:checked~div .colored-bar {
 	background-color: var(--icon-color-dark);
 }
 
-.on-off-icon.on i:nth-child(1) {
+.on-off-icon.on .icon-bar-container i:nth-child(1) {
 	animation: turn-on 0.8s forwards;
 }
 
-.on-off-icon.on i:nth-child(2) {
+.on-off-icon.on .icon-bar-container i:nth-child(2) {
 	animation: turn-on 0.8s forwards;
 }
 
-.on-off-icon.off i:nth-child(1) {
+.on-off-icon.off .icon-bar-container i:nth-child(1) {
 	animation: turn-off 0.8s forwards;
 }
 
-.on-off-icon.off i:nth-child(2) {
+.on-off-icon.off .icon-bar-container i:nth-child(2) {
 	animation: turn-off 0.8s forwards;
 }
 

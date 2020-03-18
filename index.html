@@ -13,20 +13,17 @@
 	<meta name="msapplication-TileColor" content="#da532c">
 	<meta name="theme-color" content="#ffffff">
 
-	<!-- Bootstrap CSS -->
-	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-	 crossorigin="anonymous"> -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.0/css/bootstrap.min.css"
-		type="text/css">
-
 	<!-- Fonts -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 	<link rel="preconnect" href="https://fonts.gstatic.com/">
 
 	<!-- Icon fonts -->
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-	<link rel="stylesheet" href="styles/style.css" type="text/css">
+	<!-- Toastify -->
+	<link rel="stylesheet" type="text/css" href="styles/toastify.min.css">
+
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
 	<link rel="canonical" href="https://juanferrer.dev/to-check/" />
 	<title>To Check</title>
 </head>
@@ -36,10 +33,9 @@
 	<input type="radio" name="theme" id="dark-theme-radio" value="dark" />
 	<!-- UI -->
 	<!-- Toolbar -->
-	<div class="container-fluid d-flex justify-content-between align-items-center toolbar theme-colored">
+	<div class="toolbar theme-colored">
 
-		<button type="button" class="btn btn-transparent toolbar-button menu-button" id="menu-button"
-			aria-label="Open side menu">
+		<button type="button" class="btn toolbar-button menu-button" id="menu-button" aria-label="Open side menu">
 			<i class="material-icons theme-colored-icon">menu</i>
 		</button>
 		<span class="app-name">To Check</span>
@@ -48,64 +44,62 @@
 			<input type="hidden" name="cmd" value="_s-xclick" />
 			<input type="hidden" name="hosted_button_id" value="A8JHGUE5B97ME" />
 			<button border="0" name="submit" title="PayPal - The safer, easier way to pay online!"
-				alt="Donate with PayPal button" class="btn btn-transparent toolbar-button donate-button"
-				id="donate-button"><i class="material-icons theme-colored-icon"
-					id="donate-icon">credit_card</i></button>
+				alt="Donate with PayPal button" class="btn toolbar-button donate-button" id="donate-button"><i
+					class="material-icons theme-colored-icon" id="donate-icon">credit_card</i></button>
 		</form>
-		<button type="button" class="btn btn-transparent toolbar-button theme-button light-dark-icon light"
-			id="theme-button" data-theme="light" aria-label="Change theme">
+		<button type="button" class="btn toolbar-button theme-button light-dark-icon light" id="theme-button"
+			data-theme="light" aria-label="Change theme">
 			<i class="material-icons theme-colored-icon" id="light-theme-icon">wb_sunny</i>
 			<i class="material-icons theme-colored-icon" id="dark-theme-icon"
 				style="transform: rotateY(90deg); position: absolute;">brightness_2</i>
 		</button>
-		<button type="button" class="btn btn-transparent toolbar-button completed-button on-off-icon on"
-			id="completed-button" aria-label="Change layout">
-			<i class="icon-bar transparent-bar"></i>
-			<i class="icon-bar colored-bar"></i>
+		<button type="button" class="btn toolbar-button completed-button on-off-icon on" id="completed-button"
+			aria-label="Change layout">
+			<span class="icon-bar-container">
+				<i class="icon-bar transparent-bar"></i>
+				<i class="icon-bar colored-bar"></i>
+			</span>
 			<i class="material-icons theme-colored-icon" id="show-completed-icon">visibility</i>
 		</button>
-		<button type="button" class="btn btn-transparent toolbar-button sort-button on-off-icon on" id="sort-button"
+		<button type="button" class="btn toolbar-button sort-button on-off-icon on" id="sort-button"
 			aria-label="Sort items">
-			<i class="icon-bar transparent-bar"></i>
-			<i class="icon-bar colored-bar"></i>
+			<span class="icon-bar-container">
+				<i class="icon-bar transparent-bar"></i>
+				<i class="icon-bar colored-bar"></i>
+			</span>
 			<i class="material-icons theme-colored-icon">sort_by_alpha</i>
 		</button>
 	</div>
 
 	<!-- Work area -->
-	<div class="container-fluid d-flex flex-direction-row align-items-center work-area" id="work-area">
+	<div class="work-area" id="work-area">
 		<!-- Side menu -->
-		<div class="container d-flex flex-column justify-content-between align-items-center side-menu theme-colored"
-			id="side-menu">
-			<div class="container d-flex flex-column align-items-center side-menu-list-container"
-				id="side-menu-list-container">
+		<div class="side-menu theme-colored" id="side-menu">
+			<div class="side-menu-list-container" id="side-menu-list-container">
 
 				<ul class="container-fluid list-group-flush side-menu-list" id="side-menu-list">
 
 				</ul>
-				<button type="button" class="btn btn-transparent list-add-button" id="side-menu-list-add-button"
-					aria-label="Add list">
+				<button type="button" class="btn list-add-button" id="side-menu-list-add-button" aria-label="Add list">
 					<i class="material-icons theme-colored-icon">add</i>
 				</button>
 			</div>
 
-			<div class="container d-flex flex-row justify-content-center align-items-center side-menu-footer"
-				id="side-menu-footer">
+			<div class="side-menu-footer" id="side-menu-footer">
 				<a href="https://juanferrer.dev/legal/privacy-policy"
 					class="theme-colored-text side-menu-privacy-policy" id="side-menu-privacy-policy">Privacy Policy</a>
 				<span class="theme-colored-text version-number" id="version-number">v1.26</span>
-				<button type="button" class="btn btn-transparent toolbar-button profile-button" id="profile-button"
+				<button type="button" class="btn toolbar-button profile-button" id="profile-button"
 					aria-label="Open profile">
 					<i class="material-icons theme-colored-icon" id="user-icon">person</i>
 				</button>
 			</div>
 		</div>
 		<!-- List area -->
-		<div class="container d-flex flex-column list-area theme-colored" id="list-area">
-			<div class="container-fluid d-flex justify-content-center list-title theme-colored-text" id="list-title"
-				contenteditable="true">TITLE</div>
+		<div class="list-area theme-colored" id="list-area">
+			<div class="list-title theme-colored-text" id="list-title" contenteditable="true">TITLE</div>
 			<ul class="container-fluid align-items-begin list-group-flush list" id="list">
-				<li class="list-group-item d-flex align-items-center">
+				<li class="list-group-item">
 					<input type="checkbox">
 					<span class="checkbox"></span>
 					<span class="checkbox-label" contenteditable="true">TEST CHECKBOX</span>
@@ -118,26 +112,16 @@
 					</svg>
 				</li>
 			</ul>
-			<div class="container-fluid d-flex flex-row align-items-center list-add">
-				<button type="button" class="btn btn-transparent list-add-button" id="list-add-button"
-					aria-label="Add element to list">
+			<div class="list-add">
+				<button type="button" class="btn list-add-button" id="list-add-button" aria-label="Add element to list">
 					<i class="material-icons theme-colored-icon">add</i>
 				</button>
-				<span class="container-fluid d-flex list-add-input" id="list-add-input" contenteditable="true"></span>
+				<span class="list-add-input" id="list-add-input" contenteditable="true"></span>
 			</div>
 		</div>
 	</div>
 
-	<!-- Alert modal -->
-	<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-body" id="alert-modal-message">New Update available! <span class="refresh-link"
-						onclick="location.reload(true)">REFRESH</span>
-				</div>
-			</div>
-		</div>
-	</div>
+	<span id="notification-placeholder"></span>
 
 	<script>
 		var debug = {
@@ -147,26 +131,27 @@
 		};
 	</script>
 
+	<!-- Toastify -->
+	<script type="text/javascript" src="3rd-party/toastify.js"></script>
+
 	<!-- Register Service Worker -->
 	<script type="text/javascript" src="sw-register.js"></script>
 
 	<!-- jQuery -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="3rd-party/jquery.min.js"></script>
 
 	<!-- Underscore -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
-
-	<!-- Bootstrap -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="3rd-party/underscore-min.js"></script>
 
 	<!-- Google API -->
-	<script src="3rd-party/gdad.js"></script>
-	<script src="js/googleApi.js"></script>
-	<script src="https://apis.google.com/js/api.js" onload="this.onload=function(){}; loadClient()"
+	<script type="text/javascript" src="3rd-party/gdad.js"></script>
+	<script type="text/javascript" src="js/googleApi.js"></script>
+	<script type="text/javascript" src="https://apis.google.com/js/api.js"
+		onload="this.onload=function(){}; loadClient()"
 		onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
 
 	<!-- Custom scripts -->
-	<script src="js/index.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
 </body>
 
 </html>
