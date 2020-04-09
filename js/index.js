@@ -450,6 +450,18 @@ let main = () => {
     populateList();
     populateSideMenu();
     settingsLast = JSON.parse(localStorage.getItem("settingsLast") || JSON.stringify(settings));
+
+    // Lastly, check the source (PWA, Google Play or Website)
+    let urlParameters = new URLSearchParams(window.location.search);
+    let isPWA = urlParameters.get("homescreen") === "1";
+    let isAndroid = urlParameters.get("google-play") === "1";
+
+    // Can't have a donate button if on the Google Play, so remove it
+    if (isAndroid) {
+        $("#donate-button").parent().hide();
+    }
+
+    // It would be nice to send statistics to the server here
 };
 
 // #region Event handlers
