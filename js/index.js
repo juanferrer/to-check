@@ -430,7 +430,7 @@ let setProfileImage = (url) => {
 };
 
 let firstClick = () => {
-    if (!localStorage.getItem("appInstalled") && !localStorage.getItem("isFirstClick")) {
+    if (localStorage.getItem("appInstalled") === "false" && !localStorage.getItem("isFirstClick") === "false") {
         installPrompt.prompt();
         localStorage.setItem("appInstalled", true);
         localStorage.setItem("isFirstClick", true);
