@@ -1,4 +1,4 @@
-/* globals $, debug, uploadAppData, gapi, loadClient, signIn, signOut, APP_VERSION */
+/* globals $, debug, uploadAppData, gapi, loadClient, signIn, signOut */
 
 /** Settings */
 var settings = {
@@ -10,6 +10,8 @@ var settings = {
 };
 
 var isOnline = false;
+
+var installPrompt;
 
 /** Settings as they were after last sync */
 var settingsLast = {}; // eslint-disable-line no-unused-vars
@@ -24,6 +26,7 @@ let refresh = () => {
 
 /** Open and close the side menu */
 let toggleSideMenu = () => {
+    firstClick();
     if ($("#side-menu").attr("data-open")) {
         hideSideMenu();
     } else {
@@ -32,6 +35,7 @@ let toggleSideMenu = () => {
 };
 
 let hideSideMenu = () => {
+    firstClick();
     $("#side-menu")[0].style.left = "-250px";
     $("#side-menu").removeAttr("data-open");
 };
@@ -43,6 +47,7 @@ let showSideMenu = () => {
 
 /** Change the app theme */
 let switchTheme = () => {
+    firstClick();
     let oldTheme = $("input[name=theme]:checked").val();
     let newTheme = oldTheme === "light" ? "dark" : "light";
 
@@ -58,6 +63,7 @@ let switchTheme = () => {
 };
 
 let toggleHideCompleted = () => {
+    firstClick();
     // Check if the attribute is present
     let newHideCompleted = $("#completed-button")[0].hasAttribute("data-hide");
 
@@ -77,6 +83,7 @@ let toggleHideCompleted = () => {
 };
 
 let toggleSortKeys = () => {
+    firstClick();
     // Check if the attribute is present
     let newSortKeys = $("#sort-button")[0].hasAttribute("data-sort");
 
@@ -95,6 +102,7 @@ let toggleSortKeys = () => {
 };
 
 let pressProfileButton = () => {
+    firstClick();
     if (isOnline) {
         if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance().isSignedIn.get()) {
             debug.log("Signing out");
@@ -112,6 +120,7 @@ let pressProfileButton = () => {
  * @listens blur
  */
 let updateListTitle = e => {
+    firstClick();
     let newListName = e.currentTarget.textContent;
     if (convertToVarName(newListName, true) !== settings.currentList) {
         settings.toCheckLists[convertToVarName(newListName, true)] = settings.toCheckLists[settings.currentList];
@@ -130,6 +139,7 @@ let updateListTitle = e => {
  * @listens click
  */
 let changeListSelection = e => {
+    firstClick();
     settings.currentList = convertToVarName(e.currentTarget.firstChild.textContent, true);
 
     populateList();
@@ -144,6 +154,7 @@ let changeListSelection = e => {
  * @listens click
  */
 let addList = () => {
+    firstClick();
     settings.currentList = convertToVarName("New List", true);
 
     let newListNum = 2;
@@ -185,6 +196,7 @@ let removeList = e => {
  * @listens click
  * */
 let toggleCheckbox = e => {
+    firstClick();
     let checkbox = e.currentTarget.previousElementSibling;
     checkbox.checked = !checkbox.checked;
 
@@ -201,6 +213,7 @@ let toggleCheckbox = e => {
  * @listens click
  */
 let addItemToList = e => {
+    firstClick();
     let itemName = e.currentTarget.nextElementSibling.textContent;
     if (itemName) {
         settings.toCheckLists[settings.currentList] = settings.toCheckLists[settings.currentList] || {};
@@ -217,6 +230,7 @@ let addItemToList = e => {
  * @param {Event} e
  */
 let removeItem = e => {
+    firstClick();
     e.currentTarget.parentElement.remove();
     saveLists();
     populateList();
@@ -415,29 +429,29 @@ let setProfileImage = (url) => {
     }
 };
 
+let firstClick = () => {
+    if (localStorage.getItem("appInstalled") === "false" && !localStorage.getItem("isFirstClick") === "false") {
+        installPrompt.prompt();
+        localStorage.setItem("appInstalled", true);
+        localStorage.setItem("isFirstClick", true);
+        installPrompt.userChoice.then(result => {
+            if (result.outcome === "accepted") {
+                // Installed
+            } else {
+                // Prompt dismissed
+            }
+        });
+    }
+};
+
 
 let main = () => {
     // Store the Add to Home Screen prompt
-    let deferredPrompt;
     window.addEventListener("beforeinstallprompt", e => {
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
         // Stash the event so it can be triggered later.
-        deferredPrompt = e;
-
-        if (!localStorage.getItem("appInstalled")) {
-            setTimeout(() => {
-                deferredPrompt.prompt();
-                localStorage.setItem("appInstalled", true);
-                deferredPrompt.userChoice.then(result => {
-                    if (result.outcome === "accepted") {
-                        // Installed
-                    } else {
-                        // Prompt dismissed
-                    }
-                });
-            }, 5000);
-        }
+        installPrompt = e;
     });
 
     window.addEventListener("online", handleConnectionChange);
@@ -450,6 +464,18 @@ let main = () => {
     populateList();
     populateSideMenu();
     settingsLast = JSON.parse(localStorage.getItem("settingsLast") || JSON.stringify(settings));
+
+    // Lastly, check the source (PWA, Google Play or Website)
+    let urlParameters = new URLSearchParams(window.location.search);
+    let isPWA = urlParameters.get("homescreen") === "1";
+    let isAndroid = urlParameters.get("google-play") === "1";
+
+    // Can't have a donate button if on the Google Play, so remove it
+    if (isAndroid) {
+        $("#donate-button").parent().hide();
+    }
+
+    // It would be nice to send statistics to the server here
 };
 
 // #region Event handlers
