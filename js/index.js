@@ -319,6 +319,15 @@ let saveLists = () => {
     saveSettings();
 };
 
+/** Get a plain text list */
+let exportList = () => {
+    let plainTextList = `# ${decodeURI(settings.currentList.substr(listPrefaceString.length))}\n`;
+    for (const [key, value] of Object.entries(settings.toCheckLists[settings.currentList])) {
+        plainTextList += `- ${decodeURI(key.substr(elementPrefaceString.length))}\n`;
+    };
+    return plainTextList;
+};
+
 /**
  * Extract a title from the var name
  * @param {string} s String to be titleised
@@ -465,12 +474,12 @@ let main = () => {
     populateSideMenu();
     settingsLast = JSON.parse(localStorage.getItem("settingsLast") || JSON.stringify(settings));
 
-    // Lastly, check the source (PWA, Google Play or Website)
+    // Lastly, check the source (PWA, Play Store or Website)
     let urlParameters = new URLSearchParams(window.location.search);
     let isPWA = urlParameters.get("homescreen") === "1";
     let isAndroid = urlParameters.get("google-play") === "1";
 
-    // Can't have a donate button if on the Google Play, so remove it
+    // Can't have a donate button if on the Play Store, so remove it
     if (isAndroid) {
         $("#donate-button").parent().hide();
     }
