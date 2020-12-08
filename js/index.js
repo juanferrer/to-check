@@ -319,6 +319,32 @@ let saveLists = () => {
     saveSettings();
 };
 
+/** Get a plain text list */
+let exportList = async () => {
+    let plainTextList = `# ${decodeURI(settings.currentList.substr(listPrefaceString.length))}\n`;
+    for await (const [key, value] of Object.entries(settings.toCheckLists[settings.currentList])) {
+        plainTextList += `- ${decodeURI(key.substr(elementPrefaceString.length))}\n`;
+    };
+    if (navigator.share) {
+        navigator.share({
+            title: "juanferrer.dev/to-check",
+            text: plainTextList
+        });
+    } else if (navigator.clipboard) {
+        // If share is not available (probably a PC, copy it into the clipboard)
+        navigator.clipboard.writeText(plainTextList);
+        Toastify({
+            text: "List copied to clipboard",
+            duration: 2000,
+            gravity: "bottom",
+            className: "notification",
+            stopOnFocus: true
+        }).showToast();
+    } else {
+        // Do nothing, I guess
+    }
+};
+
 /**
  * Extract a title from the var name
  * @param {string} s String to be titleised
@@ -465,12 +491,12 @@ let main = () => {
     populateSideMenu();
     settingsLast = JSON.parse(localStorage.getItem("settingsLast") || JSON.stringify(settings));
 
-    // Lastly, check the source (PWA, Google Play or Website)
+    // Lastly, check the source (PWA, Play Store or Website)
     let urlParameters = new URLSearchParams(window.location.search);
     let isPWA = urlParameters.get("homescreen") === "1";
     let isAndroid = urlParameters.get("google-play") === "1";
 
-    // Can't have a donate button if on the Google Play, so remove it
+    // Can't have a donate button if on the Play Store, so remove it
     if (isAndroid) {
         $("#donate-button").parent().hide();
     }
@@ -495,6 +521,8 @@ $("#list-title").click(hideSideMenu);
 $("#list-area").click(hideSideMenu);
 
 $("#list-title").blur(updateListTitle);
+
+$("#list-share-button").click(exportList);
 
 $(".checkbox").click(toggleCheckbox);
 
