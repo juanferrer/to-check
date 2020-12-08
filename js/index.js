@@ -323,7 +323,8 @@ let saveLists = () => {
 let exportList = async () => {
     let plainTextList = `# ${decodeURI(settings.currentList.substr(listPrefaceString.length))}\n`;
     for await (const [key, value] of Object.entries(settings.toCheckLists[settings.currentList])) {
-        plainTextList += `- ${decodeURI(key.substr(elementPrefaceString.length))}\n`;
+        // Add only if unchecked
+        if (!value) plainTextList += `- ${decodeURI(key.substr(elementPrefaceString.length))}\n`;
     };
     if (navigator.share) {
         navigator.share({
