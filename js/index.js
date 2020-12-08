@@ -320,12 +320,29 @@ let saveLists = () => {
 };
 
 /** Get a plain text list */
-let exportList = () => {
+let exportList = async () => {
     let plainTextList = `# ${decodeURI(settings.currentList.substr(listPrefaceString.length))}\n`;
-    for (const [key, value] of Object.entries(settings.toCheckLists[settings.currentList])) {
+    for await (const [key, value] of Object.entries(settings.toCheckLists[settings.currentList])) {
         plainTextList += `- ${decodeURI(key.substr(elementPrefaceString.length))}\n`;
     };
-    return plainTextList;
+    if (navigator.share) {
+        navigator.share({
+            title: "juanferrer.dev/to-check",
+            text: plainTextList
+        });
+    } else if (navigator.clipboard) {
+        // If share is not available (probably a PC, copy it into the clipboard)
+        navigator.clipboard.writeText(plainTextList);
+        Toastify({
+            text: "List copied to clipboard",
+            duration: 2000,
+            gravity: "bottom",
+            className: "notification",
+            stopOnFocus: true
+        }).showToast();
+    } else {
+        // Do nothing, I guess
+    }
 };
 
 /**
@@ -504,6 +521,8 @@ $("#list-title").click(hideSideMenu);
 $("#list-area").click(hideSideMenu);
 
 $("#list-title").blur(updateListTitle);
+
+$("#list-share-button").click(exportList);
 
 $(".checkbox").click(toggleCheckbox);
 
