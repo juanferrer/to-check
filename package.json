@@ -1,0 +1,27 @@
+{
+    "name": "to-check",
+    "version": "1.29",
+    "description": "",
+    "main": "index.js",
+    "dependencies": {
+        "gdad": "",
+        "jquery": ">=3.4.1",
+        "toastify": ">=1.7.0",
+        "underscore": ">=1.12.1"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/juanferrer/to-check.git"
+    },
+    "keywords": [],
+    "author": "juanferrer",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/juanferrer/to-check/issues"
+    },
+    "homepage": "https://github.com/juanferrer/to-check#readme"
+}
